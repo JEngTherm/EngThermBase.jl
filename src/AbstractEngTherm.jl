@@ -1,5 +1,8 @@
+# Module
 module AbstractEngTherm
 
-greet() = print("Hello World!")
+# Includes
+include("abstract.jl")
 
-end # module
+# Module
+end
