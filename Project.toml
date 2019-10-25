@@ -1,0 +1,4 @@
+name = "AbstractEngTherm"
+uuid = "a6bee788-dd3d-49a6-ad76-c4b56e7900b8"
+authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
+version = "0.1.0"
