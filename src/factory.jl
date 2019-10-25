@@ -39,6 +39,14 @@ Abstract supertype for $(what).\n
     end
 end
 
+"""
+`function mkParAbsTy(TY::Symbol, TP::Symbol, what::AbstractString, pp::Bool=true,
+xp::Bool=true)`\n
+Declares a new, parametric, abstract type `TY{𝘁} <: TP{𝘁}`, if `pp` (parametric parent) is
+`true` (default), or `TY{𝘁} <: TP`, otherwise. Argument `what` is inserted in the new type
+documentation, and `xp` controls whether or not the new abstract type is exported (default
+`true`).
+"""
 function mkParAbsTy(TY::Symbol, TP::Symbol, what::AbstractString,
                     pp::Bool=true, xp::Bool=true)
     #if !(eval(TP) isa DataType)
