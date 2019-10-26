@@ -1,4 +1,4 @@
-name = "AbstractEngTherm"
-uuid = "a6bee788-dd3d-49a6-ad76-c4b56e7900b8"
+name = "EngThermBase"
+uuid = "dffbff30-506a-45ba-b474-e78cc8ad254e"
 authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
 version = "0.1.0"
