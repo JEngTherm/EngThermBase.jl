@@ -1,5 +1,5 @@
 # Module
-module AbstractEngTherm
+module EngThermBase
 
 # Includes
 include("factory.jl")
