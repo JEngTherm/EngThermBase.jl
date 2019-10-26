@@ -2,3 +2,6 @@ name = "EngThermBase"
 uuid = "dffbff30-506a-45ba-b474-e78cc8ad254e"
 authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
 version = "0.1.0"
+
+[deps]
+InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
