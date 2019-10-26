@@ -1,2 +1,2 @@
-# AbstractEngTherm.jl
-Abstract Engineering Thermodynamics
+# EngThermBase.jl
+Basic types and functionality for Engineering Thermodynamics
