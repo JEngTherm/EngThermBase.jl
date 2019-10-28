@@ -7,6 +7,7 @@ include("abstract.jl")
 
 # Includes - concrete types
 include("amounts.jl")
+include("states.jl")
 
 # Includes - functionalities
 include("utils.jl")
