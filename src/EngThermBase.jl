@@ -6,9 +6,9 @@ include("factory.jl")
 include("abstract.jl")
 
 # Includes - concrete types
-include("amounts.jl")
-include("states.jl")
-include("constants.jl")
+## include("amounts.jl")
+## include("states.jl")
+## include("constants.jl")
 
 # Includes - functionalities
 include("utils.jl")
