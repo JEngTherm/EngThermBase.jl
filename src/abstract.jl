@@ -30,7 +30,6 @@ mkParAbsTy(        :basalRatio                  , :intensiveProperty            
 mkParAbsTy(        :perBaseProperty             , :intensiveProperty            , "specific properties"                                         , true  )
 mkParAbsTy(          :perMassProperty           , :perBaseProperty              , "specific (per mass) properties"                              , true  )
 mkParAbsTy(          :perMoleProperty           , :perBaseProperty              , "specific (per kmol) properties"                              , true  )
-mkParAbsTy(          :perVoluProperty           , :perBaseProperty              , "specific (per volume) properties"                            , true  )
 mkParAbsTy(      :propertyFlux                  , :Property                     , "extensive property fluxes"                                   , true  )
 mkParAbsTy(        :basalRate                   , :propertyFlux                 , "base property fluxes"                                        , true  )
 mkParAbsTy(        :perTimeProperty             , :propertyFlux                 , "system property fluxes"                                      , true  )
@@ -41,7 +40,6 @@ mkParAbsTy(      :intensiveInteraction          , :Interaction                  
 mkParAbsTy(        :perBaseInteraction          , :intensiveInteraction         , "specific interactions"                                       , true  )
 mkParAbsTy(          :perMassInteraction        , :perBaseInteraction           , "specific (per mass) interactions"                            , true  )
 mkParAbsTy(          :perMoleInteraction        , :perBaseInteraction           , "specific (per kmol) interactions"                            , true  )
-mkParAbsTy(          :perVoluInteraction        , :perBaseInteraction           , "specific (per volume) interactions"                          , true  )
 mkParAbsTy(      :interactionFlux               , :Interaction                  , "extensive interaction fluxes"                                , true  )
 mkParAbsTy(        :perTimeInteraction          , :interactionFlux              , "system interaction fluxes"                                   , true  )
 mkParAbsTy(    :UnrankedAmount                  , :AbstractAmount               , "unranked amounts"                                            , true  )
@@ -66,14 +64,13 @@ nonProperty         = Union{Interaction,UnrankedAmount}
 perBaseQuantity     = Union{perBaseProperty,perBaseInteraction}
 perMassQuantity     = Union{perMassProperty,perMassInteraction}
 perMoleQuantity     = Union{perMoleProperty,perMoleInteraction}
-perVoluQuantity     = Union{perVoluProperty,perVoluInteraction}
 perTimeQuantity     = Union{perTimeProperty,perTimeInteraction}
 systemQuantity      = Union{systemProperty,systemInteraction}
 intensiveQuantity   = Union{intensiveProperty,intensiveInteraction}
 extensiveQuantity   = Union{extensiveProperty,extensiveInteraction}
 
 export nonProperty
-export perBaseQuantity, perMassQuantity, perMoleQuantity, perVoluQuantity, perTimeQuantity
+export perBaseQuantity, perMassQuantity, perMoleQuantity, perTimeQuantity
 export intensiveQuantity, extensiveQuantity
 
 
