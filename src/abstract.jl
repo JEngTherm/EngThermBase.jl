@@ -61,13 +61,6 @@ mkParAbsTy(      :OpenSystem                    , :SystemModel                  
 #                                                                     Abstract Type Unions                                                                     #
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-# intensiveBase Type Unions
-nonMA = Union{MO,VO}
-nonMO = Union{MA,VO}
-nonVO = Union{MA,MO}
-
-export nonMA, nonMO, nonVO
-
 # AbstractAmount Type Unions
 nonProperty         = Union{Interaction,UnrankedAmount}
 perBaseQuantity     = Union{perBaseProperty,perBaseInteraction}
