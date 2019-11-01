@@ -5,6 +5,9 @@ module EngThermBase
 include("factory.jl")
 include("abstract.jl")
 
+# Includes - type exactness
+include("exactness.jl")
+
 # Includes - concrete types
 ## include("amounts.jl")
 ## include("states.jl")
