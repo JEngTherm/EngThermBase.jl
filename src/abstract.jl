@@ -11,12 +11,12 @@ mkOneAbsTy(    :ThermodynamicBase               , :AbstractBase                 
 mkOneAbsTy(      :intensiveBase                 , :ThermodynamicBase            , "intensive bases"                                                     )
 mkOneAbsTy(        :MA                          , :intensiveBase                , "the MAss base"                                                       )
 mkOneAbsTy(        :MO                          , :intensiveBase                , "the MOlar base"                                                      )
-mkOneAbsTy(      :nonIntensiveBase              , :ThermodynamicBase            , "non-intensive bases"                                                 )
-mkOneAbsTy(        :SY                          , :nonIntensiveBase             , "the SYstem (extensive) base"                                         )
-mkOneAbsTy(        :DT                          , :nonIntensiveBase             , "the Time Derivative (rate) base"                                     )
-mkOneAbsTy(    :TypeExactnessBase               , :AbstractBase                 , "type-exactness bases"                                                )
-mkOneAbsTy(      :EX                            , :TypeExactnessBase            , "the EXact base"                                                      )
-mkOneAbsTy(      :MM                            , :TypeExactnessBase            , "the MeasureMent base"                                                )
+mkOneAbsTy(      :extensiveBase                 , :ThermodynamicBase            , "non-intensive bases"                                                 )
+mkOneAbsTy(        :SY                          , :extensiveBase                , "the SYstem (extensive) base"                                         )
+mkOneAbsTy(        :DT                          , :extensiveBase                , "the Time Derivative (rate) base"                                     )
+mkOneAbsTy(    :exactnessBase                   , :AbstractBase                 , "type-exactness bases"                                                )
+mkOneAbsTy(      :EX                            , :exactnessBase                , "the EXact base"                                                      )
+mkOneAbsTy(      :MM                            , :exactnessBase                , "the MeasureMent base"                                                )
 
 # AbstractAncillary branch
 mkOneAbsTy(  :AbstractAncillary                 , :AbstractThermodynamics       , "ancillary types"                                                     )
