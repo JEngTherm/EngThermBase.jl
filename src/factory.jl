@@ -73,3 +73,35 @@ Abstract supertype for $(what).\n
 end
 
 
+#----------------------------------------------------------------------------------------------#
+#                               Singleton Concrete Type Factory                                #
+#----------------------------------------------------------------------------------------------#
+
+"""
+`function mkSingleTy(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)`\n
+Declares a new, non-parametric, singleton, concrete type `TY <: TP`. Argument `what` is inserted
+in the new type documentation, and `xp` controls whether or not the new singleton type is
+exported (default `true`).
+"""
+function mkSingleTy(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)
+    if !(eval(TP) isa DataType)
+        error("Type parent must be a DataType. Got $(string(TP)).")
+    end
+    hiStr = tyArchy(eval(TP))
+    dcStr = """
+`struct $(TY) <: $(TP) end`\n
+Singleton type for $(what).\n
+## Hierarchy\n
+`$(TY) <: $(hiStr)`
+    """
+    @eval begin
+        # Singleton type definition
+        struct $TY <: $TP end
+        # Type documentation
+        @doc $dcStr $TY
+        # Type exporting
+        if $(xp); export $TY; end
+    end
+end
+
+
