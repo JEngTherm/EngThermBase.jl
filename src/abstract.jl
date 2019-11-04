@@ -18,14 +18,6 @@ mkOneAbsTy(    :exactnessBase                   , :AbstractBase                 
 mkSingleTy(      :EX                            , :exactnessBase                , "the EXact base"                                                      )
 mkSingleTy(      :MM                            , :exactnessBase                , "the MeasureMent base"                                                )
 
-# AbstractAncillary branch
-mkOneAbsTy(  :AbstractAncillary                 , :AbstractThermodynamics       , "ancillary types"                                                     )
-mkOneAbsTy(    :AncillaryFunction               , :AbstractAncillary            , "ancillary functions"                                                 )
-
-# AbstractState branch
-mkParAbsTy(  :AbstractState                     , :AbstractThermodynamics       , "state types"                                                 , false )
-mkParAbsTy(    :ConceptualState                 , :AbstractState                , "conceptual states, or propery pairs/groups"                  , true  )
-
 # AbstractAmount branch
 mkParAbsTy(  :AbstractAmount                    , :AbstractThermodynamics       , "thermodynamic amount"                                        , false )
 mkParAbsTy(    :Property                        , :AbstractAmount               , "thermodynamic properties"                                    , true  )
@@ -52,6 +44,10 @@ mkParAbsTy(      :interactionFlux               , :Interaction                  
 mkParAbsTy(        :perTimeInteraction          , :interactionFlux              , "system interaction fluxes"                                   , true  )
 mkParAbsTy(    :UnrankedAmount                  , :AbstractAmount               , "unranked amounts"                                            , true  )
 
+# AbstractState branch
+mkParAbsTy(  :AbstractState                     , :AbstractThermodynamics       , "state types"                                                 , false )
+mkParAbsTy(    :ConceptualState                 , :AbstractState                , "conceptual states, or propery pairs/groups"                  , true  )
+
 # AbstractModel branch
 mkParAbsTy(  :AbstractModel                     , :AbstractThermodynamics       , "thermodynamic model"                                         , false )
 mkParAbsTy(    :SpHeatModel                     , :AbstractModel                , "specific heat models"                                        , true  )
@@ -63,6 +59,10 @@ mkParAbsTy(      :SubstanceModel                , :MediumModel                  
 mkParAbsTy(    :SystemModel                     , :AbstractModel                , "system models"                                               , true  )
 mkParAbsTy(      :ClosedSystem                  , :SystemModel                  , "closed systems"                                              , true  )
 mkParAbsTy(      :OpenSystem                    , :SystemModel                  , "open systems"                                                , true  )
+
+# AbstractAncillary branch
+mkOneAbsTy(  :AbstractAncillary                 , :AbstractThermodynamics       , "ancillary types"                                                     )
+mkOneAbsTy(    :AncillaryFunction               , :AbstractAncillary            , "ancillary functions"                                                 )
 
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
