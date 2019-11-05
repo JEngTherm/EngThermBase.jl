@@ -13,10 +13,11 @@ struct sysU{𝗯,𝘁,𝘅} <: basalProperty{𝘁}
     # Copy constructor
     sysU(x::sysU{𝗯,𝘁,𝘅}) where {𝗯,𝘁,𝘅} = new{𝗯,𝘁,𝘅}(x.val)
     # Plain float constructors
-    sysU{SY()}(x::𝘁) where 𝘁<:FLO = new{SY(),𝘁,EX()}(x * UNIT      )
-    sysU{DT()}(x::𝘁) where 𝘁<:FLO = new{DT(),𝘁,EX()}(x * UNIT / 𝗎DT)
-    sysU{MA()}(x::𝘁) where 𝘁<:FLO = new{MA(),𝘁,EX()}(x * UNIT / 𝗎MA)
-    sysU{MO()}(x::𝘁) where 𝘁<:FLO = new{MO(),𝘁,EX()}(x * UNIT / 𝗎MO)
+    sysU{SY}(x::𝘁) where 𝘁<:FLO = new{SY,𝘁,EX}(x * UNIT      )
+    sysU{DT}(x::𝘁) where 𝘁<:FLO = new{DT,𝘁,EX}(x * UNIT / 𝗎DT)
+    sysU{MA}(x::𝘁) where 𝘁<:FLO = new{MA,𝘁,EX}(x * UNIT / 𝗎MA)
+    sysU{MO}(x::𝘁) where 𝘁<:FLO = new{MO,𝘁,EX}(x * UNIT / 𝗎MO)
+    sysU(x::𝘁) where 𝘁<:FLO = sysU{DEF[:IB]}(x)
     # Plain measurement constructors
     #sysU{SY()}(x::Measurement{𝘁}) where 𝘁<:FLO = new{𝘁,EX(),SY()}(x * UNIT      )
     #sysU{DT()}(x::Measurement{𝘁}) where 𝘁<:FLO = new{𝘁,EX(),DT()}(x * UNIT / 𝗎DT)

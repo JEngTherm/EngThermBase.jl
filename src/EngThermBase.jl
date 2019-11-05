@@ -5,6 +5,9 @@ module EngThermBase
 include("factory.jl")
 include("abstract.jl")
 
+# Includes - default settings
+include("settings.jl")
+
 # Includes - type exactness
 include("exactness.jl")
 
