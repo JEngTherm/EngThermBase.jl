@@ -6,6 +6,7 @@ version = "0.1.0"
 [deps]
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [extras]
