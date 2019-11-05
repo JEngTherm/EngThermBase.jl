@@ -1,3 +1,40 @@
+struct $TYPE{𝘁<:AbstractFloat} <: $SUPT{𝘁}
+    val::Quantity{𝘁,𝗱,𝘂} where {𝘁,𝗱,𝘂}
+    # Inner constructors
+    $TYPE(x::$TYPE{𝘅}) where 𝘅 = new{𝘅}(x.val)
+    $TYPE(x::AbstractFloat) = new{typeof(x)}(x * $UNIT)
+    $TYPE(x::Quantity{𝘅,𝘆,𝘇}) where {𝘅,𝘆,𝘇} =
+        new{𝘅<:Complex ? float(𝘅.parameters[1]) : float(𝘅)}(uconvert($UNIT, float(real(x))))
+end
+
+# Constant Base Units: \sansu<TAB> for semantic difference
+const 𝗎MA = u"kg"
+const 𝗎MO = u"kmol"
+const 𝗎DT = u"s"
+
+const UNIT = u"kJ"
+
+struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
+    amt::QTY{𝘁}
+    # Copy constructor
+    sysU(x::sysU{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.val)
+    # Plain float constructors
+    sysU{SY()}(x::FLO) = new{typeof(x),EX(),SY()}(x * u"kJ")
+    sysU{DT()}(x::FLO) = new{typeof(x),EX(),DT()}(x * u"kW")
+    sysU{MA()}(x::FLO) = new{typeof(x),EX(),MA()}(x * u"kJ/kg")
+    sysU{MO()}(x::FLO) = new{typeof(x),EX(),MO()}(x * u"kJ/kmol")
+    # Plain measurement constructors
+    sysU{SY()}(x::Measurement{𝘁}) = new{𝘁,EX(),SY()}(x * u"kJ")
+    sysU{DT()}(x::Measurement{𝘁}) = new{𝘁,EX(),DT()}(x * u"kW")
+    sysU{MA()}(x::Measurement{𝘁}) = new{𝘁,EX(),MA()}(x * u"kJ/kg")
+    sysU{MO()}(x::Measurement{𝘁}) = new{𝘁,EX(),MO()}(x * u"kJ/kmol")
+    # Exact quantity constructors
+    sysU(exactAmt::ETY{𝘁})
+end
+
+
+
+
 ## #----------------------------------------------------------------------------------------------#
 ## #                                      Logical Interface                                       #
 ## #----------------------------------------------------------------------------------------------#
