@@ -11,19 +11,21 @@ const UNIT = u"kJ"
 struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
     amt::QTY{𝘁}
     # Copy constructor
-    sysU(x::sysU{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.val)
+    sysU(x::sysU{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.amt)
     # Plain float constructors
-    sysU(x::𝘁, ::Type{SY}) where 𝘁<:FLO = new{𝘁,EX,SY}(x * UNIT      )
-    sysU(x::𝘁, ::Type{DT}) where 𝘁<:FLO = new{𝘁,EX,DT}(x * UNIT / 𝗎DT)
-    sysU(x::𝘁, ::Type{MA}) where 𝘁<:FLO = new{𝘁,EX,MA}(x * UNIT / 𝗎MA)
-    sysU(x::𝘁, ::Type{MO}) where 𝘁<:FLO = new{𝘁,EX,MO}(x * UNIT / 𝗎MO)
-    sysU(x::𝘁) where 𝘁<:FLO = sysU(x, DEF[:IB])
+    sysU(x::𝘁, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x * UNIT      )
+    sysU(x::𝘁, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(x * UNIT / 𝗎DT)
+    sysU(x::𝘁, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(x * UNIT / 𝗎MA)
+    sysU(x::𝘁, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(x * UNIT / 𝗎MO)
+    sysU(x::𝖥) = sysU(x, DEF[:IB])
+    # Plain other number types
+    sysU(x::𝖭, b::Type{𝘅}=DEF[:IB]) where 𝘅<:ThermodynamicBase = sysU(float(real(x)), b)
     # Plain measurement constructors
-    sysU(x::Measurement{𝘁}, ::Type{SY}) where 𝘁<:FLO = new{𝘁,MM,SY}(x * UNIT      )
-    sysU(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:FLO = new{𝘁,MM,DT}(x * UNIT / 𝗎DT)
-    sysU(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:FLO = new{𝘁,MM,MA}(x * UNIT / 𝗎MA)
-    sysU(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:FLO = new{𝘁,MM,MO}(x * UNIT / 𝗎MO)
-    sysU(x::Measurement{𝘁}) where 𝘁<:FLO = sysU(x, DEF[:IB])
+    sysU(x::Measurement{𝘁}, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,MM,SY}(x * UNIT      )
+    sysU(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(x * UNIT / 𝗎DT)
+    sysU(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝗎MA)
+    sysU(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝗎MO)
+    sysU(x::Measurement{𝖥}) = sysU(x, DEF[:IB])
     # Exact quantity constructors
     # sysU(exactAmt::ETY{𝘁})
 end
