@@ -1,6 +1,11 @@
 # Module
 module EngThermBase
 
+# Imports
+using Reexport
+@reexport using Unitful
+@reexport using Measurements
+
 # Includes - abstract types
 include("factory.jl")
 include("abstract.jl")
