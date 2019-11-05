@@ -1,12 +1,17 @@
 # Test-of-concept for 3-parameter amounts
 # ---------------------------------------
 
-# Constant Base Units: \sansu<TAB> for semantic difference
-const 𝗎MA = u"kg"
-const 𝗎MO = u"kmol"
-const 𝗎DT = u"s"
+# Constant Base Units: \itu<TAB> for semantic difference
+const 𝑢MA = u"kg"
+const 𝑢MO = u"kmol"
+const 𝑢DT = u"s"
 
 const UNIT = u"kJ"
+
+const 𝑑SY = dimension(UNIT      )
+const 𝑑DT = dimension(UNIT / 𝑢DT)
+const 𝑑MA = dimension(UNIT / 𝑢MA)
+const 𝑑MO = dimension(UNIT / 𝑢MO)
 
 struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
     amt::QTY{𝘁}
@@ -14,21 +19,22 @@ struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
     sysU(x::sysU{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.amt)
     # Plain float constructors
     sysU(x::𝘁, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x * UNIT      )
-    sysU(x::𝘁, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(x * UNIT / 𝗎DT)
-    sysU(x::𝘁, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(x * UNIT / 𝗎MA)
-    sysU(x::𝘁, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(x * UNIT / 𝗎MO)
-    sysU(x::𝘁) where 𝘁<:𝖥 = sysU(x, DEF[:IB])
-    # Plain other number types
-    sysU(x::𝘁, b::Type{𝘅}=DEF[:IB]) where {𝘁<:𝖭, 𝘅<:ThermodynamicBase} = sysU(float(real(x)), b)
+    sysU(x::𝘁, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(x * UNIT / 𝑢DT)
+    sysU(x::𝘁, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(x * UNIT / 𝑢MA)
+    sysU(x::𝘁, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(x * UNIT / 𝑢MO)
     # Plain measurement constructors
     sysU(x::Measurement{𝘁}, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,MM,SY}(x * UNIT      )
-    sysU(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(x * UNIT / 𝗎DT)
-    sysU(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝗎MA)
-    sysU(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝗎MO)
+    sysU(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(x * UNIT / 𝑢DT)
+    sysU(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝑢MA)
+    sysU(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝑢MO)
     sysU(x::Measurement{𝘁}) where 𝘁<:𝖥 = sysU(x, DEF[:IB])
-    # Exact quantity constructors
-    # sysU(exactAmt::ETY{𝘁})
+    # Quantity constructors
+    sysU(x::Quantity{𝘁,𝑑SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x)
 end
+
+# Plain non-float number constructor
+# Plain real constructor
+sysU(x::𝖭, b::Type{𝗯}) where 𝘅<:ThermodynamicBase = sysU(float(real(x)), b)
 
 export sysU
 
