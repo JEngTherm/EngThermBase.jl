@@ -8,25 +8,25 @@ const 𝗎DT = u"s"
 
 const UNIT = u"kJ"
 
-struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
+struct sysU{𝗯,𝘁,𝘅} <: basalProperty{𝘁}
     amt::QTY{𝘁}
     # Copy constructor
-    sysU(x::sysU{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.val)
+    sysU(x::sysU{𝗯,𝘁,𝘅}) where {𝗯,𝘁,𝘅} = new{𝗯,𝘁,𝘅}(x.val)
     # Plain float constructors
-    sysU{SY()}(x::FLO) = new{typeof(x),EX(),SY()}(x * UNIT      )
-    sysU{DT()}(x::FLO) = new{typeof(x),EX(),DT()}(x * UNIT / 𝗎DT)
-    sysU{MA()}(x::FLO) = new{typeof(x),EX(),MA()}(x * UNIT / 𝗎MA)
-    sysU{MO()}(x::FLO) = new{typeof(x),EX(),MO()}(x * UNIT / 𝗎MO)
+    sysU{SY()}(x::𝘁) where 𝘁<:FLO = new{SY(),𝘁,EX()}(x * UNIT      )
+    sysU{DT()}(x::𝘁) where 𝘁<:FLO = new{DT(),𝘁,EX()}(x * UNIT / 𝗎DT)
+    sysU{MA()}(x::𝘁) where 𝘁<:FLO = new{MA(),𝘁,EX()}(x * UNIT / 𝗎MA)
+    sysU{MO()}(x::𝘁) where 𝘁<:FLO = new{MO(),𝘁,EX()}(x * UNIT / 𝗎MO)
     # Plain measurement constructors
-    sysU{SY()}(x::Measurement{𝘁}) = new{𝘁,EX(),SY()}(x * UNIT      )
-    sysU{DT()}(x::Measurement{𝘁}) = new{𝘁,EX(),DT()}(x * UNIT / 𝗎DT)
-    sysU{MA()}(x::Measurement{𝘁}) = new{𝘁,EX(),MA()}(x * UNIT / 𝗎MA)
-    sysU{MO()}(x::Measurement{𝘁}) = new{𝘁,EX(),MO()}(x * UNIT / 𝗎MO)
+    #sysU{SY()}(x::Measurement{𝘁}) where 𝘁<:FLO = new{𝘁,EX(),SY()}(x * UNIT      )
+    #sysU{DT()}(x::Measurement{𝘁}) where 𝘁<:FLO = new{𝘁,EX(),DT()}(x * UNIT / 𝗎DT)
+    #sysU{MA()}(x::Measurement{𝘁}) where 𝘁<:FLO = new{𝘁,EX(),MA()}(x * UNIT / 𝗎MA)
+    #sysU{MO()}(x::Measurement{𝘁}) where 𝘁<:FLO = new{𝘁,EX(),MO()}(x * UNIT / 𝗎MO)
     # Exact quantity constructors
-    sysU(exactAmt::ETY{𝘁})
+    # sysU(exactAmt::ETY{𝘁})
 end
 
-
+export sysU
 
 
 ## #----------------------------------------------------------------------------------------------#

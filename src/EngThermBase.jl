@@ -9,7 +9,7 @@ include("abstract.jl")
 include("exactness.jl")
 
 # Includes - concrete types
-## include("amounts.jl")
+include("amounts.jl")
 ## include("states.jl")
 ## include("constants.jl")
 
