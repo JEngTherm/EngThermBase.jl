@@ -28,11 +28,14 @@ struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
     sysU(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝑢MA)
     sysU(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝑢MO)
     # Quantity constructors
-    sysU(x::Quantity{𝘁,𝑑SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x)
+    sysU(x::Quantity{𝘁,𝑑SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(uconvert(UNIT, x))
+    sysU(x::Quantity{𝘁,𝑑DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(uconvert(UNIT / 𝑢DT, x))
+    sysU(x::Quantity{𝘁,𝑑MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(uconvert(UNIT / 𝑢MA, x))
+    sysU(x::Quantity{𝘁,𝑑MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(uconvert(UNIT / 𝑢MO, x))
 end
 
 # Plain real constructor
-sysU(x::𝖱, b::Type{𝗯}) where 𝘅<:ThermodynamicBase = sysU(float(x), b)
+sysU(x::𝘁, b::Type{𝗯}) where {𝘁<:𝖱, 𝗯<:ThermodynamicBase} = sysU(float(x), b)
 
 export sysU
 
