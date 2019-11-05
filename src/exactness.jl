@@ -5,8 +5,8 @@
 # \sansF<TAB>: plain Julia Floats (since Measurements.Measurement <: AbstractFloat)
 𝖥 = Union{Float16,Float32,Float64,BigFloat}
 
-# \sansN<TAB>: plain Julia Numbers (since Unitful.Quantity <: Number)
-𝖭 = Union{Complex,AbstractIrrational,Integer,Rational}
+# \sansR<TAB>: plain Julia Reals (since Unitful.Quantity <: Number)
+𝖱 = Union{Complex,AbstractIrrational,Integer,Rational}
 
 # Exact types: all type params are \bsans#<TAB>
 ETY{𝘁} = Quantity{𝘁} where 𝘁<:𝖥
