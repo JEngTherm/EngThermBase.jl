@@ -13,31 +13,31 @@ const 𝑑DT = dimension(UNIT / 𝑢DT)
 const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
-struct sysU{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
+struct uAmt{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
     amt::QTY{𝘁}
     # Copy constructor
-    sysU(x::sysU{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.amt)
+    uAmt(x::uAmt{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.amt)
     # Plain float constructors
-    sysU(x::𝘁, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x * UNIT      )
-    sysU(x::𝘁, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(x * UNIT / 𝑢DT)
-    sysU(x::𝘁, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(x * UNIT / 𝑢MA)
-    sysU(x::𝘁, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(x * UNIT / 𝑢MO)
+    uAmt(x::𝘁, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x * UNIT      )
+    uAmt(x::𝘁, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(x * UNIT / 𝑢DT)
+    uAmt(x::𝘁, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(x * UNIT / 𝑢MA)
+    uAmt(x::𝘁, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(x * UNIT / 𝑢MO)
     # Plain measurement constructors
-    sysU(x::Measurement{𝘁}, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,MM,SY}(x * UNIT      )
-    sysU(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(x * UNIT / 𝑢DT)
-    sysU(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝑢MA)
-    sysU(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝑢MO)
+    uAmt(x::Measurement{𝘁}, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,MM,SY}(x * UNIT      )
+    uAmt(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(x * UNIT / 𝑢DT)
+    uAmt(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝑢MA)
+    uAmt(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝑢MO)
     # Quantity constructors
-    sysU(x::Quantity{𝘁,𝑑SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(uconvert(UNIT, x))
-    sysU(x::Quantity{𝘁,𝑑DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(uconvert(UNIT / 𝑢DT, x))
-    sysU(x::Quantity{𝘁,𝑑MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(uconvert(UNIT / 𝑢MA, x))
-    sysU(x::Quantity{𝘁,𝑑MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::Quantity{𝘁,𝑑SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(uconvert(UNIT, x))
+    uAmt(x::Quantity{𝘁,𝑑DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::Quantity{𝘁,𝑑MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::Quantity{𝘁,𝑑MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(uconvert(UNIT / 𝑢MO, x))
 end
 
 # Plain real constructor
-sysU(x::𝘁, b::Type{𝗯}) where {𝘁<:𝖱, 𝗯<:ThermodynamicBase} = sysU(float(x), b)
+uAmt(x::𝘁, b::Type{𝗯}) where {𝘁<:𝖱, 𝗯<:ThermodynamicBase} = uAmt(float(x), b)
 
-export sysU
+export uAmt
 
 
 ## #----------------------------------------------------------------------------------------------#
