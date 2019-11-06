@@ -13,12 +13,12 @@ function tyArchy(t::Union{DataType,UnionAll})
 end
 
 """
-`function mkOneAbsTy(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)`\n
+`function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)`\n
 Declares exactly one new, non-parametric, abstract type `TY <: TP`. Argument `what` is inserted
 in the new type documentation, and `xp` controls whether or not the new abstract type is
 exported (default `true`).
 """
-function mkOneAbsTy(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)
+function mkNonPAbs(TY::Symbol, TP::Symbol, what::AbstractString, xp::Bool=true)
     if !(eval(TP) isa DataType)
         error("Type parent must be a DataType. Got $(string(TP)).")
     end
@@ -40,14 +40,14 @@ Abstract supertype for $(what).\n
 end
 
 """
-`function mkParAbsTy(TY::Symbol, TP::Symbol, what::AbstractString, pp::Bool=true,
+`function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Bool=true,
 xp::Bool=true)`\n
-Declares a new, parametric, abstract type `TY{𝘁} <: TP{𝘁}`, if `pp` (parametric parent) is
+Declares a new, 1-parameter abstract type `TY{𝘁} <: TP{𝘁}`, if `pp` (parametric parent) is
 `true` (default), or `TY{𝘁} <: TP`, otherwise. Argument `what` is inserted in the new type
 documentation, and `xp` controls whether or not the new abstract type is exported (default
 `true`).
 """
-function mkParAbsTy(TY::Symbol, TP::Symbol, what::AbstractString,
+function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
                     pp::Bool=true, xp::Bool=true)
     #if !(eval(TP) isa DataType)
     #    error("Type parent must be a DataType. Got $(string(TP)).")
