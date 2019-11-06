@@ -40,15 +40,15 @@ Abstract supertype for $(what).\n
 end
 
 """
-`function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Bool=true,
+`function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, fpp::Bool=true,
 xp::Bool=true)`\n
-Declares a new, 1-parameter abstract type `TY{𝘁} <: TP{𝘁}`, if `pp` (parametric parent) is
-`true` (default), or `TY{𝘁} <: TP`, otherwise. Argument `what` is inserted in the new type
+Declares a new, 1-parameter abstract type `TY{𝘁} <: TP{𝘁}`, if `fpp` (fully parametric parent)
+is `true` (default), or `TY{𝘁} <: TP`, otherwise. Argument `what` is inserted in the new type
 documentation, and `xp` controls whether or not the new abstract type is exported (default
 `true`).
 """
 function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
-                   pp::Bool=true, xp::Bool=true)
+                   fpp::Bool=true, xp::Bool=true)
     #if !(eval(TP) isa DataType)
     #    error("Type parent must be a DataType. Got $(string(TP)).")
     #end
@@ -73,12 +73,45 @@ Abstract supertype for $(what).\n
 end
 
 """
+`function mk2ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, fpp::Bool=true,
+xp::Bool=true)`\n
+Declares a new, 2-parameter abstract type `TY{𝗽,𝘅} <: TP{𝗽,𝘅}`, if `fpp` (fully parametric
+parent) is `true` (default), or `TY{𝗽,𝘅} <: TP{𝗽}`, otherwise. Argument `what` is inserted in
+the new type documentation, and `xp` controls whether or not the new abstract type is exported
+(default `true`).
+"""
+function mk2ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
+                   pp::Bool=true, xp::Bool=true)
+    #if !(eval(TP) isa DataType)
+    #    error("Type parent must be a DataType. Got $(string(TP)).")
+    #end
+    hiStr = tyArchy(eval(TP))
+    dcStr = """
+`abstract type $(TY){𝗽,𝘅} <: $(TP)$(pp ? "{𝗽,𝘅}" : "{𝗽}") end`\n
+Abstract supertype for $(what).\n
+## Hierarchy\n
+`$(TY) <: $(hiStr)`
+    """
+    if pp
+        @eval (abstract type $TY{𝗽,𝘅} <: $TP{𝗽,𝘅} end)
+    else
+        @eval (abstract type $TY{𝗽,𝘅} <: $TP{𝗽} end)
+    end
+    @eval begin
+        # Type documentation
+        @doc $dcStr $TY
+        # Type exporting
+        if $(xp); export $TY; end
+    end
+end
+
+"""
 `function mk3ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, fpp::Bool=true,
 xp::Bool=true)`\n
 Declares a new, 3-parameter abstract type `TY{𝗽,𝘅,𝗯} <: TP{𝗽,𝘅,𝗯}`, if `fpp` (fully parametric
-parent) is `true` (default), or `TY{𝗽,𝘅,𝗯} <: TP{𝗽}`, otherwise. Argument `what` is inserted in
-the new type documentation, and `xp` controls whether or not the new abstract type is exported
-(default `true`).
+parent) is `true` (default), or `TY{𝗽,𝘅,𝗯} <: TP{𝗽,𝘅}`, otherwise. Argument `what` is inserted
+in the new type documentation, and `xp` controls whether or not the new abstract type is
+exported (default `true`).
 """
 function mk3ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
                    pp::Bool=true, xp::Bool=true)
@@ -87,7 +120,7 @@ function mk3ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
     #end
     hiStr = tyArchy(eval(TP))
     dcStr = """
-`abstract type $(TY){𝗽,𝘅,𝗯} <: $(TP)$(pp ? "{𝗽,𝘅,𝗯}" : "{𝗽}") end`\n
+`abstract type $(TY){𝗽,𝘅,𝗯} <: $(TP)$(pp ? "{𝗽,𝘅,𝗯}" : "{𝗽,𝘅}") end`\n
 Abstract supertype for $(what).\n
 ## Hierarchy\n
 `$(TY) <: $(hiStr)`
@@ -95,7 +128,7 @@ Abstract supertype for $(what).\n
     if pp
         @eval (abstract type $TY{𝗽,𝘅,𝗯} <: $TP{𝗽,𝘅,𝗯} end)
     else
-        @eval (abstract type $TY{𝗽,𝘅,𝗯} <: $TP{𝗽} end)
+        @eval (abstract type $TY{𝗽,𝘅,𝗯} <: $TP{𝗽,𝘅} end)
     end
     @eval begin
         # Type documentation
