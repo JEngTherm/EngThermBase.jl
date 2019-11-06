@@ -63,7 +63,7 @@ eFam = Union{Quantity{𝗾,dimension(u"kJ")},
              Quantity{𝗾,dimension(u"kJ/kg")},
              Quantity{𝗾,dimension(u"kJ/kmol")}} where 𝗾<:Union{𝖥,Measurement{𝘁}} where 𝘁<:𝖥
 
-function u(x::eFam, b::Type{<:ThermBase}=DEF[:IB])
+function u(x::eFam)
     uAmt(x)
 end
 
