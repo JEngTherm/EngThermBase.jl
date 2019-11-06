@@ -21,27 +21,8 @@ mkOneAbsTy(      :MM                            , :exactnessBase                
 # AbstractAmount branch
 mkParAbsTy(  :AbstractAmount                    , :AbstractThermodynamics       , "thermodynamic amount"                                        , false )
 mkParAbsTy(    :Property                        , :AbstractAmount               , "thermodynamic properties"                                    , true  )
-mkParAbsTy(      :extensiveProperty             , :Property                     , "extensive properties"                                        , true  )
-mkParAbsTy(        :basalProperty               , :extensiveProperty            , "extensive base properties"                                   , true  )
-mkParAbsTy(        :systemProperty              , :extensiveProperty            , "extensive non-base system properties"                        , true  )
-mkParAbsTy(      :intensiveProperty             , :Property                     , "intensive properties"                                        , true  )
-mkParAbsTy(        :intrinsicProperty           , :intensiveProperty            , "intrinsic intensive properties"                              , true  )
-mkParAbsTy(        :basalRatio                  , :intensiveProperty            , "heterogeneous base property ratios"                          , true  )
-mkParAbsTy(        :perBaseProperty             , :intensiveProperty            , "specific properties"                                         , true  )
-mkParAbsTy(          :perMassProperty           , :perBaseProperty              , "specific (per mass) properties"                              , true  )
-mkParAbsTy(          :perMoleProperty           , :perBaseProperty              , "specific (per kmol) properties"                              , true  )
-mkParAbsTy(      :propertyFlux                  , :Property                     , "extensive property fluxes"                                   , true  )
-mkParAbsTy(        :basalRate                   , :propertyFlux                 , "base property fluxes"                                        , true  )
-mkParAbsTy(        :perTimeProperty             , :propertyFlux                 , "system property fluxes"                                      , true  )
+mkParAbsTy(      :Intrinsic                     , :Property                     , "intrinsic intensive properties"                              , true  )
 mkParAbsTy(    :Interaction                     , :AbstractAmount               , "thermodynamic interations"                                   , true  )
-mkParAbsTy(      :extensiveInteraction          , :Interaction                  , "extensive interactions"                                      , true  )
-mkParAbsTy(        :systemInteraction           , :extensiveInteraction         , "system extensive interactions"                               , true  )
-mkParAbsTy(      :intensiveInteraction          , :Interaction                  , "intensive interactions"                                      , true  )
-mkParAbsTy(        :perBaseInteraction          , :intensiveInteraction         , "specific interactions"                                       , true  )
-mkParAbsTy(          :perMassInteraction        , :perBaseInteraction           , "specific (per mass) interactions"                            , true  )
-mkParAbsTy(          :perMoleInteraction        , :perBaseInteraction           , "specific (per kmol) interactions"                            , true  )
-mkParAbsTy(      :interactionFlux               , :Interaction                  , "extensive interaction fluxes"                                , true  )
-mkParAbsTy(        :perTimeInteraction          , :interactionFlux              , "system interaction fluxes"                                   , true  )
 mkParAbsTy(    :UnrankedAmount                  , :AbstractAmount               , "unranked amounts"                                            , true  )
 
 # AbstractState branch
@@ -71,16 +52,7 @@ mkOneAbsTy(    :AncillaryFunction               , :AbstractAncillary            
 
 # AbstractAmount Type Unions
 nonProperty         = Union{Interaction,UnrankedAmount}
-perBaseQuantity     = Union{perBaseProperty,perBaseInteraction}
-perMassQuantity     = Union{perMassProperty,perMassInteraction}
-perMoleQuantity     = Union{perMoleProperty,perMoleInteraction}
-perTimeQuantity     = Union{perTimeProperty,perTimeInteraction}
-systemQuantity      = Union{systemProperty,systemInteraction}
-intensiveQuantity   = Union{intensiveProperty,intensiveInteraction}
-extensiveQuantity   = Union{extensiveProperty,extensiveInteraction}
 
 export nonProperty
-export perBaseQuantity, perMassQuantity, perMoleQuantity, perTimeQuantity
-export intensiveQuantity, extensiveQuantity
 
 

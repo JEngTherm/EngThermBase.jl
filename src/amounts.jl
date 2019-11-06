@@ -13,7 +13,7 @@ const 𝑑DT = dimension(UNIT / 𝑢DT)
 const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
-struct uAmt{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
+struct uAmt{𝘁,𝘅,𝗯} <: Property{𝘁}
     amt::QTY{𝘁}
     # Copy constructor
     uAmt(x::uAmt{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.amt)
