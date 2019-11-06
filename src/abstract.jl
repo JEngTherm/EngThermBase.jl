@@ -20,29 +20,29 @@ mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"             
 
 # AMOUNT branch
 mk2ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                        , 0)
-mk2ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"                    , 1)
+mk2ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"                    , 2)
 mk2ParAbs(      :Unbased   , :Property     , "unbased intrinsic intensive properties"      , 2)
 mk3ParAbs(      :Based     , :Property     , "based property groups"                       , 2)
-mk3ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"                   , 1)
-mk2ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                            , 1)
+mk3ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"                   , 2)
+mk2ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                            , 2)
 
 # STATE branch
-mk1ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
-mk1ParAbs(    :PropPair    , :STATE        , "propery pairs"                               , 1)
-mk1ParAbs(    :PropTrio    , :STATE        , "propery trios"                               , 1)
-mk1ParAbs(    :PropQuad    , :STATE        , "propery quads"                               , 1)
+mk2ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
+mk2ParAbs(    :PropPair    , :STATE        , "propery pairs"                               , 2)
+mk2ParAbs(    :PropTrio    , :STATE        , "propery trios"                               , 2)
+mk2ParAbs(    :PropQuad    , :STATE        , "propery quads"                               , 2)
 
 # MODEL branch
-mk1ParAbs(  :MODEL         , :EngTherm     , "thermodynamic model"                         , 0)
-mk1ParAbs(    :Heat        , :MODEL        , "specific heat models"                        , 1)
-mk1ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"               , 1)
-mk1ParAbs(      :UnvarHeat , :Heat         , "univariate specific heat models"             , 1)
-mk1ParAbs(      :BivarHeat , :Heat         , "bivariate specific heat models"              , 1)
-mk1ParAbs(    :Medium      , :MODEL        , "substance/medium models"                     , 1)
-mk1ParAbs(      :Substance , :Medium       , "substance model by Equation of State"        , 1)
-mk1ParAbs(    :System      , :MODEL        , "system models"                               , 1)
-mk1ParAbs(      :Closed    , :System       , "closed systems"                              , 1)
-mk1ParAbs(      :Open      , :System       , "open systems"                                , 1)
+mk2ParAbs(  :MODEL         , :EngTherm     , "thermodynamic model"                         , 0)
+mk2ParAbs(    :Heat        , :MODEL        , "specific heat models"                        , 2)
+mk2ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"               , 2)
+mk2ParAbs(      :UnvarHeat , :Heat         , "univariate specific heat models"             , 2)
+mk2ParAbs(      :BivarHeat , :Heat         , "bivariate specific heat models"              , 2)
+mk2ParAbs(    :Medium      , :MODEL        , "substance/medium models"                     , 2)
+mk2ParAbs(      :Substance , :Medium       , "substance model by Equation of State"        , 2)
+mk2ParAbs(    :System      , :MODEL        , "system models"                               , 2)
+mk2ParAbs(      :Closed    , :System       , "closed systems"                              , 2)
+mk2ParAbs(      :Open      , :System       , "open systems"                                , 2)
 
 # AUX branch
 mkNonPAbs(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
