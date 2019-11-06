@@ -13,7 +13,7 @@ const 𝑑DT = dimension(UNIT / 𝑢DT)
 const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
-struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: Property{𝗽}
+struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: BProperty{𝗽,𝘅,𝗯}
     amt::QTY{𝗽}
     # Copy constructor
     uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = new{𝗽,𝘅,𝗯}(x.amt)
@@ -40,7 +40,7 @@ struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: Property{𝗽}
 end
 
 # Plain real constructor
-uAmt(x::𝗽, b::Type{𝗯}) where {𝗽<:𝖱, 𝗯<:ThermBase} = uAmt(float(x), b)
+uAmt(x::bareR, b::Type{𝗯}) where 𝗯<:ThermBase = uAmt(float(x), b)
 # Precision-changing constructors
 (::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
 (::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
