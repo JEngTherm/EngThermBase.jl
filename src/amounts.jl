@@ -13,42 +13,42 @@ const 𝑑DT = dimension(UNIT / 𝑢DT)
 const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
-struct uAmt{𝘁<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: Property{𝘁}
-    amt::QTY{𝘁}
+struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: Property{𝗽}
+    amt::QTY{𝗽}
     # Copy constructor
-    uAmt(x::uAmt{𝘁,𝘅,𝗯}) where {𝘁,𝘅,𝗯} = new{𝘁,𝘅,𝗯}(x.amt)
+    uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = new{𝗽,𝘅,𝗯}(x.amt)
     # Plain float constructors
-    uAmt(x::𝘁, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(x * UNIT      )
-    uAmt(x::𝘁, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(x * UNIT / 𝑢DT)
-    uAmt(x::𝘁, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(x * UNIT / 𝑢MA)
-    uAmt(x::𝘁, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(x * UNIT / 𝑢MO)
+    uAmt(x::𝗽, ::Type{SY}) where 𝗽<:𝖥 = new{𝗽,EX,SY}(x * UNIT      )
+    uAmt(x::𝗽, ::Type{DT}) where 𝗽<:𝖥 = new{𝗽,EX,DT}(x * UNIT / 𝑢DT)
+    uAmt(x::𝗽, ::Type{MA}) where 𝗽<:𝖥 = new{𝗽,EX,MA}(x * UNIT / 𝑢MA)
+    uAmt(x::𝗽, ::Type{MO}) where 𝗽<:𝖥 = new{𝗽,EX,MO}(x * UNIT / 𝑢MO)
     # Plain measurement constructors
-    uAmt(x::Measurement{𝘁}, ::Type{SY}) where 𝘁<:𝖥 = new{𝘁,MM,SY}(x * UNIT      )
-    uAmt(x::Measurement{𝘁}, ::Type{DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(x * UNIT / 𝑢DT)
-    uAmt(x::Measurement{𝘁}, ::Type{MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(x * UNIT / 𝑢MA)
-    uAmt(x::Measurement{𝘁}, ::Type{MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(x * UNIT / 𝑢MO)
+    uAmt(x::Measurement{𝗽}, ::Type{SY}) where 𝗽<:𝖥 = new{𝗽,MM,SY}(x * UNIT      )
+    uAmt(x::Measurement{𝗽}, ::Type{DT}) where 𝗽<:𝖥 = new{𝗽,MM,DT}(x * UNIT / 𝑢DT)
+    uAmt(x::Measurement{𝗽}, ::Type{MA}) where 𝗽<:𝖥 = new{𝗽,MM,MA}(x * UNIT / 𝑢MA)
+    uAmt(x::Measurement{𝗽}, ::Type{MO}) where 𝗽<:𝖥 = new{𝗽,MM,MO}(x * UNIT / 𝑢MO)
     # Quantity constructors - exact
-    uAmt(x::Quantity{𝘁,𝑑SY}) where 𝘁<:𝖥 = new{𝘁,EX,SY}(uconvert(UNIT      , x))
-    uAmt(x::Quantity{𝘁,𝑑DT}) where 𝘁<:𝖥 = new{𝘁,EX,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::Quantity{𝘁,𝑑MA}) where 𝘁<:𝖥 = new{𝘁,EX,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::Quantity{𝘁,𝑑MO}) where 𝘁<:𝖥 = new{𝘁,EX,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::Quantity{𝗽,𝑑SY}) where 𝗽<:𝖥 = new{𝗽,EX,SY}(uconvert(UNIT      , x))
+    uAmt(x::Quantity{𝗽,𝑑DT}) where 𝗽<:𝖥 = new{𝗽,EX,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::Quantity{𝗽,𝑑MA}) where 𝗽<:𝖥 = new{𝗽,EX,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::Quantity{𝗽,𝑑MO}) where 𝗽<:𝖥 = new{𝗽,EX,MO}(uconvert(UNIT / 𝑢MO, x))
     # Quantity constructors - measurement
-    uAmt(x::Quantity{Measurement{𝘁},𝑑SY}) where 𝘁<:𝖥 = new{𝘁,MM,SY}(uconvert(UNIT      , x))
-    uAmt(x::Quantity{Measurement{𝘁},𝑑DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::Quantity{Measurement{𝘁},𝑑MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::Quantity{Measurement{𝘁},𝑑MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::Quantity{Measurement{𝗽},𝑑SY}) where 𝗽<:𝖥 = new{𝗽,MM,SY}(uconvert(UNIT      , x))
+    uAmt(x::Quantity{Measurement{𝗽},𝑑DT}) where 𝗽<:𝖥 = new{𝗽,MM,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::Quantity{Measurement{𝗽},𝑑MA}) where 𝗽<:𝖥 = new{𝗽,MM,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::Quantity{Measurement{𝗽},𝑑MO}) where 𝗽<:𝖥 = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
 end
 
 # Plain real constructor
-uAmt(x::𝘁, b::Type{𝗯}) where {𝘁<:𝖱, 𝗯<:ThermodynamicBase} = uAmt(float(x), b)
+uAmt(x::𝗽, b::Type{𝗯}) where {𝗽<:𝖱, 𝗯<:ThermodynamicBase} = uAmt(float(x), b)
 # Precision-changing constructors
-(::Type{uAmt{𝘀}})(x::uAmt{𝘁,EX,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
-(::Type{uAmt{𝘀}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
+(::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
+(::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
 # Precision+Exactness-changing constructors
-(::Type{uAmt{𝘀,EX}})(x::uAmt{𝘁,EX,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
-(::Type{uAmt{𝘀,EX}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(𝘀(x.amt.val.val), 𝗯)
-(::Type{uAmt{𝘀,MM}})(x::uAmt{𝘁,EX,𝗯}, e::𝘀=zero(𝘀)) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(measurement(𝘀(x.amt.val), e), 𝗯)
-(::Type{uAmt{𝘀,MM}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
+(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
+(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(𝘀(x.amt.val.val), 𝗯)
+(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,EX,𝗯}, e::𝘀=zero(𝘀)) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(measurement(𝘀(x.amt.val), e), 𝗯)
+(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
 
 export uAmt
 
