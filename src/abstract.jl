@@ -48,13 +48,3 @@ mkOneAbsTy(  :AUX           , :EngTherm     , "ancillary EngTherm types"        
 mkOneAbsTy(    :AuxFunc     , :AUX          , "ancillary functions"                            )
 
 
-#----------------------------------------------------------------------------------------------#
-#                                     Abstract Type Unions                                     #
-#----------------------------------------------------------------------------------------------#
-
-# AbstractAmount Type Unions
-nonProperty         = Union{Interaction,UnrankedAmount}
-
-export nonProperty
-
-
