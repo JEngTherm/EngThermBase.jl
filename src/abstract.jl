@@ -29,6 +29,12 @@ mk3ParAbs(      :BProperty , :BasedAmt     , "based property groups"            
 mk3ParAbs(      :BInteract , :BasedAmt     , "based interaction groups"                    , 3)
 mk3ParAbs(      :BUnranked , :BasedAmt     , "based unranked amount groups"                , 3)
 
+Property = Union{WProperty,BProperty}
+Interact = Union{WInteract,BInteract}
+Unranked = Union{WUnranked,BUnranked}
+
+export Property, Interact, Unranked
+
 # STATE branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
 mk2ParAbs(    :PropPair    , :STATE        , "propery pairs"                               , 2)
