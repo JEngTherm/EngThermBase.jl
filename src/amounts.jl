@@ -40,7 +40,7 @@ struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: Property{𝗽}
 end
 
 # Plain real constructor
-uAmt(x::𝗽, b::Type{𝗯}) where {𝗽<:𝖱, 𝗯<:ThermodynamicBase} = uAmt(float(x), b)
+uAmt(x::𝗽, b::Type{𝗯}) where {𝗽<:𝖱, 𝗯<:ThermBase} = uAmt(float(x), b)
 # Precision-changing constructors
 (::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
 (::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
