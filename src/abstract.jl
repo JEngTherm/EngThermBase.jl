@@ -24,7 +24,7 @@ mk2ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"         
 mk2ParAbs(      :Unbased   , :Property     , "unbased intrinsic intensive properties"      , 2)
 mk3ParAbs(      :Based     , :Property     , "based property groups"                       , 2)
 mk3ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"                   , 1)
-mk1ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                            , 1)
+mk2ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                            , 1)
 
 # STATE branch
 mk1ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
