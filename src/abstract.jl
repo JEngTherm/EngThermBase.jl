@@ -1,54 +1,56 @@
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#                                                      Abstract Thermodynamics Abstract Type Definitions                                                       #
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
+#                              Abstract EngTherm Type Definitions                              #
+#----------------------------------------------------------------------------------------------#
 
-# AbstractThermodynamics root abstract type
-mkOneAbsTy(:AbstractThermodynamics              , :Any                          , "thermodynamic entities"                                              )
+# EngTherm root abstract type
+mkOneAbsTy(:EngTherm        , :Any          , "thermodynamic entities"                         )
 
-# AbstractBase branch
-mkOneAbsTy(  :AbstractBase                      , :AbstractThermodynamics       , "quantity bases"                                                      )
-mkOneAbsTy(    :ThermBase                       , :AbstractBase                 , "thermodynamic bases"                                                 )
-mkOneAbsTy(      :IntBase                       , :ThermBase                    , "intensive bases"                                                     )
-mkOneAbsTy(        :MA                          , :IntBase                      , "the MAss base"                                                       )
-mkOneAbsTy(        :MO                          , :IntBase                      , "the MOlar base"                                                      )
-mkOneAbsTy(      :ExtBase                       , :ThermBase                    , "non-intensive bases"                                                 )
-mkOneAbsTy(        :SY                          , :ExtBase                      , "the SYstem (extensive) base"                                         )
-mkOneAbsTy(        :DT                          , :ExtBase                      , "the Time Derivative (rate) base"                                     )
-mkOneAbsTy(    :ExactBase                       , :AbstractBase                 , "type-exactness bases"                                                )
-mkOneAbsTy(      :EX                            , :exactnessBase                , "the EXact base"                                                      )
-mkOneAbsTy(      :MM                            , :exactnessBase                , "the MeasureMent base"                                                )
+# BASE branch
+mkOneAbsTy(  :BASE          , :EngTherm     , "quantity bases"                                 )
+mkOneAbsTy(    :ThermBase   , :BASE         , "thermodynamic bases"                            )
+mkOneAbsTy(      :IntBase   , :ThermBase    , "intensive bases"                                )
+mkOneAbsTy(        :MA      , :IntBase      , "the MAss base"                                  )
+mkOneAbsTy(        :MO      , :IntBase      , "the MOlar base"                                 )
+mkOneAbsTy(      :ExtBase   , :ThermBase    , "non-intensive bases"                            )
+mkOneAbsTy(        :SY      , :ExtBase      , "the SYstem (extensive) base"                    )
+mkOneAbsTy(        :DT      , :ExtBase      , "the Time Derivative (rate) base"                )
+mkOneAbsTy(    :ExactBase   , :BASE         , "type-exactness bases"                           )
+mkOneAbsTy(      :EX        , :ExactBase    , "the EXact base"                                 )
+mkOneAbsTy(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
-# AbstractAmount branch
-mkParAbsTy(  :AbstractAmount                    , :AbstractThermodynamics       , "thermodynamic amount"                                        , false )
-mkParAbsTy(    :Property                        , :AbstractAmount               , "thermodynamic properties"                                    , true  )
-mkParAbsTy(      :Intrinsic                     , :Property                     , "intrinsic intensive properties"                              , true  )
-mkParAbsTy(    :Interaction                     , :AbstractAmount               , "thermodynamic interations"                                   , true  )
-mkParAbsTy(    :UnrankedAmount                  , :AbstractAmount               , "unranked amounts"                                            , true  )
+# AMOUNT branch
+mkParAbsTy(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                    , false)
+mkParAbsTy(    :Property    , :AMOUNT       , "thermodynamic properties"                , true )
+mkParAbsTy(      :Intrinsic , :Property     , "intrinsic intensive properties"          , true )
+mkParAbsTy(    :Interaction , :AMOUNT       , "thermodynamic interations"               , true )
+mkParAbsTy(    :Unranked    , :AMOUNT       , "unranked amounts"                        , true )
 
-# AbstractState branch
-mkParAbsTy(  :AbstractState                     , :AbstractThermodynamics       , "state types"                                                 , false )
-mkParAbsTy(    :ConceptualState                 , :AbstractState                , "conceptual states, or propery pairs/groups"                  , true  )
+# STATE branch
+mkParAbsTy(  :STATE         , :EngTherm     , "state types"                             , false)
+mkParAbsTy(    :PropPair    , :STATE        , "propery pairs"                           , true )
+mkParAbsTy(    :PropTrio    , :STATE        , "propery trios"                           , true )
+mkParAbsTy(    :PropQuad    , :STATE        , "propery quads"                           , true )
 
-# AbstractModel branch
-mkParAbsTy(  :AbstractModel                     , :AbstractThermodynamics       , "thermodynamic model"                                         , false )
-mkParAbsTy(    :SpHeatModel                     , :AbstractModel                , "specific heat models"                                        , true  )
-mkParAbsTy(      :ConstSpHeatModel              , :SpHeatModel                  , "zero-variate (constant) specific heat models"                , true  )
-mkParAbsTy(      :UnvarSpHeatModel              , :SpHeatModel                  , "ideal gas univariate (T) specific heat models"               , true  )
-mkParAbsTy(      :BivarSpHeatModel              , :SpHeatModel                  , "general bivariate, e.g., (T, v), specific heat models"       , true  )
-mkParAbsTy(    :MediumModel                     , :AbstractModel                , "substance/medium models"                                     , true  )
-mkParAbsTy(      :SubstanceModel                , :MediumModel                  , "substance model by Equation of State (EoS)"                  , true  )
-mkParAbsTy(    :SystemModel                     , :AbstractModel                , "system models"                                               , true  )
-mkParAbsTy(      :ClosedSystem                  , :SystemModel                  , "closed systems"                                              , true  )
-mkParAbsTy(      :OpenSystem                    , :SystemModel                  , "open systems"                                                , true  )
+# MODEL branch
+mkParAbsTy(  :MODEL         , :EngTherm     , "thermodynamic model"                     , false)
+mkParAbsTy(    :Heat        , :MODEL        , "specific heat models"                    , true )
+mkParAbsTy(      :ConstHeat , :Heat         , "constant specific heat models"           , true )
+mkParAbsTy(      :UnvarHeat , :Heat         , "univariate specific heat models"         , true )
+mkParAbsTy(      :BivarHeat , :Heat         , "bivariate specific heat models"          , true )
+mkParAbsTy(    :Medium      , :MODEL        , "substance/medium models"                 , true )
+mkParAbsTy(      :Substance , :Medium       , "substance model by Equation of State"    , true )
+mkParAbsTy(    :System      , :MODEL        , "system models"                           , true )
+mkParAbsTy(      :Closed    , :System       , "closed systems"                          , true )
+mkParAbsTy(      :Open      , :System       , "open systems"                            , true )
 
-# AbstractAncillary branch
-mkOneAbsTy(  :AbstractAncillary                 , :AbstractThermodynamics       , "ancillary types"                                                     )
-mkOneAbsTy(    :AncillaryFunction               , :AbstractAncillary            , "ancillary functions"                                                 )
+# AUX branch
+mkOneAbsTy(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
+mkOneAbsTy(    :AuxFunc     , :AUX          , "ancillary functions"                            )
 
 
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#                                                                     Abstract Type Unions                                                                     #
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
+#                                     Abstract Type Unions                                     #
+#----------------------------------------------------------------------------------------------#
 
 # AbstractAmount Type Unions
 nonProperty         = Union{Interaction,UnrankedAmount}
