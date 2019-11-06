@@ -3,48 +3,48 @@
 #----------------------------------------------------------------------------------------------#
 
 # EngTherm root abstract type
-mkOneAbsTy(:EngTherm        , :Any          , "thermodynamic entities"                         )
+mkNonPAbs(:EngTherm        , :Any          , "thermodynamic entities"                         )
 
 # BASE branch
-mkOneAbsTy(  :BASE          , :EngTherm     , "quantity bases"                                 )
-mkOneAbsTy(    :ThermBase   , :BASE         , "thermodynamic bases"                            )
-mkOneAbsTy(      :IntBase   , :ThermBase    , "intensive bases"                                )
-mkOneAbsTy(        :MA      , :IntBase      , "the MAss base"                                  )
-mkOneAbsTy(        :MO      , :IntBase      , "the MOlar base"                                 )
-mkOneAbsTy(      :ExtBase   , :ThermBase    , "non-intensive bases"                            )
-mkOneAbsTy(        :SY      , :ExtBase      , "the SYstem (extensive) base"                    )
-mkOneAbsTy(        :DT      , :ExtBase      , "the Time Derivative (rate) base"                )
-mkOneAbsTy(    :ExactBase   , :BASE         , "type-exactness bases"                           )
-mkOneAbsTy(      :EX        , :ExactBase    , "the EXact base"                                 )
-mkOneAbsTy(      :MM        , :ExactBase    , "the MeasureMent base"                           )
+mkNonPAbs(  :BASE          , :EngTherm     , "quantity bases"                                 )
+mkNonPAbs(    :ThermBase   , :BASE         , "thermodynamic bases"                            )
+mkNonPAbs(      :IntBase   , :ThermBase    , "intensive bases"                                )
+mkNonPAbs(        :MA      , :IntBase      , "the MAss base"                                  )
+mkNonPAbs(        :MO      , :IntBase      , "the MOlar base"                                 )
+mkNonPAbs(      :ExtBase   , :ThermBase    , "non-intensive bases"                            )
+mkNonPAbs(        :SY      , :ExtBase      , "the SYstem (extensive) base"                    )
+mkNonPAbs(        :DT      , :ExtBase      , "the Time Derivative (rate) base"                )
+mkNonPAbs(    :ExactBase   , :BASE         , "type-exactness bases"                           )
+mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                                 )
+mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
 # AMOUNT branch
-mkParAbsTy(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                    , false)
-mkParAbsTy(    :Property    , :AMOUNT       , "thermodynamic properties"                , true )
-mkParAbsTy(      :Intrinsic , :Property     , "intrinsic intensive properties"          , true )
-mkParAbsTy(    :Interaction , :AMOUNT       , "thermodynamic interations"               , true )
-mkParAbsTy(    :Unranked    , :AMOUNT       , "unranked amounts"                        , true )
+mk1ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                    , false)
+mk1ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"                , true )
+mk1ParAbs(      :Intrinsic , :Property     , "intrinsic intensive properties"          , true )
+mk1ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"               , true )
+mk1ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                        , true )
 
 # STATE branch
-mkParAbsTy(  :STATE         , :EngTherm     , "state types"                             , false)
-mkParAbsTy(    :PropPair    , :STATE        , "propery pairs"                           , true )
-mkParAbsTy(    :PropTrio    , :STATE        , "propery trios"                           , true )
-mkParAbsTy(    :PropQuad    , :STATE        , "propery quads"                           , true )
+mk1ParAbs(  :STATE         , :EngTherm     , "state types"                             , false)
+mk1ParAbs(    :PropPair    , :STATE        , "propery pairs"                           , true )
+mk1ParAbs(    :PropTrio    , :STATE        , "propery trios"                           , true )
+mk1ParAbs(    :PropQuad    , :STATE        , "propery quads"                           , true )
 
 # MODEL branch
-mkParAbsTy(  :MODEL         , :EngTherm     , "thermodynamic model"                     , false)
-mkParAbsTy(    :Heat        , :MODEL        , "specific heat models"                    , true )
-mkParAbsTy(      :ConstHeat , :Heat         , "constant specific heat models"           , true )
-mkParAbsTy(      :UnvarHeat , :Heat         , "univariate specific heat models"         , true )
-mkParAbsTy(      :BivarHeat , :Heat         , "bivariate specific heat models"          , true )
-mkParAbsTy(    :Medium      , :MODEL        , "substance/medium models"                 , true )
-mkParAbsTy(      :Substance , :Medium       , "substance model by Equation of State"    , true )
-mkParAbsTy(    :System      , :MODEL        , "system models"                           , true )
-mkParAbsTy(      :Closed    , :System       , "closed systems"                          , true )
-mkParAbsTy(      :Open      , :System       , "open systems"                            , true )
+mk1ParAbs(  :MODEL         , :EngTherm     , "thermodynamic model"                     , false)
+mk1ParAbs(    :Heat        , :MODEL        , "specific heat models"                    , true )
+mk1ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"           , true )
+mk1ParAbs(      :UnvarHeat , :Heat         , "univariate specific heat models"         , true )
+mk1ParAbs(      :BivarHeat , :Heat         , "bivariate specific heat models"          , true )
+mk1ParAbs(    :Medium      , :MODEL        , "substance/medium models"                 , true )
+mk1ParAbs(      :Substance , :Medium       , "substance model by Equation of State"    , true )
+mk1ParAbs(    :System      , :MODEL        , "system models"                           , true )
+mk1ParAbs(      :Closed    , :System       , "closed systems"                          , true )
+mk1ParAbs(      :Open      , :System       , "open systems"                            , true )
 
 # AUX branch
-mkOneAbsTy(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
-mkOneAbsTy(    :AuxFunc     , :AUX          , "ancillary functions"                            )
+mkNonPAbs(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
+mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"                            )
 
 
