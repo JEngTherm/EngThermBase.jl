@@ -37,34 +37,18 @@ struct uAmt{𝘁,𝘅,𝗯} <: basalProperty{𝘁}
     uAmt(x::Quantity{Measurement{𝘁},𝑑DT}) where 𝘁<:𝖥 = new{𝘁,MM,DT}(uconvert(UNIT / 𝑢DT, x))
     uAmt(x::Quantity{Measurement{𝘁},𝑑MA}) where 𝘁<:𝖥 = new{𝘁,MM,MA}(uconvert(UNIT / 𝑢MA, x))
     uAmt(x::Quantity{Measurement{𝘁},𝑑MO}) where 𝘁<:𝖥 = new{𝘁,MM,MO}(uconvert(UNIT / 𝑢MO, x))
-    # Precision-changing constructors
-    (::Type{uAmt{𝘀}})(x::uAmt{𝘁,EX,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        new{𝘀,EX,𝗯}(𝘀(x.amt.val) * unit(x.amt))
-    end
-    ### The following is waay faster
-    (::Type{uAmt{𝘀}})(x::uAmt{𝘁,EX,𝗯}, bare::Bool) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        uAmt(𝘀(x.amt.val), 𝗯)
-    end
-    (::Type{uAmt{𝘀}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        new{𝘀,MM,𝗯}(Measurement{𝘀}(x.amt.val) * unit(x.amt))
-    end
-    # Precision+Exactness-changing constructors
-    (::Type{uAmt{𝘀,EX}})(x::uAmt{𝘁,EX,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        new{𝘀,EX,𝗯}(𝘀(x.amt.val) * unit(x.amt))
-    end
-    (::Type{uAmt{𝘀,EX}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        new{𝘀,EX,𝗯}(𝘀(x.amt.val.val) * unit(x.amt))
-    end
-    (::Type{uAmt{𝘀,MM}})(x::uAmt{𝘁,EX,𝗯}, e::𝘀=zero(𝘀)) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        new{𝘀,MM,𝗯}(measurement(𝘀(x.amt.val), e) * unit(x.amt))
-    end
-    (::Type{uAmt{𝘀,MM}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = begin
-        new{𝘀,MM,𝗯}(Measurement{𝘀}(x.amt.val) * unit(x.amt))
-    end
 end
 
 # Plain real constructor
 uAmt(x::𝘁, b::Type{𝗯}) where {𝘁<:𝖱, 𝗯<:ThermodynamicBase} = uAmt(float(x), b)
+# Precision-changing constructors
+(::Type{uAmt{𝘀}})(x::uAmt{𝘁,EX,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
+(::Type{uAmt{𝘀}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
+# Precision+Exactness-changing constructors
+(::Type{uAmt{𝘀,EX}})(x::uAmt{𝘁,EX,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
+(::Type{uAmt{𝘀,EX}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(𝘀(x.amt.val.val), 𝗯)
+(::Type{uAmt{𝘀,MM}})(x::uAmt{𝘁,EX,𝗯}, e::𝘀=zero(𝘀)) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(measurement(𝘀(x.amt.val), e), 𝗯)
+(::Type{uAmt{𝘀,MM}})(x::uAmt{𝘁,MM,𝗯}) where {𝘀<:𝖥,𝘁,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
 
 export uAmt
 
