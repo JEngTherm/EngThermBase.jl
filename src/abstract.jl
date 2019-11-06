@@ -21,7 +21,8 @@ mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"             
 # AMOUNT branch
 mk1ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                    , false)
 mk1ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"                , true )
-mk1ParAbs(      :Intrinsic , :Property     , "intrinsic intensive properties"          , true )
+mk1ParAbs(      :Unbased   , :Property     , "unbased intrinsic intensive properties"  , true )
+mk1ParAbs(      :Based     , :Property     , "based property groups"                   , true )
 mk1ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"               , true )
 mk1ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                        , true )
 
