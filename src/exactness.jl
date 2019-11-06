@@ -6,7 +6,7 @@
 𝖥 = Union{Float16,Float32,Float64,BigFloat}
 
 # \sansR<TAB>: plain Julia Reals (since Unitful.Quantity <: Number)
-𝖱 = Union{Complex,AbstractIrrational,Integer,Rational}
+𝖱 = Union{AbstractIrrational,Integer,Rational}
 
 # Exact types: all type params are \bsans#<TAB>
 ETY{𝘁} = Quantity{𝘁} where 𝘁<:𝖥
