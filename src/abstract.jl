@@ -18,7 +18,7 @@ mkNonPAbs(    :ExactBase   , :BASE         , "type-exactness bases"             
 mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                                 )
 mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
-# AMOUNT branch
+# AMOUNT branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                        , 0)
 mk2ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"                    , 2)
 mk2ParAbs(      :Unbased   , :Property     , "unbased intrinsic intensive properties"      , 2)
@@ -26,13 +26,13 @@ mk3ParAbs(      :Based     , :Property     , "based property groups"            
 mk3ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"                   , 2)
 mk2ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                            , 2)
 
-# STATE branch
+# STATE branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
 mk2ParAbs(    :PropPair    , :STATE        , "propery pairs"                               , 2)
 mk2ParAbs(    :PropTrio    , :STATE        , "propery trios"                               , 2)
 mk2ParAbs(    :PropQuad    , :STATE        , "propery quads"                               , 2)
 
-# MODEL branch
+# MODEL branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :MODEL         , :EngTherm     , "thermodynamic model"                         , 0)
 mk2ParAbs(    :Heat        , :MODEL        , "specific heat models"                        , 2)
 mk2ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"               , 2)
