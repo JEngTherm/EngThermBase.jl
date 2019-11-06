@@ -20,11 +20,14 @@ mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"             
 
 # AMOUNT branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                        , 0)
-mk2ParAbs(    :Property    , :AMOUNT       , "thermodynamic properties"                    , 2)
-mk2ParAbs(      :Unbased   , :Property     , "unbased intrinsic intensive properties"      , 2)
-mk3ParAbs(      :Based     , :Property     , "based property groups"                       , 2)
-mk3ParAbs(    :Interaction , :AMOUNT       , "thermodynamic interations"                   , 2)
-mk2ParAbs(    :Unranked    , :AMOUNT       , "unranked amounts"                            , 2)
+mk2ParAbs(    :WholeAmt    , :AMOUNT       , "whole, unbased amounts"                      , 2)
+mk2ParAbs(      :WProperty , :WholeAmt     , "whole, unbased properties"                   , 2)
+mk2ParAbs(      :WInteract , :WholeAmt     , "whole, unbased interactions"                 , 2)
+mk2ParAbs(      :WUnranked , :WholeAmt     , "whole, unbased unranked amounts"             , 2)
+mk3ParAbs(    :BasedAmt    , :AMOUNT       , "based amount groups"                         , 2)
+mk3ParAbs(      :BProperty , :BasedAmt     , "based property groups"                       , 3)
+mk3ParAbs(      :BInteract , :BasedAmt     , "based interaction groups"                    , 3)
+mk3ParAbs(      :BUnranked , :BasedAmt     , "based unranked amount groups"                , 3)
 
 # STATE branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
