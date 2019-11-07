@@ -14,9 +14,10 @@ const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
 struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: BProperty{𝗽,𝘅,𝗯}
-    amt::QTY{𝗽}
+    amt::ATY{𝗽}
     # Copy constructor
     uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = new{𝗽,𝘅,𝗯}(x.amt)
+    # Plain constructors enforce default units & avoid unit conversion
     # Plain float constructors
     uAmt(x::𝗽, ::Type{SY}) where 𝗽<:𝖥 = new{𝗽,EX,SY}(x * UNIT      )
     uAmt(x::𝗽, ::Type{DT}) where 𝗽<:𝖥 = new{𝗽,EX,DT}(x * UNIT / 𝑢DT)
@@ -27,16 +28,17 @@ struct uAmt{𝗽<:𝖥, 𝘅<:ExactBase, 𝗯<:ThermBase} <: BProperty{𝗽,𝘅
     uAmt(x::Measurement{𝗽}, ::Type{DT}) where 𝗽<:𝖥 = new{𝗽,MM,DT}(x * UNIT / 𝑢DT)
     uAmt(x::Measurement{𝗽}, ::Type{MA}) where 𝗽<:𝖥 = new{𝗽,MM,MA}(x * UNIT / 𝑢MA)
     uAmt(x::Measurement{𝗽}, ::Type{MO}) where 𝗽<:𝖥 = new{𝗽,MM,MO}(x * UNIT / 𝑢MO)
+    # Quantity constructors have to perform unit conversion despite matching dimensions
     # Quantity constructors - exact
-    uAmt(x::Quantity{𝗽,𝑑SY}) where 𝗽<:𝖥 = new{𝗽,EX,SY}(uconvert(UNIT      , x))
-    uAmt(x::Quantity{𝗽,𝑑DT}) where 𝗽<:𝖥 = new{𝗽,EX,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::Quantity{𝗽,𝑑MA}) where 𝗽<:𝖥 = new{𝗽,EX,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::Quantity{𝗽,𝑑MO}) where 𝗽<:𝖥 = new{𝗽,EX,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::QTTY{𝗽,𝑑SY}) where 𝗽<:𝖥 = new{𝗽,EX,SY}(uconvert(UNIT      , x))
+    uAmt(x::QTTY{𝗽,𝑑DT}) where 𝗽<:𝖥 = new{𝗽,EX,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::QTTY{𝗽,𝑑MA}) where 𝗽<:𝖥 = new{𝗽,EX,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::QTTY{𝗽,𝑑MO}) where 𝗽<:𝖥 = new{𝗽,EX,MO}(uconvert(UNIT / 𝑢MO, x))
     # Quantity constructors - measurement
-    uAmt(x::Quantity{Measurement{𝗽},𝑑SY}) where 𝗽<:𝖥 = new{𝗽,MM,SY}(uconvert(UNIT      , x))
-    uAmt(x::Quantity{Measurement{𝗽},𝑑DT}) where 𝗽<:𝖥 = new{𝗽,MM,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::Quantity{Measurement{𝗽},𝑑MA}) where 𝗽<:𝖥 = new{𝗽,MM,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::Quantity{Measurement{𝗽},𝑑MO}) where 𝗽<:𝖥 = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::QTTY{Measurement{𝗽},𝑑SY}) where 𝗽<:𝖥 = new{𝗽,MM,SY}(uconvert(UNIT      , x))
+    uAmt(x::QTTY{Measurement{𝗽},𝑑DT}) where 𝗽<:𝖥 = new{𝗽,MM,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::QTTY{Measurement{𝗽},𝑑MA}) where 𝗽<:𝖥 = new{𝗽,MM,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::QTTY{Measurement{𝗽},𝑑MO}) where 𝗽<:𝖥 = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
 end
 
 # Plain real constructor
@@ -51,6 +53,7 @@ uAmt(x::bareR, b::Type{𝗯}) where 𝗯<:ThermBase = uAmt(float(x), b)
 (::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:𝖥,𝗽,𝗯} = uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
 
 export uAmt
+
 
 # Indirect construction from plain
 function u(x::𝗾, b::Type{𝗯}=DEF[:IB]) where {𝗾<:Union{𝖥,𝖱,Measurement{𝘁}} where 𝘁<:𝖥, 𝗯<:ThermBase}
