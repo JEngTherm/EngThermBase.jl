@@ -6,8 +6,7 @@ using Reexport
 @reexport using Unitful
 @reexport using Measurements
 
-# Includes - abstract types
-include("factory.jl")
+# Includes - abstract supertypes
 include("abstract.jl")
 
 # Includes - default settings

@@ -41,7 +41,7 @@ end
 
 
 #----------------------------------------------------------------------------------------------#
-#                              Abstract EngTherm Type Definitions                              #
+#                        EngTherm Plain Abstract Supertype Definitions                         #
 #----------------------------------------------------------------------------------------------#
 
 # EngTherm root abstract type
@@ -60,6 +60,161 @@ mkNonPAbs(    :ExactBase   , :BASE         , "type-exactness bases"             
 mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                                 )
 mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
+# AUX branch
+mkNonPAbs(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
+mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"                            )
+
+
+#----------------------------------------------------------------------------------------------#
+#                Concrete type unions for allowed abstract supertype parameters                #
+#----------------------------------------------------------------------------------------------#
+
+"""
+`const PRECISION = Union{Float16,Float32,Float64,BigFloat}`\n
+Concrete PRECISION type union for parametric abstract types.
+"""
+const PRECISION = Union{Float16,Float32,Float64,BigFloat}
+
+"""
+`const EXACTNESS = Union{EX,MM}`\n
+Concrete EXACTNESS type union for parametric abstract types.
+"""
+const EXACTNESS = Union{EX,MM}
+
+"""
+`const THERMBASE = Union{MA,MO,SY,DT}`\n
+Concrete THERMBASE type union for parametric abstract types.
+"""
+const THERMBASE = Union{MA,MO,SY,DT}
+
+
+#----------------------------------------------------------------------------------------------#
+#            {PRECISION[,EXACTNESS[,THERMBASE]]} Parametric Abstract Type Factories            #
+#----------------------------------------------------------------------------------------------#
+
+"""
+`function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Integer=1,
+xp::Bool=true)`\n
+Declares a new, 1-parameter abstract type. Parent type parameter count is a function of `pp`, so
+that declarations are as follows:\n
+- `TY{𝗽} <: TP{𝗽}` for `pp >= 1` (default);
+- `TY{𝗽<:PRECISION} <: TP` for `pp <= 0`.\n
+Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
+new abstract type is exported (default `true`).
+"""
+function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
+                   pp::Integer=1, xp::Bool=true)
+    #if !(eval(TP) isa DataType)
+    #    error("Type parent must be a DataType. Got $(string(TP)).")
+    #end
+    hiStr = tyArchy(eval(TP))
+    ppStr = pp>=1 ? "{𝗽}" : ""
+    tpStr = pp>=1 ? "{𝗽}" : "{𝗽<:PRECISION}"
+    dcStr = """
+`abstract type $(TY)$(tpStr) <: $(TP)$(ppStr) end`\n
+Abstract supertype for $(what).\n
+## Hierarchy\n
+`$(TY) <: $(hiStr)`
+    """
+    if      pp>=1   @eval (abstract type $TY{𝗽} <: $TP{𝗽} end)
+    elseif  pp<=0   @eval (abstract type $TY{𝗽<:PRECISION} <: $TP end)
+    end
+    @eval begin
+        # Type documentation
+        @doc $dcStr $TY
+        # Type exporting
+        if $(xp); export $TY; end
+    end
+end
+
+"""
+`function mk2ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Integer=2,
+xp::Bool=true)`\n
+Declares a new, 2-parameter abstract type. Parent type parameter count is a function of `pp`, so
+that declarations are as follows:\n
+- `TY{𝗽,𝘅} <: TP{𝗽,𝘅}` for `pp >= 2` (default);
+- `TY{𝗽,𝘅<:EXACTNESS} <: TP{𝗽}` for `pp = 1`;
+- `TY{𝗽<:PRECISION,𝘅<:EXACTNESS} <: TP` for `pp <= 0`.\n
+Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
+new abstract type is exported (default `true`).
+"""
+function mk2ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
+                   pp::Integer=2, xp::Bool=true)
+    #if !(eval(TP) isa DataType)
+    #    error("Type parent must be a DataType. Got $(string(TP)).")
+    #end
+    hiStr = tyArchy(eval(TP))
+    ppStr = pp>=2 ? "{𝗽,𝘅}" : pp==1 ? "{𝗽}" : ""
+    tpStr = pp>=2 ? "{𝗽,𝘅}" : pp==1 ? "{𝗽,𝘅<:EXACTNESS}" : "{𝗽<:PRECISION,𝘅<:EXACTNESS}"
+    dcStr = """
+`abstract type $(TY)$(tpStr) <: $(TP)$(ppStr) end`\n
+Abstract supertype for $(what).\n
+## Hierarchy\n
+`$(TY) <: $(hiStr)`
+    """
+    if      pp>=2   @eval (abstract type $TY{𝗽,𝘅} <: $TP{𝗽,𝘅} end)
+    elseif  pp==1   @eval (abstract type $TY{𝗽,𝘅<:EXACTNESS} <: $TP{𝗽} end)
+    elseif  pp<=0   @eval (abstract type $TY{𝗽<:PRECISION,𝘅<:EXACTNESS} <: $TP end)
+    end
+    @eval begin
+        # Type documentation
+        @doc $dcStr $TY
+        # Type exporting
+        if $(xp); export $TY; end
+    end
+end
+
+"""
+`function mk3ParAbs(TY::Symbol, TP::Symbol, what::AbstractString, pp::Integer=3,
+xp::Bool=true)`\n
+Declares a new, 3-parameter abstract type. Parent type parameter count is a function of `pp`, so
+that declarations are as follows:\n
+- `TY{𝗽,𝘅,𝗯} <: TP{𝗽,𝘅,𝗯}` for `pp >= 3` (default);
+- `TY{𝗽,𝘅,𝗯<:THERMBASE} <: TP{𝗽,𝘅}` for `pp == 2`;
+- `TY{𝗽,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: TP{𝗽}` for `pp = 1`;
+- `TY{𝗽<:PRECISION,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: TP` for `pp <= 0`.\n
+Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
+new abstract type is exported (default `true`).
+"""
+function mk3ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
+                   pp::Integer=3, xp::Bool=true)
+    #if !(eval(TP) isa DataType)
+    #    error("Type parent must be a DataType. Got $(string(TP)).")
+    #end
+    hiStr = tyArchy(eval(TP))
+    ppStr = pp>=3 ? "{𝗽,𝘅,𝗯}" : pp==2 ? "{𝗽,𝘅}" : pp==1 ? "{𝗽}" : ""
+    tpStr = pp>=3 ? "{𝗽,𝘅,𝗯}" :
+            pp==2 ? "{𝗽,𝘅,𝗯<:THERMBASE}" :
+            pp==1 ? "{𝗽,𝘅<:EXACTNESS,𝗯<:THERMBASE}" :
+                    "{𝗽<:PRECISION,𝘅<:EXACTNESS,𝗯<:THERMBASE}"
+    dcStr = """
+`abstract type $(TY)$(tpStr) <: $(TP)$(ppStr) end`\n
+Abstract supertype for $(what).\n
+## Hierarchy\n
+`$(TY) <: $(hiStr)`
+    """
+    if pp>=3
+        @eval (abstract type $TY{𝗽,𝘅,𝗯} <: $TP{𝗽,𝘅,𝗯} end)
+    elseif pp==2
+        @eval (abstract type $TY{𝗽,𝘅,𝗯<:THERMBASE} <: $TP{𝗽,𝘅} end)
+    elseif pp==1
+        @eval (abstract type $TY{𝗽,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: $TP{𝗽} end)
+    elseif pp<=0
+        @eval (abstract type $TY{𝗽<:PRECISION,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: $TP end)
+    end
+    @eval begin
+        # Type documentation
+        @doc $dcStr $TY
+        # Type exporting
+        if $(xp); export $TY; end
+    end
+end
+
+
+#----------------------------------------------------------------------------------------------#
+#                      EngTherm Parametric Abstract Supertype Definitions                      #
+#----------------------------------------------------------------------------------------------#
+
 # AMOUNT branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                        , 0)
 mk2ParAbs(    :WholeAmt    , :AMOUNT       , "whole, unbased amounts"                      , 2)
@@ -71,9 +226,9 @@ mk3ParAbs(      :BProperty , :BasedAmt     , "based property groups"            
 mk3ParAbs(      :BInteract , :BasedAmt     , "based interaction groups"                    , 3)
 mk3ParAbs(      :BUnranked , :BasedAmt     , "based unranked amount groups"                , 3)
 
-Property = Union{WProperty,BProperty}
-Interact = Union{WInteract,BInteract}
-Unranked = Union{WUnranked,BUnranked}
+Property{𝗽,𝘅} = Union{WProperty{𝗽,𝘅},BProperty{𝗽,𝘅,𝗯} where 𝗯} where {𝗽,𝘅}
+Interact{𝗽,𝘅} = Union{WInteract{𝗽,𝘅},BInteract{𝗽,𝘅,𝗯} where 𝗯} where {𝗽,𝘅}
+Unranked{𝗽,𝘅} = Union{WUnranked{𝗽,𝘅},BUnranked{𝗽,𝘅,𝗯} where 𝗯} where {𝗽,𝘅}
 
 export Property, Interact, Unranked
 
@@ -94,9 +249,5 @@ mk2ParAbs(      :Substance , :Medium       , "substance model by Equation of Sta
 mk2ParAbs(    :System      , :MODEL        , "system models"                               , 2)
 mk2ParAbs(      :Closed    , :System       , "closed systems"                              , 2)
 mk2ParAbs(      :Open      , :System       , "open systems"                                , 2)
-
-# AUX branch
-mkNonPAbs(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
-mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"                            )
 
 
