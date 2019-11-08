@@ -1,82 +1,175 @@
-# Test-of-concept for 3-parameter amounts
-# ---------------------------------------
+#----------------------------------------------------------------------------------------------#
+#                                           Imports                                            #
+#----------------------------------------------------------------------------------------------#
 
-# Constant Base Units: \itu<TAB> for semantic difference
-const 𝑢MA = u"kg"
-const 𝑢MO = u"kmol"
-const 𝑢DT = u"s"
+import Unicode: normalize
 
-const UNIT = u"kJ"
 
-const 𝑑SY = dimension(UNIT      )
-const 𝑑DT = dimension(UNIT / 𝑢DT)
-const 𝑑MA = dimension(UNIT / 𝑢MA)
-const 𝑑MO = dimension(UNIT / 𝑢MO)
+#----------------------------------------------------------------------------------------------#
+#                                    Amount Type Interface                                     #
+#----------------------------------------------------------------------------------------------#
 
-struct uAmt{𝗽,𝘅,𝗯} <: BProperty{𝗽,𝘅,𝗯}
-    amt::Union{UATY{𝗽,𝑑SY},UATY{𝗽,𝑑DT},UATY{𝗽,𝑑MA},UATY{𝗽,𝑑MO}} where 𝗽<:PREC
-    # Copy constructor
-    uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(x.amt)
-    # Plain constructors enforce default units & avoid unit conversion
-    # Plain Exact (𝗽<:PREC) float constructors
-    uAmt(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(x * UNIT      )
-    uAmt(x::𝗽, ::Type{DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(x * UNIT / 𝑢DT)
-    uAmt(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(x * UNIT / 𝑢MA)
-    uAmt(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(x * UNIT / 𝑢MO)
-    # Plain Measurement (PMTY) constructors
-    uAmt(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(x * UNIT      )
-    uAmt(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(x * UNIT / 𝑢DT)
-    uAmt(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(x * UNIT / 𝑢MA)
-    uAmt(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(x * UNIT / 𝑢MO)
-    # Quantity constructors have to perform unit conversion despite matching dimensions
-    # United Exact (UETY) constructors
-    uAmt(x::UETY{𝗽,𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(uconvert(UNIT      , x))
-    uAmt(x::UETY{𝗽,𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::UETY{𝗽,𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::UETY{𝗽,𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(uconvert(UNIT / 𝑢MO, x))
-    # United Measurement (UMTY) constructors
-    uAmt(x::UMTY{𝗽,𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(uconvert(UNIT      , x))
-    uAmt(x::UMTY{𝗽,𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::UMTY{𝗽,𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::UMTY{𝗽,𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
+"""
+`function deco end`\n
+Interface to return a unique decorative `Symbol` from a method's argument type.
+"""
+function deco end
+
+export deco
+
+
+#----------------------------------------------------------------------------------------------#
+#                                    Amount Type Factories                                     #
+#----------------------------------------------------------------------------------------------#
+
+"""
+Based Amount type factory.
+"""
+function mkBasAmt(PREF::Symbol,         # Lowercase Prefix:     :u
+                  SUPT::Symbol,         # Supertype:            :BProperty
+                  SYMB::AbstractString, # Printing symbol:      "U"
+                  UNIT::Unitful.Units,  # SY quantity units:    u"kJ"
+                  WHAT::AbstractString, # Description:          "internal energy"
+                  DELT::Bool=false;     # Whether a Δ quantity
+                  bsym::NTuple{4,Symbol}=(:none,:none,:none,:none)
+                 )
+    # Constants
+    TYPE = Symbol(string(PREF) * "Amt")
+    𝑢SY = UNIT
+    𝑢DT = UNIT / u"s"
+    𝑢MA = UNIT / u"kg"
+    𝑢MO = UNIT / u"kmol"
+    𝑑SY = dimension(𝑢SY)
+    𝑑DT = dimension(𝑢DT)
+    𝑑MA = dimension(𝑢MA)
+    𝑑MO = dimension(𝑢MO)
+    i, f = DELT ? (2, 3) : (1, 2)
+    𝑠SY = bsym[1] == :none ? normalize(DELT ? "Δ" : "" * uppercase(string(SYMB))) : bsym[1]
+    𝑠DT = bsym[2] == :none ? normalize(string(𝑠SY[i], "\u0307", 𝑠SY[f:end])) : bsym[2]
+    𝑠MA = bsym[3] == :none ? normalize(DELT ? "Δ" : "" * lowercase(string(SYMB))) : bsym[3]
+    𝑠MO = bsym[4] == :none ? normalize(string(𝑠MA[i], "\u0304", 𝑠MA[f:end])) : bsym[4]
+    # Documentation
+    hiStr = tyArchy(eval(SUPT))
+    dcStr = """
+`struct $TYPE{𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: $SUPT{𝗽,𝘅,𝗯}`\n
+Precision-, Exactness-, and Base- parametric $WHAT amounts based in $UNIT.\n
+`$TYPE{𝗽,𝘅,𝗯}` parameters are:\n
+- Precision `𝗽<:Union{Float16,Float32,Float64,BigFloat}`;\n
+- Exactness `𝘅<:Union{EX,MM}`, i.e., either a single, precise value or an uncertainty-bearing
+  measurement, respectively;\n
+- Thermodynamic base `𝗯<:Union{SY,DT,MA,MO}` respectively for system, rate, mass, or molar
+  quantities, respectively in units of $(𝑢SY), $(𝑢DT), $(𝑢MA), or $(𝑢MO).\n
+A `$TYPE` can be natively constructed from the following argument types:\n
+- A plain, unitless float;\n
+- A plain, unitless `Measurement`; hence, any `AbstractFloat`;\n
+- A `Quantity{AbstractFloat}` with compatible units.\n
+Constructors determine parameters from their arguments. `Quantity` constructors do not need a
+base argument. Plain, `AbstractFloat` ones require the base argument.\n
+## Hierarchy\n
+`$(TYPE) <: $(hiStr)`
+    """
+    # @eval block
+    @eval begin
+        # Concrete type definition
+        struct $TYPE{𝗽,𝘅,𝗯} <: $SUPT{𝗽,𝘅,𝗯}
+            amt::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}} where 𝗽<:PREC
+            # Copy constructor
+            $TYPE(x::$TYPE{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(x.amt)
+            # Plain constructors enforce default units & avoid unit conversion
+            # Plain Exact (𝗽<:PREC) float constructors
+            $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(x * $𝑢SY)
+            $TYPE(x::𝗽, ::Type{DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(x * $𝑢DT)
+            $TYPE(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(x * $𝑢MA)
+            $TYPE(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(x * $𝑢MO)
+            # Plain Measurement (PMTY) constructors
+            $TYPE(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(x * $𝑢SY)
+            $TYPE(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(x * $𝑢DT)
+            $TYPE(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(x * $𝑢MA)
+            $TYPE(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(x * $𝑢MO)
+            # Quantity constructors have to perform unit conversion despite matching dimensions
+            # United Exact (UETY) constructors
+            $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(uconvert($𝑢SY, x))
+            $TYPE(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(uconvert($𝑢DT, x))
+            $TYPE(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(uconvert($𝑢MA, x))
+            $TYPE(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(uconvert($𝑢MO, x))
+            # United Measurement (UMTY) constructors
+            $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(uconvert($𝑢SY, x))
+            $TYPE(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(uconvert($𝑢DT, x))
+            $TYPE(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(uconvert($𝑢MA, x))
+            $TYPE(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert($𝑢MO, x))
+        end
+        # Type documentation
+        @doc $dcStr $TYPE
+        # Precision-changing external constructors
+        (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
+            $TYPE(𝘀(x.amt.val), 𝗯)
+        end
+        (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
+            $TYPE(Measurement{𝘀}(x.amt.val), 𝗯)
+        end
+        # Precision+Exactness-changing external constructors
+        (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
+            $TYPE(𝘀(x.amt.val), 𝗯)
+        end
+        (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
+            $TYPE(𝘀(x.amt.val.val), 𝗯)
+        end
+        (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX,𝗯},
+                            e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
+                            ) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
+            $TYPE(measurement(𝘀(x.amt.val), e), 𝗯)
+        end
+        (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
+            $TYPE(MEAS{𝘀}(x.amt.val), 𝗯)
+        end
+        # Type export
+        export $TYPE
+        # Type-specific functions
+        deco(x::$TYPE{𝗽,𝘅,SY} where {𝗽,𝘅}) = Symbol($𝑠SY)
+        deco(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = Symbol($𝑠DT)
+        deco(x::$TYPE{𝗽,𝘅,MA} where {𝗽,𝘅}) = Symbol($𝑠MA)
+        deco(x::$TYPE{𝗽,𝘅,MO} where {𝗽,𝘅}) = Symbol($𝑠MO)
+        # Indirect construction from plain
+        $PREF(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
+        $PREF(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        # Indirect construction from quantity
+        $PREF(x::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},
+                       UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}}) where 𝗽<:PREC = begin
+            $TYPE(x)
+        end
+        $PREF(x::Union{uniR{𝗽,$𝑑SY},uniR{𝗽,$𝑑DT},
+                       uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
+            $TYPE(float(x.val) * unit(x))
+        end
+        export $PREF
+##         # Conversions
+##         convert(::Type{$TYPE{𝘁}}, y::$TYPE{𝘁}) where 𝘁 = y
+##         convert(::Type{$TYPE{𝘅}}, y::$TYPE{𝘆}) where {𝘅,𝘆} = $TYPE{𝘅}(y)
+##         # Promotion rules: same-type: for +, -; other-type: for SCALAR *, /
+##         promote_rule(::Type{$TYPE{𝘀}}, ::Type{$TYPE{𝘁}}) where {𝘀,𝘁} = $TYPE{promote_type(𝘀, 𝘁)}
+    end
 end
 
-# Precision-changing external constructors
-(::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-    uAmt(𝘀(x.amt.val), 𝗯)
-end
-(::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-    uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
-end
+#----------------------------------------------------------------------------------------------#
+#                           Thermodynamic Amount Group Declarations                            #
+#----------------------------------------------------------------------------------------------#
 
-# Precision+Exactness-changing external constructors
-(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-    uAmt(𝘀(x.amt.val), 𝗯)
-end
-(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-    uAmt(𝘀(x.amt.val.val), 𝗯)
-end
-(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,EX,𝗯},
-                     e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
-                    ) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-    uAmt(measurement(𝘀(x.amt.val), e), 𝗯)
-end
-(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-    uAmt(MEAS{𝘀}(x.amt.val), 𝗯)
-end
+mkBasAmt(:u , :BProperty, "U"   , u"kJ"     , "internal energy"     , false )
+mkBasAmt(:h , :BProperty, "H"   , u"kJ"     , "enthalpy"            , false )
+mkBasAmt(:g , :BProperty, "G"   , u"kJ"     , "Gibbs energy"        , false )
+mkBasAmt(:a , :BProperty, "A"   , u"kJ"     , "Helmholtz energy"    , false )
+mkBasAmt(:e , :BProperty, "E"   , u"kJ"     , "total energy"        , false )
+mkBasAmt(:ek, :BProperty, "Ek"  , u"kJ"     , "kinetic energy"      , false )
+mkBasAmt(:ep, :BProperty, "Ep"  , u"kJ"     , "potential energy"    , false )
+mkBasAmt(:s , :BProperty, "S"   , u"kJ/K"   , "entropy"             , false )
+mkBasAmt(:cp, :BProperty, "Cp"  , u"kJ/K"   , "iso-P specific heat" , false )
+mkBasAmt(:cv, :BProperty, "Cv"  , u"kJ/K"   , "iso-v specific heat" , false )
+mkBasAmt(:r , :BProperty, "R"   , u"kJ/K"   , "gas constant"        , false )
 
-export uAmt
-
-# Indirect construction from plain
-u(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = uAmt(x, b)
-u(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = uAmt(float(x), b)
-# Indirect construction from quantity
-u(x::Union{UATY{𝗽,𝑑SY},UATY{𝗽,𝑑DT},UATY{𝗽,𝑑MA},UATY{𝗽,𝑑MO}}) where 𝗽<:PREC = uAmt(x)
-u(x::Union{uniR{𝗽,𝑑SY},uniR{𝗽,𝑑DT},uniR{𝗽,𝑑MA},uniR{𝗽,𝑑MO}}) where 𝗽<:REAL = begin
-    uAmt(float(x.val) * unit(x))
-end
-
-export u
+mkBasAmt(:q , :BInteract, "Q"   , u"kJ"     , "heat"                , false )
+mkBasAmt(:w , :BInteract, "W"   , u"kJ"     , "work"                , false )
+#mkBasAmt(:Δe, :BInteract, "E"   , u"kJ"     , "energy variation"    , true  )
+#mkBasAmt(:Δs, :BInteract, "S"   , u"kJ/K"   , "entropy variation"   , true  )
 
 
 ## #----------------------------------------------------------------------------------------------#
@@ -224,7 +317,6 @@ export u
 ##     """
 ##     strMacroNam = Symbol(string(STRM, "_str"))
 ##     strMacroExp = Symbol(string("@", STRM, "_str"))
-##     UNTY = typeof(UNIT)
 ##     @eval begin
 ##         # Concrete type definition
 ##         struct $TYPE{𝘁<:AbstractFloat} <: $SUPT{𝘁}
