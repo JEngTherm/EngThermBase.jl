@@ -2,11 +2,6 @@
 #                        Unexported Type Aliases -- Shorter Signatures                         #
 #----------------------------------------------------------------------------------------------#
 
-const FL16 = Float16
-const FL32 = Float32
-const FL64 = Float64
-const BIGF = BigFloat
-
 const MEAS = Measurement
 const QTTY = Quantity
 
@@ -14,17 +9,14 @@ const QTTY = Quantity
 #                                        Type Exactness                                        #
 #----------------------------------------------------------------------------------------------#
 
-# \sansF<TAB>: plain Julia Floats (since Measurements.Measurement <: AbstractFloat)
-𝖥 = Union{FL16,FL32,FL64,BIGF}
-
 # Exact types: all type params are \bsans#<TAB>
-ETY{𝘁} = QTTY{𝘁} where 𝘁<:𝖥
+ETY{𝗽,𝗱} = Union{QTTY{𝗽,𝗱}} where {𝗽<:PREC,𝗱}
 
 # Measurement types
-MTY{𝘁} = QTTY{MEAS{𝘁}} where 𝘁<:𝖥
+MTY{𝗽,𝗱} = Union{QTTY{MEAS{𝗽},𝗱}} where {𝗽<:PREC,𝗱}
 
-# θ Amount types
-ATY{𝘁} = Union{ETY{𝘁},MTY{𝘁}} where 𝘁<:𝖥
+# Therm Amount types
+ATY{𝗽,𝗱} = Union{ETY{𝗽,𝗱},MTY{𝗽,𝗱}} where {𝗽<:PREC,𝗱}
 
 
 #----------------------------------------------------------------------------------------------#
@@ -32,22 +24,22 @@ ATY{𝘁} = Union{ETY{𝘁},MTY{𝘁}} where 𝘁<:𝖥
 #----------------------------------------------------------------------------------------------#
 
 # The 4 type quadrants are:
-# -------------------------
-#   bareF   ATY{𝘁}  | float-based
-#   bareR   unitR   | non-float reals
-#   -----------------
-#   plain   united
+#
+#                  |    plain   united      |
+#  ----------------+------------------------+
+#   float-based    |    bareF   ATY{𝗽,𝗱}    |
+#   non-float reals|    bareR   unitR       |
 
-# \sansR<TAB>: plain Julia Reals (since Unitful.Quantity <: Number)
-𝖱 = Union{AbstractIrrational,Integer,Rational}
+# REAL: plain Julia Reals other than `PREC` (since Unitful.Quantity <: Number)
+REAL = Union{AbstractIrrational,Integer,Rational}
 
 # Bare, unitless floats
-bareF = Union{𝘁, MEAS{𝘁}} where 𝘁<:𝖥
+bareF = Union{𝗽, MEAS{𝗽}} where 𝗽<:PREC
 
 # Bare, unitless reals
-bareR = Union{𝘁, MEAS{𝘁}} where 𝘁<:𝖱
+bareR = Union{𝘁, MEAS{𝘁}} where 𝘁<:REAL
 
-# United reals
-unitR = Union{QTTY{𝘁}, QTTY{MEAS{𝘁}}} where 𝘁<:𝖱
+# Unit-ed reals
+unitR = Union{QTTY{𝘁}, QTTY{MEAS{𝘁}}} where 𝘁<:REAL
 
 

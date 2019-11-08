@@ -48,15 +48,15 @@ end
 mkNonPAbs(:EngTherm        , :Any          , "thermodynamic entities"                         )
 
 # BASE branch
-mkNonPAbs(  :BASE          , :EngTherm     , "quantity bases"                                 )
-mkNonPAbs(    :ThermBase   , :BASE         , "thermodynamic bases"                            )
+mkNonPAbs(  :BASES         , :EngTherm     , "quantity bases"                                 )
+mkNonPAbs(    :ThermBase   , :BASES        , "thermodynamic bases"                            )
 mkNonPAbs(      :IntBase   , :ThermBase    , "intensive bases"                                )
 mkNonPAbs(        :MA      , :IntBase      , "the MAss base"                                  )
 mkNonPAbs(        :MO      , :IntBase      , "the MOlar base"                                 )
 mkNonPAbs(      :ExtBase   , :ThermBase    , "non-intensive bases"                            )
 mkNonPAbs(        :SY      , :ExtBase      , "the SYstem (extensive) base"                    )
 mkNonPAbs(        :DT      , :ExtBase      , "the Time Derivative (rate) base"                )
-mkNonPAbs(    :ExactBase   , :BASE         , "type-exactness bases"                           )
+mkNonPAbs(    :ExactBase   , :BASES        , "type-exactness bases"                           )
 mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                                 )
 mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
@@ -70,26 +70,26 @@ mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"              
 #----------------------------------------------------------------------------------------------#
 
 """
-`const PRECISION = Union{Float16,Float32,Float64,BigFloat}`\n
-Concrete PRECISION type union for parametric abstract types.
+`const PREC = Union{Float16,Float32,Float64,BigFloat}`\n
+Concrete PREC type union for parametric abstract types.
 """
-const PRECISION = Union{Float16,Float32,Float64,BigFloat}
+const PREC = Union{Float16,Float32,Float64,BigFloat}
 
 """
-`const EXACTNESS = Union{EX,MM}`\n
-Concrete EXACTNESS type union for parametric abstract types.
+`const EXAC = Union{EX,MM}`\n
+Concrete EXAC type union for parametric abstract types.
 """
-const EXACTNESS = Union{EX,MM}
+const EXAC = Union{EX,MM}
 
 """
-`const THERMBASE = Union{MA,MO,SY,DT}`\n
-Concrete THERMBASE type union for parametric abstract types.
+`const BASE = Union{MA,MO,SY,DT}`\n
+Concrete BASE type union for parametric abstract types.
 """
-const THERMBASE = Union{MA,MO,SY,DT}
+const BASE = Union{MA,MO,SY,DT}
 
 
 #----------------------------------------------------------------------------------------------#
-#            {PRECISION[,EXACTNESS[,THERMBASE]]} Parametric Abstract Type Factories            #
+#                   {PREC[,EXAC[,BASE]]} Parametric Abstract Type Factories                    #
 #----------------------------------------------------------------------------------------------#
 
 """
@@ -98,7 +98,7 @@ xp::Bool=true)`\n
 Declares a new, 1-parameter abstract type. Parent type parameter count is a function of `pp`, so
 that declarations are as follows:\n
 - `TY{𝗽} <: TP{𝗽}` for `pp >= 1` (default);
-- `TY{𝗽<:PRECISION} <: TP` for `pp <= 0`.\n
+- `TY{𝗽<:PREC} <: TP` for `pp <= 0`.\n
 Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
 new abstract type is exported (default `true`).
 """
@@ -109,15 +109,14 @@ function mk1ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
     #end
     hiStr = tyArchy(eval(TP))
     ppStr = pp>=1 ? "{𝗽}" : ""
-    tpStr = pp>=1 ? "{𝗽}" : "{𝗽<:PRECISION}"
     dcStr = """
-`abstract type $(TY)$(tpStr) <: $(TP)$(ppStr) end`\n
+`abstract type $(TY){𝗽<:PREC} <: $(TP)$(ppStr) end`\n
 Abstract supertype for $(what).\n
 ## Hierarchy\n
 `$(TY) <: $(hiStr)`
     """
     if      pp>=1   @eval (abstract type $TY{𝗽} <: $TP{𝗽} end)
-    elseif  pp<=0   @eval (abstract type $TY{𝗽<:PRECISION} <: $TP end)
+    elseif  pp<=0   @eval (abstract type $TY{𝗽<:PREC} <: $TP end)
     end
     @eval begin
         # Type documentation
@@ -133,8 +132,8 @@ xp::Bool=true)`\n
 Declares a new, 2-parameter abstract type. Parent type parameter count is a function of `pp`, so
 that declarations are as follows:\n
 - `TY{𝗽,𝘅} <: TP{𝗽,𝘅}` for `pp >= 2` (default);
-- `TY{𝗽,𝘅<:EXACTNESS} <: TP{𝗽}` for `pp = 1`;
-- `TY{𝗽<:PRECISION,𝘅<:EXACTNESS} <: TP` for `pp <= 0`.\n
+- `TY{𝗽,𝘅<:EXAC} <: TP{𝗽}` for `pp = 1`;
+- `TY{𝗽<:PREC,𝘅<:EXAC} <: TP` for `pp <= 0`.\n
 Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
 new abstract type is exported (default `true`).
 """
@@ -145,16 +144,15 @@ function mk2ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
     #end
     hiStr = tyArchy(eval(TP))
     ppStr = pp>=2 ? "{𝗽,𝘅}" : pp==1 ? "{𝗽}" : ""
-    tpStr = pp>=2 ? "{𝗽,𝘅}" : pp==1 ? "{𝗽,𝘅<:EXACTNESS}" : "{𝗽<:PRECISION,𝘅<:EXACTNESS}"
     dcStr = """
-`abstract type $(TY)$(tpStr) <: $(TP)$(ppStr) end`\n
+`abstract type $(TY){𝗽<:PREC,𝘅<:EXAC} <: $(TP)$(ppStr) end`\n
 Abstract supertype for $(what).\n
 ## Hierarchy\n
 `$(TY) <: $(hiStr)`
     """
     if      pp>=2   @eval (abstract type $TY{𝗽,𝘅} <: $TP{𝗽,𝘅} end)
-    elseif  pp==1   @eval (abstract type $TY{𝗽,𝘅<:EXACTNESS} <: $TP{𝗽} end)
-    elseif  pp<=0   @eval (abstract type $TY{𝗽<:PRECISION,𝘅<:EXACTNESS} <: $TP end)
+    elseif  pp==1   @eval (abstract type $TY{𝗽,𝘅<:EXAC} <: $TP{𝗽} end)
+    elseif  pp<=0   @eval (abstract type $TY{𝗽<:PREC,𝘅<:EXAC} <: $TP end)
     end
     @eval begin
         # Type documentation
@@ -170,9 +168,9 @@ xp::Bool=true)`\n
 Declares a new, 3-parameter abstract type. Parent type parameter count is a function of `pp`, so
 that declarations are as follows:\n
 - `TY{𝗽,𝘅,𝗯} <: TP{𝗽,𝘅,𝗯}` for `pp >= 3` (default);
-- `TY{𝗽,𝘅,𝗯<:THERMBASE} <: TP{𝗽,𝘅}` for `pp == 2`;
-- `TY{𝗽,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: TP{𝗽}` for `pp = 1`;
-- `TY{𝗽<:PRECISION,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: TP` for `pp <= 0`.\n
+- `TY{𝗽,𝘅,𝗯<:BASE} <: TP{𝗽,𝘅}` for `pp == 2`;
+- `TY{𝗽,𝘅<:EXAC,𝗯<:BASE} <: TP{𝗽}` for `pp = 1`;
+- `TY{𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: TP` for `pp <= 0`.\n
 Argument `what` is inserted in the new type documentation, and `xp` controls whether or not the
 new abstract type is exported (default `true`).
 """
@@ -183,12 +181,8 @@ function mk3ParAbs(TY::Symbol, TP::Symbol, what::AbstractString,
     #end
     hiStr = tyArchy(eval(TP))
     ppStr = pp>=3 ? "{𝗽,𝘅,𝗯}" : pp==2 ? "{𝗽,𝘅}" : pp==1 ? "{𝗽}" : ""
-    tpStr = pp>=3 ? "{𝗽,𝘅,𝗯}" :
-            pp==2 ? "{𝗽,𝘅,𝗯<:THERMBASE}" :
-            pp==1 ? "{𝗽,𝘅<:EXACTNESS,𝗯<:THERMBASE}" :
-                    "{𝗽<:PRECISION,𝘅<:EXACTNESS,𝗯<:THERMBASE}"
     dcStr = """
-`abstract type $(TY)$(tpStr) <: $(TP)$(ppStr) end`\n
+`abstract type $(TY){𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: $(TP)$(ppStr) end`\n
 Abstract supertype for $(what).\n
 ## Hierarchy\n
 `$(TY) <: $(hiStr)`
@@ -196,11 +190,11 @@ Abstract supertype for $(what).\n
     if pp>=3
         @eval (abstract type $TY{𝗽,𝘅,𝗯} <: $TP{𝗽,𝘅,𝗯} end)
     elseif pp==2
-        @eval (abstract type $TY{𝗽,𝘅,𝗯<:THERMBASE} <: $TP{𝗽,𝘅} end)
+        @eval (abstract type $TY{𝗽,𝘅,𝗯<:BASE} <: $TP{𝗽,𝘅} end)
     elseif pp==1
-        @eval (abstract type $TY{𝗽,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: $TP{𝗽} end)
+        @eval (abstract type $TY{𝗽,𝘅<:EXAC,𝗯<:BASE} <: $TP{𝗽} end)
     elseif pp<=0
-        @eval (abstract type $TY{𝗽<:PRECISION,𝘅<:EXACTNESS,𝗯<:THERMBASE} <: $TP end)
+        @eval (abstract type $TY{𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: $TP end)
     end
     @eval begin
         # Type documentation
@@ -216,12 +210,12 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # AMOUNT branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :AMOUNT        , :EngTherm     , "thermodynamic amount"                        , 0)
-mk2ParAbs(    :WholeAmt    , :AMOUNT       , "whole, unbased amounts"                      , 2)
+mk2ParAbs(  :AMOUNTS       , :EngTherm     , "thermodynamic amounts"                       , 0)
+mk2ParAbs(    :WholeAmt    , :AMOUNTS      , "whole, unbased amounts"                      , 2)
 mk2ParAbs(      :WProperty , :WholeAmt     , "whole, unbased properties"                   , 2)
 mk2ParAbs(      :WInteract , :WholeAmt     , "whole, unbased interactions"                 , 2)
 mk2ParAbs(      :WUnranked , :WholeAmt     , "whole, unbased unranked amounts"             , 2)
-mk3ParAbs(    :BasedAmt    , :AMOUNT       , "based amount groups"                         , 2)
+mk3ParAbs(    :BasedAmt    , :AMOUNTS      , "based amount groups"                         , 2)
 mk3ParAbs(      :BProperty , :BasedAmt     , "based property groups"                       , 3)
 mk3ParAbs(      :BInteract , :BasedAmt     , "based interaction groups"                    , 3)
 mk3ParAbs(      :BUnranked , :BasedAmt     , "based unranked amount groups"                , 3)
@@ -233,20 +227,20 @@ Unranked{𝗽,𝘅} = Union{WUnranked{𝗽,𝘅},BUnranked{𝗽,𝘅,𝗯} where
 export Property, Interact, Unranked
 
 # STATE branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :STATE         , :EngTherm     , "state types"                                 , 0)
-mk2ParAbs(    :PropPair    , :STATE        , "propery pairs"                               , 2)
-mk2ParAbs(    :PropTrio    , :STATE        , "propery trios"                               , 2)
-mk2ParAbs(    :PropQuad    , :STATE        , "propery quads"                               , 2)
+mk2ParAbs(  :STATES        , :EngTherm     , "thermodynamic states"                        , 0)
+mk2ParAbs(    :PropPair    , :STATES       , "propery pairs"                               , 2)
+mk2ParAbs(    :PropTrio    , :STATES       , "propery trios"                               , 2)
+mk2ParAbs(    :PropQuad    , :STATES       , "propery quads"                               , 2)
 
 # MODEL branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :MODEL         , :EngTherm     , "thermodynamic model"                         , 0)
-mk2ParAbs(    :Heat        , :MODEL        , "specific heat models"                        , 2)
+mk2ParAbs(  :MODELS        , :EngTherm     , "thermodynamic models"                        , 0)
+mk2ParAbs(    :Heat        , :MODELS       , "specific heat models"                        , 2)
 mk2ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"               , 2)
 mk2ParAbs(      :UnvarHeat , :Heat         , "univariate specific heat models"             , 2)
 mk2ParAbs(      :BivarHeat , :Heat         , "bivariate specific heat models"              , 2)
-mk2ParAbs(    :Medium      , :MODEL        , "substance/medium models"                     , 2)
+mk2ParAbs(    :Medium      , :MODELS       , "substance/medium models"                     , 2)
 mk2ParAbs(      :Substance , :Medium       , "substance model by Equation of State"        , 2)
-mk2ParAbs(    :System      , :MODEL        , "system models"                               , 2)
+mk2ParAbs(    :System      , :MODELS       , "system models"                               , 2)
 mk2ParAbs(      :Closed    , :System       , "closed systems"                              , 2)
 mk2ParAbs(      :Open      , :System       , "open systems"                                , 2)
 
