@@ -56,19 +56,14 @@ end
 
 export uAmt
 
-
 # Indirect construction from plain
-function u(x::𝗾, b::Type{𝗯}=DEF[:IB]) where {𝗾<:Union{PREC,REAL,MEAS{𝘁}} where 𝘁<:PREC, 𝗯<:ThermBase}
+function u(x::𝗾, b::Type{𝗯}=DEF[:IB])
+    where {𝗾<:Union{PREC,REAL,MEAS{𝘁}} where 𝘁<:PREC, 𝗯<:ThermBase}
     uAmt(x, b)
 end
 
 # Indirect construction from quantity
-eFam = Union{Quantity{𝗾,dimension(u"kJ")},
-             Quantity{𝗾,dimension(u"kJ/s")},
-             Quantity{𝗾,dimension(u"kJ/kg")},
-             Quantity{𝗾,dimension(u"kJ/kmol")}} where 𝗾<:Union{PREC,MEAS{𝘁}} where 𝘁<:PREC
-
-function u(x::eFam)
+function u(x::Union{ATY{𝗽,𝑑SY},ATY{𝗽,𝑑DT},ATY{𝗽,𝑑MA},ATY{𝗽,𝑑MO}})
     uAmt(x)
 end
 
