@@ -41,8 +41,6 @@ struct uAmt{𝗽,𝘅,𝗯} <: BProperty{𝗽,𝘅,𝗯}
     uAmt(x::QTTY{MEAS{𝗽},𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
 end
 
-# Plain real constructor
-uAmt(x::bareR, b::Type{𝗯}) where 𝗯<:BASE = uAmt(float(x), b)
 # Precision-changing constructors
 (::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀,𝗽,𝗯} = uAmt(𝘀(x.amt.val), 𝗯)
 (::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀,𝗽,𝗯} = uAmt(MEAS{𝘀}(x.amt.val), 𝗯)
@@ -57,15 +55,10 @@ end
 export uAmt
 
 # Indirect construction from plain
-function u(x::𝗾, b::Type{𝗯}=DEF[:IB])
-    where {𝗾<:Union{PREC,REAL,MEAS{𝘁}} where 𝘁<:PREC, 𝗯<:ThermBase}
-    uAmt(x, b)
-end
-
+u(x::bareF, b::BASE=DEF[:IB]) = uAmt(x, b)
+u(x::bareR, b::BASE=DEF[:IB]) = uAmt(float(x), b)
 # Indirect construction from quantity
-function u(x::Union{ATY{𝗽,𝑑SY},ATY{𝗽,𝑑DT},ATY{𝗽,𝑑MA},ATY{𝗽,𝑑MO}})
-    uAmt(x)
-end
+u(x::Union{ATY{𝗽,𝑑SY},ATY{𝗽,𝑑DT},ATY{𝗽,𝑑MA},ATY{𝗽,𝑑MO}}) where 𝗽 = uAmt(x)
 
 export u
 
