@@ -14,7 +14,7 @@ const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
 struct uAmt{𝗽,𝘅,𝗯} <: BProperty{𝗽,𝘅,𝗯}
-    amt::ATY{𝗽}
+    amt::Union{ATY{𝗽,𝑑SY},ATY{𝗽,𝑑DT},ATY{𝗽,𝑑MA},ATY{𝗽,𝑑MO}}
     # Copy constructor
     uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = new{𝗽,𝘅,𝗯}(x.amt)
     # Plain constructors enforce default units & avoid unit conversion
