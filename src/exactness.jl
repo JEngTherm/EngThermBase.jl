@@ -2,12 +2,6 @@
 # -----------------------
 
 """
-`PETY{𝗽} = Union{𝗽} where 𝗽<:Union{Float16,Float32,Float64,BigFloat}`\n
-𝗣lain 𝗘xact 𝗧𝗬pe: Plain (unitless) Julia Floats.
-"""
-PETY{𝗽} = Union{𝗽} where 𝗽<:PREC
-
-"""
 `PMTY{𝗽} = Union{Measurement{𝗽}} where 𝗽<:Union{Float16,Float32,Float64,BigFloat}`\n
 𝗣lain 𝗠easurement 𝗧𝗬pe: Plain (unitless) `Measurement`s.
 """
