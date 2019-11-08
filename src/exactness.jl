@@ -37,21 +37,21 @@ UATY{𝗽,𝗱} = Union{UETY{𝗽,𝗱},UMTY{𝗽,𝗱}} where {𝗽<:PREC,𝗱}
 
 # The 4 type quadrants are:
 #
-#                  |    plain   united      |
-#  ----------------+------------------------+
-#   float-based    |    bareF   UATY{𝗽,𝗱}   |
-#   non-float reals|    bareR   unitR       |
+#                  |    plain       united      |
+#  ----------------+----------------------------+
+#   float-based    |    plnF{𝗽}     UATY{𝗽,𝗱}   |
+#   non-float reals|    plnR{𝘁}     uniR{𝘁,𝗱}   |
 
 # REAL: plain Julia Reals other than `PREC` (since Unitful.Quantity <: Number)
 REAL = Union{AbstractIrrational,Integer,Rational}
 
-# Bare, unitless floats
-bareF = Union{𝗽, Measurement{𝗽}} where 𝗽<:PREC
+# Plain, unitless floats
+plnF{𝗽} = Union{𝗽, Measurement{𝗽}} where 𝗽<:PREC
 
-# Bare, unitless reals
-bareR = Union{𝘁, Measurement{𝘁}} where 𝘁<:REAL
+# Plain, unitless non-float reals
+plnR{𝘁} = Union{𝘁, Measurement{𝘁}} where 𝘁<:REAL
 
 # Unit-ed reals
-unitR = Union{Quantity{𝘁}, Quantity{Measurement{𝘁}}} where 𝘁<:REAL
+uniR{𝘁,𝗱} = Union{Quantity{𝘁,𝗱}, Quantity{Measurement{𝘁},𝗱}} where {𝘁<:REAL,𝗱}
 
 

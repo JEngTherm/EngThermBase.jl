@@ -14,9 +14,9 @@ const 𝑑MA = dimension(UNIT / 𝑢MA)
 const 𝑑MO = dimension(UNIT / 𝑢MO)
 
 struct uAmt{𝗽,𝘅,𝗯} <: BProperty{𝗽,𝘅,𝗯}
-    amt::Union{UATY{𝗽,𝑑SY},UATY{𝗽,𝑑DT},UATY{𝗽,𝑑MA},UATY{𝗽,𝑑MO}} where 𝗽
+    amt::Union{UATY{𝗽,𝑑SY},UATY{𝗽,𝑑DT},UATY{𝗽,𝑑MA},UATY{𝗽,𝑑MO}} where 𝗽<:PREC
     # Copy constructor
-    uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = new{𝗽,𝘅,𝗯}(x.amt)
+    uAmt(x::uAmt{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(x.amt)
     # Plain constructors enforce default units & avoid unit conversion
     # Plain Exact (𝗽<:PREC) float constructors
     uAmt(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(x * UNIT      )
@@ -24,52 +24,57 @@ struct uAmt{𝗽,𝘅,𝗯} <: BProperty{𝗽,𝘅,𝗯}
     uAmt(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(x * UNIT / 𝑢MA)
     uAmt(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(x * UNIT / 𝑢MO)
     # Plain Measurement (PMTY) constructors
-    uAmt(x::PMTY{𝗽}, ::Type{SY}) where 𝗽 = new{𝗽,MM,SY}(x * UNIT      )
-    uAmt(x::PMTY{𝗽}, ::Type{DT}) where 𝗽 = new{𝗽,MM,DT}(x * UNIT / 𝑢DT)
-    uAmt(x::PMTY{𝗽}, ::Type{MA}) where 𝗽 = new{𝗽,MM,MA}(x * UNIT / 𝑢MA)
-    uAmt(x::PMTY{𝗽}, ::Type{MO}) where 𝗽 = new{𝗽,MM,MO}(x * UNIT / 𝑢MO)
+    uAmt(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(x * UNIT      )
+    uAmt(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(x * UNIT / 𝑢DT)
+    uAmt(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(x * UNIT / 𝑢MA)
+    uAmt(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(x * UNIT / 𝑢MO)
     # Quantity constructors have to perform unit conversion despite matching dimensions
     # United Exact (UETY) constructors
-    uAmt(x::UETY{𝗽,𝑑SY}) where 𝗽 = new{𝗽,EX,SY}(uconvert(UNIT      , x))
-    uAmt(x::UETY{𝗽,𝑑DT}) where 𝗽 = new{𝗽,EX,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::UETY{𝗽,𝑑MA}) where 𝗽 = new{𝗽,EX,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::UETY{𝗽,𝑑MO}) where 𝗽 = new{𝗽,EX,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::UETY{𝗽,𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(uconvert(UNIT      , x))
+    uAmt(x::UETY{𝗽,𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::UETY{𝗽,𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::UETY{𝗽,𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(uconvert(UNIT / 𝑢MO, x))
     # United Measurement (UMTY) constructors
-    uAmt(x::UMTY{𝗽,𝑑SY}) where 𝗽 = new{𝗽,MM,SY}(uconvert(UNIT      , x))
-    uAmt(x::UMTY{𝗽,𝑑DT}) where 𝗽 = new{𝗽,MM,DT}(uconvert(UNIT / 𝑢DT, x))
-    uAmt(x::UMTY{𝗽,𝑑MA}) where 𝗽 = new{𝗽,MM,MA}(uconvert(UNIT / 𝑢MA, x))
-    uAmt(x::UMTY{𝗽,𝑑MO}) where 𝗽 = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
+    uAmt(x::UMTY{𝗽,𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(uconvert(UNIT      , x))
+    uAmt(x::UMTY{𝗽,𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(uconvert(UNIT / 𝑢DT, x))
+    uAmt(x::UMTY{𝗽,𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(uconvert(UNIT / 𝑢MA, x))
+    uAmt(x::UMTY{𝗽,𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert(UNIT / 𝑢MO, x))
 end
 
 # Precision-changing external constructors
-(::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀,𝗽,𝗯} = begin
+(::Type{uAmt{𝘀}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
     uAmt(𝘀(x.amt.val), 𝗯)
 end
-(::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀,𝗽,𝗯} = begin
+(::Type{uAmt{𝘀}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
     uAmt(Measurement{𝘀}(x.amt.val), 𝗯)
 end
 
 # Precision+Exactness-changing external constructors
-(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀,𝗽,𝗯} = begin
+(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
     uAmt(𝘀(x.amt.val), 𝗯)
 end
-(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀,𝗽,𝗯} = begin
+(::Type{uAmt{𝘀,EX}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
     uAmt(𝘀(x.amt.val.val), 𝗯)
 end
-(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,EX,𝗯}, e::𝘀=zero(𝘀)) where {𝘀,𝗽,𝗯} = begin
+(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,EX,𝗯},
+                     e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
+                    ) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
     uAmt(measurement(𝘀(x.amt.val), e), 𝗯)
 end
-(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀,𝗽,𝗯} = begin
+(::Type{uAmt{𝘀,MM}})(x::uAmt{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
     uAmt(MEAS{𝘀}(x.amt.val), 𝗯)
 end
 
 export uAmt
 
 # Indirect construction from plain
-u(x::bareF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = uAmt(x, b)
-u(x::bareR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = uAmt(float(x), b)
+u(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = uAmt(x, b)
+u(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = uAmt(float(x), b)
 # Indirect construction from quantity
-u(x::Union{UATY{𝗽,𝑑SY},UATY{𝗽,𝑑DT},UATY{𝗽,𝑑MA},UATY{𝗽,𝑑MO}}) where 𝗽 = uAmt(x)
+u(x::Union{UATY{𝗽,𝑑SY},UATY{𝗽,𝑑DT},UATY{𝗽,𝑑MA},UATY{𝗽,𝑑MO}}) where 𝗽<:PREC = uAmt(x)
+u(x::Union{uniR{𝗽,𝑑SY},uniR{𝗽,𝑑DT},uniR{𝗽,𝑑MA},uniR{𝗽,𝑑MO}}) where 𝗽<:REAL = begin
+    uAmt(float(x.val) * unit(x))
+end
 
 export u
 
