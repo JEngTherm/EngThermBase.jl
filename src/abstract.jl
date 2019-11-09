@@ -45,10 +45,10 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # EngTherm root abstract type
-mkNonPAbs(:EngTherm        , :Any          , "thermodynamic entities"                         )
+mkNonPAbs(:AbstractTherm   , :Any          , "thermodynamic entities"                         )
 
 # BASE branch
-mkNonPAbs(  :BASES         , :EngTherm     , "quantity bases"                                 )
+mkNonPAbs(  :BASES         , :AbstractTherm, "quantity bases"                                 )
 mkNonPAbs(    :ThermBase   , :BASES        , "thermodynamic bases"                            )
 mkNonPAbs(      :IntBase   , :ThermBase    , "intensive bases"                                )
 mkNonPAbs(        :MA      , :IntBase      , "the MAss base"                                  )
@@ -61,7 +61,7 @@ mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                   
 mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
 # AUX branch
-mkNonPAbs(  :AUX           , :EngTherm     , "ancillary EngTherm types"                       )
+mkNonPAbs(  :AUX           , :AbstractTherm, "ancillary EngTherm types"                       )
 mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"                            )
 
 
@@ -210,7 +210,7 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # AMOUNT branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :AMOUNTS       , :EngTherm     , "thermodynamic amounts"                       , 0)
+mk2ParAbs(  :AMOUNTS       , :AbstractTherm, "thermodynamic amounts"                       , 0)
 mk2ParAbs(    :WholeAmt    , :AMOUNTS      , "whole, unbased amounts"                      , 2)
 mk2ParAbs(      :WProperty , :WholeAmt     , "whole, unbased properties"                   , 2)
 mk2ParAbs(      :WInteract , :WholeAmt     , "whole, unbased interactions"                 , 2)
@@ -227,13 +227,13 @@ Unranked{𝗽,𝘅} = Union{WUnranked{𝗽,𝘅},BUnranked{𝗽,𝘅,𝗯} where
 export Property, Interact, Unranked
 
 # STATE branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :STATES        , :EngTherm     , "thermodynamic states"                        , 0)
+mk2ParAbs(  :STATES        , :AbstractTherm, "thermodynamic states"                        , 0)
 mk2ParAbs(    :PropPair    , :STATES       , "propery pairs"                               , 2)
 mk2ParAbs(    :PropTrio    , :STATES       , "propery trios"                               , 2)
 mk2ParAbs(    :PropQuad    , :STATES       , "propery quads"                               , 2)
 
 # MODEL branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :MODELS        , :EngTherm     , "thermodynamic models"                        , 0)
+mk2ParAbs(  :MODELS        , :AbstractTherm, "thermodynamic models"                        , 0)
 mk2ParAbs(    :Heat        , :MODELS       , "specific heat models"                        , 2)
 mk2ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"               , 2)
 mk2ParAbs(      :UnvarHeat , :Heat         , "univariate specific heat models"             , 2)
