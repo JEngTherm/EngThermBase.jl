@@ -43,11 +43,19 @@ function mkBasAmt(PREF::Symbol,         # Lowercase Prefix:     :u
     𝑑DT = dimension(𝑢DT)
     𝑑MA = dimension(𝑢MA)
     𝑑MO = dimension(𝑢MO)
-    i, f = DELT ? (2, 3) : (1, 2)
-    𝑠SY = bsym[1] == :none ? normalize(DELT ? "Δ" : "" * uppercase(string(SYMB))) : bsym[1]
-    𝑠DT = bsym[2] == :none ? normalize(string(𝑠SY[i], "\u0307", 𝑠SY[f:end])) : bsym[2]
-    𝑠MA = bsym[3] == :none ? normalize(DELT ? "Δ" : "" * lowercase(string(SYMB))) : bsym[3]
-    𝑠MO = bsym[4] == :none ? normalize(string(𝑠MA[i], "\u0304", 𝑠MA[f:end])) : bsym[4]
+    i, f = DELT ? (3, 4) : (1, 2)
+    𝑠SY = bsym[1] == :none ?
+        normalize((DELT ? "Δ" : "") * uppercase(string(SYMB))) :
+        string(bsym[1])
+    𝑠DT = bsym[2] == :none ?
+        normalize(string(𝑠SY[1:i], "\u0307", 𝑠SY[f:end])) :
+        string(bsym[2])
+    𝑠MA = bsym[3] == :none ?
+        normalize((DELT ? "Δ" : "") * lowercase(string(SYMB))) :
+        string(bsym[3])
+    𝑠MO = bsym[4] == :none ?
+        normalize(string(𝑠MA[1:i], "\u0304", 𝑠MA[f:end])) :
+        string(bsym[4])
     # Documentation
     hiStr = tyArchy(eval(SUPT))
     dcStr = """
@@ -154,6 +162,19 @@ end
 #                           Thermodynamic Amount Group Declarations                            #
 #----------------------------------------------------------------------------------------------#
 
+# Mass / Mass fraction anomalous
+mkBasAmt(:m , :BProperty, "m"   , u"kg"     , "mass"                , false ,
+         bsym=(:m, :ṁ, :mf, :M))
+
+# Chemical amount / Molar fraction anomalous
+mkBasAmt(:N , :BProperty, "N"   , u"kmol"   , "chemical amount"     , false ,
+         bsym=(:N, :Ṅ, :n, :y))
+
+# Gas constant / System constant anomalous
+mkBasAmt(:R , :BProperty, "R"   , u"kJ/K"   , "gas constant"        , false ,
+         bsym=(:mR, :ṁR, :R, :R̄))
+
+# Regular properties
 mkBasAmt(:u , :BProperty, "U"   , u"kJ"     , "internal energy"     , false )
 mkBasAmt(:h , :BProperty, "H"   , u"kJ"     , "enthalpy"            , false )
 mkBasAmt(:g , :BProperty, "G"   , u"kJ"     , "Gibbs energy"        , false )
@@ -164,65 +185,14 @@ mkBasAmt(:ep, :BProperty, "Ep"  , u"kJ"     , "potential energy"    , false )
 mkBasAmt(:s , :BProperty, "S"   , u"kJ/K"   , "entropy"             , false )
 mkBasAmt(:cp, :BProperty, "Cp"  , u"kJ/K"   , "iso-P specific heat" , false )
 mkBasAmt(:cv, :BProperty, "Cv"  , u"kJ/K"   , "iso-v specific heat" , false )
-mkBasAmt(:r , :BProperty, "R"   , u"kJ/K"   , "gas constant"        , false )
 
+# Regular interactions
 mkBasAmt(:q , :BInteract, "Q"   , u"kJ"     , "heat"                , false )
 mkBasAmt(:w , :BInteract, "W"   , u"kJ"     , "work"                , false )
-#mkBasAmt(:Δe, :BInteract, "E"   , u"kJ"     , "energy variation"    , true  )
-#mkBasAmt(:Δs, :BInteract, "S"   , u"kJ/K"   , "entropy variation"   , true  )
+mkBasAmt(:Δe, :BInteract, "E"   , u"kJ"     , "energy variation"    , true  )
+mkBasAmt(:Δs, :BInteract, "S"   , u"kJ/K"   , "entropy variation"   , true  )
 
 
-## #----------------------------------------------------------------------------------------------#
-## #                                      Logical Interface                                       #
-## #----------------------------------------------------------------------------------------------#
-## 
-## """
-## `BO(::perMassQuantity)`\n
-## `BO(::perMoleQuantity)`\n
-## `BO(::perVoluQuantity)`\n
-## Returns the Thermodynamic (B)ase (O)f, hence `BO`, the given quantity as the appropriate
-## singleton base type.
-## """
-## BO(::perMassQuantity) = MA
-## BO(::perMoleQuantity) = MO
-## BO(::perVoluQuantity) = VO
-## 
-## """
-## `EO(::AbstractAmount{𝘁}) where 𝘁`...\n
-## Returns the Type(E)xactness Base (O)f, hence `EO`, the given quantity as the appropriate
-## singleton base type.
-## """ # 𝘁: U+1d601 or \bsanst<TAB> in julia REPL
-## EO(::AbstractAmount{𝘁}) where 𝘁<:Union{Float16,Float32,Float64,BigFloat} = 𝘁
-## 
-## 
-## #----------------------------------------------------------------------------------------------#
-## #                                    Amount Type Interface                                     #
-## #----------------------------------------------------------------------------------------------#
-## 
-## """`function deco end`\n\n Interface to return a unique decorative `Symbol` from a method's
-## argument type."""
-## function deco end
-## 
-## """`function extType end`\n\n Interface to return a method's argument corresponding extensive
-## type."""
-## function extType end
-## 
-## """`function intType end`\n\n Interface to return a method's argument corresponding intensive
-## type."""
-## function intType end
-## 
-## """`function dotType end`\n\n Interface to return a method's argument corresponding rate (dot)
-## type."""
-## function dotType end
-## 
-## """`function durType end`\n\n Interface to return a method's argument corresponding duration
-## (time integral) type."""
-## function durType end
-## 
-## export deco
-## export extType, intType, dotType, durType
-## 
-## 
 ## #----------------------------------------------------------------------------------------------#
 ## #                                Concrete Amount Type Factories                                #
 ## #----------------------------------------------------------------------------------------------#
