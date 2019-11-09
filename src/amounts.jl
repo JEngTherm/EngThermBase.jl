@@ -162,13 +162,13 @@ end
 #                           Thermodynamic Amount Group Declarations                            #
 #----------------------------------------------------------------------------------------------#
 
-# Mass / Mass fraction anomalous
-mkBasAmt(:m , :BProperty, "m"   , u"kg"     , "mass"                , false ,
-         bsym=(:m, :ṁ, :mf, :M))
-
-# Chemical amount / Molar fraction anomalous
-mkBasAmt(:N , :BProperty, "N"   , u"kmol"   , "chemical amount"     , false ,
-         bsym=(:N, :Ṅ, :n, :y))
+## # Mass / Mass fraction anomalous
+## mkBasAmt(:m , :BProperty, "m"   , u"kg"     , "mass"                , false ,
+##          bsym=(:m, :ṁ, :mf, :M))
+## 
+## # Chemical amount / Molar fraction anomalous
+## mkBasAmt(:N , :BProperty, "N"   , u"kmol"   , "chemical amount"     , false ,
+##          bsym=(:N, :Ṅ, :n, :y))
 
 # Gas constant / System constant anomalous
 mkBasAmt(:R , :BProperty, "R"   , u"kJ/K"   , "gas constant"        , false ,
