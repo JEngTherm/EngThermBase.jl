@@ -69,3 +69,15 @@ _qty(x::UATY{𝗽,𝗱,𝘂}) where {𝗽,𝗱,𝘂} = Quantity{𝗽,𝗱,𝘂}(
 _qty(x::UMTY{𝗽,𝗱,𝘂}) where {𝗽,𝗱,𝘂} = Quantity{Measurement{𝗽},𝗱,𝘂}(x)
 
 
+#----------------------------------------------------------------------------------------------#
+#                                        Promote Rules                                         #
+#----------------------------------------------------------------------------------------------#
+
+import Base: promote_rule
+
+promote_rule(::Type{EX}, ::Type{EX}) = EX
+promote_rule(::Type{EX}, ::Type{MM}) = MM
+promote_rule(::Type{MM}, ::Type{EX}) = MM
+promote_rule(::Type{MM}, ::Type{MM}) = MM
+
+
