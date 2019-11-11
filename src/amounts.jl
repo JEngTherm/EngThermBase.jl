@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------------------------------#
 
 import Unicode: normalize
+import Base: convert
 
 
 #----------------------------------------------------------------------------------------------#
@@ -133,7 +134,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             $TYPE(measurement(𝘀(x.amt.val), e), 𝗯)
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(MEAS{𝘀}(x.amt.val), 𝗯)
+            $TYPE(Measurement{𝘀}(x.amt.val), 𝗯)
         end
         # Type export
         export $TYPE
@@ -155,11 +156,23 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             $TYPE(float(x.val) * unit(x))
         end
         export $PREF
-##         # Conversions
-##         convert(::Type{$TYPE{𝘁}}, y::$TYPE{𝘁}) where 𝘁 = y
-##         convert(::Type{$TYPE{𝘅}}, y::$TYPE{𝘆}) where {𝘅,𝘆} = $TYPE{𝘅}(y)
-##         # Promotion rules: same-type: for +, -; other-type: for SCALAR *, /
-##         promote_rule(::Type{$TYPE{𝘀}}, ::Type{$TYPE{𝘁}}) where {𝘀,𝘁} = $TYPE{promote_type(𝘀, 𝘁)}
+        # Conversions - Change of base is _not_ a conversion
+        # Same {EXAC,BASE}, {PREC}- conversion
+        convert(::Type{$TYPE{𝘀,𝘅,𝗯}},
+                y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = begin
+            $TYPE{promote_type(𝘀,𝗽),𝘅}(y)
+        end
+        # Same {BASE}, {PREC,EXAC}- conversion
+        convert(::Type{$TYPE{𝘀,𝘆,𝗯}},
+                y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = begin
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
+        end
+        # Promotion rules
+        promote_rule(::Type{$TYPE{𝘀,𝘆,𝗯}},
+                     ::Type{$TYPE{𝗽,𝘅,𝗯}}) where {𝘀<:PREC,𝗽<:PREC,
+                                                  𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = begin
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅),𝗯}
+        end
     end
 end
 
