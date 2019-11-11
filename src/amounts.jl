@@ -90,26 +90,26 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             $TYPE(x::$TYPE{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(x.amt)
             # Plain constructors enforce default units & avoid unit conversion
             # Plain Exact (𝗽<:PREC) float constructors
-            $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(x * $uSY)
-            $TYPE(x::𝗽, ::Type{DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(x * $uDT)
-            $TYPE(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(x * $uMA)
-            $TYPE(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(x * $uMO)
+            $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(_qty(x * $uSY))
+            $TYPE(x::𝗽, ::Type{DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(_qty(x * $uDT))
+            $TYPE(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(_qty(x * $uMA))
+            $TYPE(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(_qty(x * $uMO))
             # Plain Measurement (PMTY) constructors
-            $TYPE(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(x * $uSY)
-            $TYPE(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(x * $uDT)
-            $TYPE(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(x * $uMA)
-            $TYPE(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(x * $uMO)
+            $TYPE(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(_qty(x * $uSY))
+            $TYPE(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(_qty(x * $uDT))
+            $TYPE(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(_qty(x * $uMA))
+            $TYPE(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(_qty(x * $uMO))
             # Quantity constructors have to perform unit conversion despite matching dimensions
             # United Exact (UETY) constructors
-            $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(uconvert($uSY, x))
-            $TYPE(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(uconvert($uDT, x))
-            $TYPE(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(uconvert($uMA, x))
-            $TYPE(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(uconvert($uMO, x))
+            $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(_qty(uconvert($uSY, x)))
+            $TYPE(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(_qty(uconvert($uDT, x)))
+            $TYPE(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(_qty(uconvert($uMA, x)))
+            $TYPE(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(_qty(uconvert($uMO, x)))
             # United Measurement (UMTY) constructors
-            $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(uconvert($uSY, x))
-            $TYPE(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(uconvert($uDT, x))
-            $TYPE(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(uconvert($uMA, x))
-            $TYPE(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert($uMO, x))
+            $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(_qty(uconvert($uSY, x)))
+            $TYPE(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(_qty(uconvert($uDT, x)))
+            $TYPE(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(_qty(uconvert($uMA, x)))
+            $TYPE(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(_qty(uconvert($uMO, x)))
         end
         # Type documentation
         @doc $dcStr $TYPE
@@ -167,13 +167,13 @@ end
 #                           Thermodynamic Amount Group Declarations                            #
 #----------------------------------------------------------------------------------------------#
 
-## # Mass / Mass fraction anomalous
-## mkBasAmt(:m , :BProperty, "m"   , u"kg"     , "mass"                , false ,
-##          bsym=(:m, :ṁ, :mf, :M))
-## 
-## # Chemical amount / Molar fraction anomalous
-## mkBasAmt(:N , :BProperty, "N"   , u"kmol"   , "chemical amount"     , false ,
-##          bsym=(:N, :Ṅ, :n, :y))
+# Mass / Mass fraction anomalous
+mkBasAmt(:m , :BProperty, "m"   , u"kg"     , "mass"                , false ,
+         bsym=(:m, :ṁ, :mf, :M))
+
+# Chemical amount / Molar fraction anomalous
+mkBasAmt(:N , :BProperty, "N"   , u"kmol"   , "chemical amount"     , false ,
+         bsym=(:N, :Ṅ, :n, :y))
 
 # Gas constant / System constant anomalous
 mkBasAmt(:R , :BProperty, "R"   , u"kJ/K"   , "gas constant"        , false ,
