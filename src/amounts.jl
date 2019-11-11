@@ -35,14 +35,18 @@ function mkBasAmt(PREF::Symbol,         # Lowercase Prefix:     :u
                  )
     # Constants
     TYPE = Symbol(string(PREF) * "Amt")
-    𝑢SY = UNIT
-    𝑢DT = UNIT / u"s"
-    𝑢MA = UNIT / u"kg"
-    𝑢MO = UNIT / u"kmol"
-    𝑑SY = dimension(𝑢SY)
-    𝑑DT = dimension(𝑢DT)
-    𝑑MA = dimension(𝑢MA)
-    𝑑MO = dimension(𝑢MO)
+    uSY = UNIT
+    uDT = UNIT / u"s"
+    uMA = UNIT / u"kg"
+    uMO = UNIT / u"kmol"
+    𝑢SY = typeof(uSY)
+    𝑢DT = typeof(uDT)
+    𝑢MA = typeof(uMA)
+    𝑢MO = typeof(uMO)
+    𝑑SY = dimension(uSY)
+    𝑑DT = dimension(uDT)
+    𝑑MA = dimension(uMA)
+    𝑑MO = dimension(uMO)
     i, f = DELT ? (3, 4) : (1, 2)
     𝑠SY = bsym[1] == :none ?
         normalize((DELT ? "Δ" : "") * uppercase(string(SYMB))) :
@@ -66,7 +70,7 @@ Precision-, Exactness-, and Base- parametric $WHAT amounts based in $UNIT.\n
 - Exactness `𝘅<:Union{EX,MM}`, i.e., either a single, precise value or an uncertainty-bearing
   measurement, respectively;\n
 - Thermodynamic base `𝗯<:Union{SY,DT,MA,MO}` respectively for system, rate, mass, or molar
-  quantities, respectively in units of $(𝑢SY), $(𝑢DT), $(𝑢MA), or $(𝑢MO).\n
+  quantities, respectively in units of $(uSY), $(uDT), $(uMA), or $(uMO).\n
 A `$TYPE` can be natively constructed from the following argument types:\n
 - A plain, unitless float;\n
 - A plain, unitless `Measurement`; hence, any `AbstractFloat`;\n
@@ -80,31 +84,32 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
     @eval begin
         # Concrete type definition
         struct $TYPE{𝗽,𝘅,𝗯} <: $SUPT{𝗽,𝘅,𝗯}
-            amt::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}} where 𝗽<:PREC
+            amt::Union{UATY{𝗽,$𝑑SY,$𝑢SY},UATY{𝗽,$𝑑DT,$𝑢DT},
+                       UATY{𝗽,$𝑑MA,$𝑢MA},UATY{𝗽,$𝑑MO,$𝑢MO}} where 𝗽<:PREC
             # Copy constructor
             $TYPE(x::$TYPE{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(x.amt)
             # Plain constructors enforce default units & avoid unit conversion
             # Plain Exact (𝗽<:PREC) float constructors
-            $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(x * $𝑢SY)
-            $TYPE(x::𝗽, ::Type{DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(x * $𝑢DT)
-            $TYPE(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(x * $𝑢MA)
-            $TYPE(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(x * $𝑢MO)
+            $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(x * $uSY)
+            $TYPE(x::𝗽, ::Type{DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(x * $uDT)
+            $TYPE(x::𝗽, ::Type{MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(x * $uMA)
+            $TYPE(x::𝗽, ::Type{MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(x * $uMO)
             # Plain Measurement (PMTY) constructors
-            $TYPE(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(x * $𝑢SY)
-            $TYPE(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(x * $𝑢DT)
-            $TYPE(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(x * $𝑢MA)
-            $TYPE(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(x * $𝑢MO)
+            $TYPE(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(x * $uSY)
+            $TYPE(x::PMTY{𝗽}, ::Type{DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(x * $uDT)
+            $TYPE(x::PMTY{𝗽}, ::Type{MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(x * $uMA)
+            $TYPE(x::PMTY{𝗽}, ::Type{MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(x * $uMO)
             # Quantity constructors have to perform unit conversion despite matching dimensions
             # United Exact (UETY) constructors
-            $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(uconvert($𝑢SY, x))
-            $TYPE(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(uconvert($𝑢DT, x))
-            $TYPE(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(uconvert($𝑢MA, x))
-            $TYPE(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(uconvert($𝑢MO, x))
+            $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(uconvert($uSY, x))
+            $TYPE(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,EX,DT}(uconvert($uDT, x))
+            $TYPE(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,EX,MA}(uconvert($uMA, x))
+            $TYPE(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,EX,MO}(uconvert($uMO, x))
             # United Measurement (UMTY) constructors
-            $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(uconvert($𝑢SY, x))
-            $TYPE(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(uconvert($𝑢DT, x))
-            $TYPE(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(uconvert($𝑢MA, x))
-            $TYPE(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert($𝑢MO, x))
+            $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM,SY}(uconvert($uSY, x))
+            $TYPE(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(uconvert($uDT, x))
+            $TYPE(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(uconvert($uMA, x))
+            $TYPE(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(uconvert($uMO, x))
         end
         # Type documentation
         @doc $dcStr $TYPE
