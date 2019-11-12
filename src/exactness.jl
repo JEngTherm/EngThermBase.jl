@@ -65,7 +65,7 @@ const ULESS = Unitful.FreeUnits{(),NoDims,nothing}
 
 # Adapted from https://github.com/PainterQubits/Unitful.jl/issues/283#issuecomment-552285299
 _qty(x::𝗽) where 𝗽<:PREC = Quantity{𝗽, DLESS, ULESS}(x)
-_qty(x::UATY{𝗽,𝗱,𝘂}) where {𝗽,𝗱,𝘂} = Quantity{𝗽,𝗱,𝘂}(x)
+_qty(x::UETY{𝗽,𝗱,𝘂}) where {𝗽,𝗱,𝘂} = Quantity{𝗽,𝗱,𝘂}(x)
 _qty(x::UMTY{𝗽,𝗱,𝘂}) where {𝗽,𝗱,𝘂} = Quantity{Measurement{𝗽},𝗱,𝘂}(x)
 
 
