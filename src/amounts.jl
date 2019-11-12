@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------------------------------#
 
 import Unicode: normalize
-import Base: convert
+import Base: cp, convert
 
 
 #----------------------------------------------------------------------------------------------#
@@ -26,15 +26,15 @@ export deco
 """
 Whole Amount type factory.
 """
-function mkWhlAmt(PREF::Symbol,         # Lowercase Prefix:     :T
+function mkWhlAmt(TYPE::Symbol,         # Type name:            :sysT
                   SUPT::Symbol,         # Supertype:            :WProperty
+                  FNAM::Symbol,         # Function Name:        :T
                   SYMB::AbstractString, # Printing symbol:      "T"
                   UNIT::Unitful.Units,  # SY quantity units:    u"K"
                   WHAT::AbstractString, # Description:          "temperature"
                   DELT::Bool=false,     # Whether a Δ quantity
                  )
     # Constants
-    TYPE = Symbol(string(PREF) * "Amt")
     uSY = UNIT
     𝑢SY = typeof(uSY)
     𝑑SY = dimension(uSY)
@@ -94,12 +94,12 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         # Indirect construction from plain
-        $PREF(x::plnF) = $TYPE(x)
-        $PREF(x::plnR) = $TYPE(float(x))
+        $FNAM(x::plnF) = $TYPE(x)
+        $FNAM(x::plnR) = $TYPE(float(x))
         # Indirect construction from quantity
-        $PREF(x::UATY{𝗽,$𝑑SY}) where 𝗽<:PREC = $TYPE(x)
-        $PREF(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
-        export $PREF
+        $FNAM(x::UATY{𝗽,$𝑑SY}) where 𝗽<:PREC = $TYPE(x)
+        $FNAM(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
+        export $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -123,15 +123,15 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Regular properties -- \bb#<TAB> velocity/speed function names
-mkWhlAmt(:T     , :WProperty, "T"   , u"K"          , "temperature"         , false )
-mkWhlAmt(:P     , :WProperty, "P"   , u"kPa"        , "pressure"            , false )
-mkWhlAmt(:velo  , :WProperty, "𝕍"   , u"√(kJ/kg)"   , "velocity"            , false )
-mkWhlAmt(:spee  , :WProperty, "𝕧"   , u"m/s"        , "speed"               , false )
+mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "temperature"         , false )
+mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "pressure"            , false )
+mkWhlAmt(:velo  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "velocity"            , false )
+mkWhlAmt(:spee  , :WProperty, :spee , "𝕧"   , u"m/s"        , "speed"               , false )
 
 # Regular unranked -- \sans#<TAB> function names
-mkWhlAmt(:time  , :WUnranked, "𝗍"   , u"s"          , "time"                , false )
-mkWhlAmt(:grav  , :WUnranked, "𝗀"   , u"m/s^2"      , "gravity"             , false )
-mkWhlAmt(:alti  , :WUnranked, "𝗓"   , u"m"          , "altitude"            , false )
+mkWhlAmt(:time  , :WUnranked, :time , "𝗍"   , u"s"          , "time"                , false )
+mkWhlAmt(:grav  , :WUnranked, :grav , "𝗀"   , u"m/s^2"      , "gravity"             , false )
+mkWhlAmt(:alti  , :WUnranked, :alti , "𝗓"   , u"m"          , "altitude"            , false )
 
 
 #----------------------------------------------------------------------------------------------#
@@ -141,8 +141,9 @@ mkWhlAmt(:alti  , :WUnranked, "𝗓"   , u"m"          , "altitude"            ,
 """
 Based Amount type factory.
 """
-function mkBasAmt(PREF::Symbol,         # Lowercase Prefix:     :u
+function mkBasAmt(TYPE::Symbol,         # Type Name:            :uAmt
                   SUPT::Symbol,         # Supertype:            :BProperty
+                  FNAM::Symbol,         # Function Name:        :u
                   SYMB::AbstractString, # Printing symbol:      "U"
                   UNIT::Unitful.Units,  # SY quantity units:    u"kJ"
                   WHAT::AbstractString, # Description:          "internal energy"
@@ -150,7 +151,6 @@ function mkBasAmt(PREF::Symbol,         # Lowercase Prefix:     :u
                   bsym::NTuple{4,Symbol}=(:none,:none,:none,:none)
                  )
     # Constants
-    TYPE = Symbol(string(PREF) * "Amt")
     uSY = UNIT
     uDT = UNIT / u"s"
     uMA = UNIT / u"kg"
@@ -259,18 +259,18 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         deco(x::$TYPE{𝗽,𝘅,MA} where {𝗽,𝘅}) = Symbol($𝑠MA)
         deco(x::$TYPE{𝗽,𝘅,MO} where {𝗽,𝘅}) = Symbol($𝑠MO)
         # Indirect construction from plain
-        $PREF(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
-        $PREF(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        $FNAM(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
+        $FNAM(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
         # Indirect construction from quantity
-        $PREF(x::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},
+        $FNAM(x::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},
                        UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}}) where 𝗽<:PREC = begin
             $TYPE(x)
         end
-        $PREF(x::Union{uniR{𝗽,$𝑑SY},uniR{𝗽,$𝑑DT},
+        $FNAM(x::Union{uniR{𝗽,$𝑑SY},uniR{𝗽,$𝑑DT},
                        uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
             $TYPE(float(x.val) * unit(x))
         end
-        export $PREF
+        export $FNAM
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
         convert(::Type{$TYPE{𝘀,𝘅,𝗯}},
@@ -297,34 +297,39 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Mass / Mass fraction anomalous
-mkBasAmt(:m , :BProperty, "m"   , u"kg"     , "mass"                , false ,
+mkBasAmt(:mAmt  , :BProperty, :m    , "m"   , u"kg"         , "mass"                , false ,
          bsym=(:m, :ṁ, :mf, :M))
 
 # Chemical amount / Molar fraction anomalous
-mkBasAmt(:N , :BProperty, "N"   , u"kmol"   , "chemical amount"     , false ,
+mkBasAmt(:nAmt  , :BProperty, :N    , "N"   , u"kmol"       , "chemical amount"     , false ,
          bsym=(:N, :Ṅ, :n, :y))
 
 # Gas constant / System constant anomalous
-mkBasAmt(:R , :BProperty, "R"   , u"kJ/K"   , "gas constant"        , false ,
+mkBasAmt(:RAmt  , :BProperty, :R    , "mR"  , u"kJ/K"       , "gas constant"        , false ,
          bsym=(:mR, :ṁR, :R, :R̄))
 
+# Plank function anomalous
+mkBasAmt(:rAmt  , :BProperty, :r    , "mr"  , u"kJ/K"       , "Planck function"     , false ,
+         bsym=(:mr, :ṁr, :r, :r̄))
+
 # Regular properties
-mkBasAmt(:u , :BProperty, "U"   , u"kJ"     , "internal energy"     , false )
-mkBasAmt(:h , :BProperty, "H"   , u"kJ"     , "enthalpy"            , false )
-mkBasAmt(:g , :BProperty, "G"   , u"kJ"     , "Gibbs energy"        , false )
-mkBasAmt(:a , :BProperty, "A"   , u"kJ"     , "Helmholtz energy"    , false )
-mkBasAmt(:e , :BProperty, "E"   , u"kJ"     , "total energy"        , false )
-mkBasAmt(:ek, :BProperty, "Ek"  , u"kJ"     , "kinetic energy"      , false )
-mkBasAmt(:ep, :BProperty, "Ep"  , u"kJ"     , "potential energy"    , false )
-mkBasAmt(:s , :BProperty, "S"   , u"kJ/K"   , "entropy"             , false )
-mkBasAmt(:cp, :BProperty, "Cp"  , u"kJ/K"   , "iso-P specific heat" , false )
-mkBasAmt(:cv, :BProperty, "Cv"  , u"kJ/K"   , "iso-v specific heat" , false )
+mkBasAmt(:uAmt  , :BProperty, :u    , "U"   , u"kJ"         , "internal energy"     , false )
+mkBasAmt(:hAmt  , :BProperty, :h    , "H"   , u"kJ"         , "enthalpy"            , false )
+mkBasAmt(:gAmt  , :BProperty, :g    , "G"   , u"kJ"         , "Gibbs energy"        , false )
+mkBasAmt(:aAmt  , :BProperty, :a    , "A"   , u"kJ"         , "Helmholtz energy"    , false )
+mkBasAmt(:eAmt  , :BProperty, :e    , "E"   , u"kJ"         , "total energy"        , false )
+mkBasAmt(:ekAmt , :BProperty, :ek   , "Ek"  , u"kJ"         , "kinetic energy"      , false )
+mkBasAmt(:epAmt , :BProperty, :ep   , "Ep"  , u"kJ"         , "potential energy"    , false )
+mkBasAmt(:sAmt  , :BProperty, :s    , "S"   , u"kJ/K"       , "entropy"             , false )
+mkBasAmt(:cpAmt , :BProperty, :cp   , "Cp"  , u"kJ/K"       , "iso-P specific heat" , false )
+mkBasAmt(:cvAmt , :BProperty, :cv   , "Cv"  , u"kJ/K"       , "iso-v specific heat" , false )
+mkBasAmt(:jAmt  , :BProperty, :j    , "J"   , u"kJ/K"       , "Massieu function"    , false )
 
 # Regular interactions
-mkBasAmt(:q , :BInteract, "Q"   , u"kJ"     , "heat"                , false )
-mkBasAmt(:w , :BInteract, "W"   , u"kJ"     , "work"                , false )
-mkBasAmt(:Δe, :BInteract, "E"   , u"kJ"     , "energy variation"    , true  )
-mkBasAmt(:Δs, :BInteract, "S"   , u"kJ/K"   , "entropy variation"   , true  )
+mkBasAmt(:qAmt  , :BInteract, :q    , "Q"   , u"kJ"         , "heat"                , false )
+mkBasAmt(:wAmt  , :BInteract, :w    , "W"   , u"kJ"         , "work"                , false )
+mkBasAmt(:ΔeAmt , :BInteract, :Δe   , "E"   , u"kJ"         , "energy variation"    , true  )
+mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "entropy variation"   , true  )
 
 
 ## #----------------------------------------------------------------------------------------------#
