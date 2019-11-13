@@ -3,13 +3,16 @@
 #----------------------------------------------------------------------------------------------#
 
 """
-`const DEF = Dict{Symbol,Type{𝘁} where 𝘁<:AbstractTherm}(...)`\n
-`EngThermBase` defaults: a dictionary of `{Symbol,Type{𝘁} where 𝘁<:AbstractTherm}` pairs.\n
+`const DEF = Dict{Symbol,Any}(...)`\n
+`EngThermBase` defaults\n
 """
-const DEF = Dict{Symbol,Type{𝘁} where 𝘁<:AbstractTherm}(
-    :IB     => MA,      # Default Intensive Base
-    :EB     => SY,      # Default Extensive Base
-    :XB     => EX,      # Default Exactness Base
+const DEF = Dict{Symbol,Any}(
+    :IB         => MA,      # Default Intensive Base
+    :EB         => SY,      # Default Extensive Base
+    :XB         => EX,      # Default Exactness Base
+    :showPrec   => true,    # Whether to Base.show the Precision
+    :showExac   => false,   # Whether to Base.show the Exactness
+    :showBase   => false,   # Whether to Base.show the ThermBase
 )
 
 export DEF

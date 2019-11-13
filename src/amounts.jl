@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------------------------------#
 
 import Unicode: normalize
-import Base: cp, convert
+import Base: cp, convert, show
 
 
 #----------------------------------------------------------------------------------------------#
@@ -397,6 +397,43 @@ mkBasAmt(:ΔeAmt , :BInteract, :Δe   , "E"   , u"kJ"         , "energy variatio
 mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "entropy variation"   , true  )
 
 
+#----------------------------------------------------------------------------------------------#
+#                                       Pretty Printing                                        #
+#----------------------------------------------------------------------------------------------#
+
+# Auxiliar method
+function subscript(x::Int)
+    asSub(c::Char) = Char(Int(c) - Int('0') + Int('₀'))
+    map(asSub, "$(x)")
+end
+
+# Precision decoration
+pDeco(::Type{Float16})  = DEF[:showPrec] ? subscript(16) : ""
+pDeco(::Type{Float32})  = DEF[:showPrec] ? subscript(32) : ""
+pDeco(::Type{Float64})  = DEF[:showPrec] ? subscript(64) : ""
+pDeco(::Type{BigFloat}) = DEF[:showPrec] ? subscript(precision(BigFloat)) : ""
+
+# Exactness decoration
+xDeco(::Type{EX}) = DEF[:showExec] ? "(exac)" : ""
+xDeco(::Type{MM}) = DEF[:showExec] ? "(meas)" : ""
+
+# ThermBase decoration
+bDeco(::Type{SY}) = DEF[:showBase] ? "syst" : ""
+bDeco(::Type{DT}) = DEF[:showBase] ? "rate" : ""
+bDeco(::Type{MA}) = DEF[:showBase] ? "mass" : ""
+bDeco(::Type{MO}) = DEF[:showBase] ? "molr" : ""
+
+# Custom printing
+Base.show(io::IO, x::AMOUNTS{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = begin
+    print(io,
+          "$(string(deco(x)))$(pDeco(𝗽)): ",
+          𝘅 == MM ? "(" : "",
+          "$(x.amt.val)",
+          𝘅 == MM ? ")" : "",
+          " $(unit(x.amt))")
+end
+
+
 ## #----------------------------------------------------------------------------------------------#
 ## #                                Concrete Amount Type Factories                                #
 ## #----------------------------------------------------------------------------------------------#
@@ -594,14 +631,6 @@ mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "entropy variati
 ## perMassEP(z::Altitude, g::Gravity) = perMassEP(g*z)     # specific potential energy from g,z
 ## Altitude(g::Gravity, p::perMassEP) = Altitude(p/g)      # inverse
 ## Altitude(p::perMassEP, g::Gravity) = Altitude(p/g)      # inverse
-## 
-## 
-## #----------------------------------------------------------------------------------------------#
-## #                                       Pretty Printing                                        #
-## #----------------------------------------------------------------------------------------------#
-## 
-## # Custom printing
-## Base.show(io::IO, a::AbstractAmount) = print(io, "$(string(deco(a))): $(a.val)")
 ## 
 ## 
 ## #----------------------------------------------------------------------------------------------#
