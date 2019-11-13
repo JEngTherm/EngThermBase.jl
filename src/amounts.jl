@@ -324,6 +324,8 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         end
         # Type export
         export $TYPE
+        # Type-stable wrapped amount obtaining function
+        amt(x::$TYPE{𝗽,EX,SY}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑SY,$𝑢SY}
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅,SY} where {𝗽,𝘅}) = Symbol($𝑠SY)
         deco(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = Symbol($𝑠DT)
