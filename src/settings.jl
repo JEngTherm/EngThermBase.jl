@@ -13,7 +13,7 @@ const DEF = Dict{Symbol,Any}(
     :XB         => EX,      # Default Exactness Base
     # --- Print formatting
     :showPrec   => true,    # Whether to Base.show the Precision of AMOUNTS
-    :showSFmt   => "%.2f",  # String format for Base.show AMOUNTS
+    :showSigD   => 5,       # Significant digits for Base.show of AMOUNTS
 )
 
 export DEF

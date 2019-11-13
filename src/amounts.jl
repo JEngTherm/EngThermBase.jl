@@ -8,7 +8,13 @@ Interface to return a unique decorative `Symbol` from a method's argument type.
 """
 function deco end
 
-export deco
+"""
+`function ppu end`\n
+Interface to pretty-print units.
+"""
+function ppu end
+
+export deco, ppu
 
 
 #----------------------------------------------------------------------------------------------#
@@ -61,6 +67,7 @@ export _Amt
 
 # Type-specific functions
 deco(x::_Amt{𝗽,𝘅} where {𝗽,𝘅}) = Symbol("?")
+ppu(x::_Amt) = "$(unit(x.amt))"
 
 # Conversions
 convert(::Type{_Amt{𝘀,𝘅}},
@@ -93,6 +100,7 @@ function mkWhlAmt(TYPE::Symbol,         # Type name:            :sysT
                   FNAM::Symbol,         # Function Name:        :T
                   SYMB::AbstractString, # Printing symbol:      "T"
                   UNIT::Unitful.Units,  # SY quantity units:    u"K"
+                  USTR::AbstractString, # PrettyPrinting units: "K"
                   WHAT::AbstractString, # Description:          "temperature"
                   DELT::Bool=false,     # Whether a Δ quantity
                  )
@@ -106,7 +114,7 @@ function mkWhlAmt(TYPE::Symbol,         # Type name:            :sysT
     hiStr = tyArchy(eval(SUPT))
     dcStr = """
 `struct $TYPE{𝗽<:PREC,𝘅<:EXAC} <: $SUPT{𝗽,𝘅}`\n
-Precision-, and Exactness- parametric $WHAT amounts based in $UNIT.\n
+Precision-, and Exactness- parametric $WHAT amounts based in $USTR.\n
 `$TYPE{𝗽,𝘅}` parameters are:\n
 - Precision `𝗽<:Union{Float16,Float32,Float64,BigFloat}`;\n
 - Exactness `𝘅<:Union{EX,MM}`, i.e., either a single, precise value or an uncertainty-bearing
@@ -154,6 +162,7 @@ Constructors determine all parameters from their arguments.\n
         export $TYPE
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
+        ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = $USTR
         # Indirect construction from plain
         $FNAM(x::plnF) = $TYPE(x)
         $FNAM(x::plnR) = $TYPE(float(x))
@@ -184,15 +193,15 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Regular properties -- \bb#<TAB> velocity/speed function names
-mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "temperature"         , false )
-mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "pressure"            , false )
-mkWhlAmt(:VELO  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "velocity"            , false )
-mkWhlAmt(:SPEE  , :WProperty, :spee , "𝕧"   , u"m/s"        , "speed"               , false )
+mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "K"       , "temperature"         , false )
+mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "kPa"     , "pressure"            , false )
+mkWhlAmt(:VELO  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "√kJ/kg"  , "velocity"            , false )
+mkWhlAmt(:SPEE  , :WProperty, :spee , "𝕧"   , u"m/s"        , "m/s"     , "speed"               , false )
 
 # Regular unranked -- \sans#<TAB> function names
-mkWhlAmt(:time  , :WUnranked, :time , "𝗍"   , u"s"          , "time"                , false )
-mkWhlAmt(:grav  , :WUnranked, :grav , "𝗀"   , u"m/s^2"      , "gravity"             , false )
-mkWhlAmt(:alti  , :WUnranked, :alti , "𝗓"   , u"m"          , "altitude"            , false )
+mkWhlAmt(:time  , :WUnranked, :time , "𝗍"   , u"s"          , "s"       , "time"                , false )
+mkWhlAmt(:grav  , :WUnranked, :grav , "𝗀"   , u"m/s^2"      , "m/s²"    , "gravity"             , false )
+mkWhlAmt(:alti  , :WUnranked, :alti , "𝗓"   , u"m"          , "m"       , "altitude"            , false )
 
 
 #----------------------------------------------------------------------------------------------#
@@ -207,6 +216,7 @@ function mkBasAmt(TYPE::Symbol,         # Type Name:            :uAmt
                   FNAM::Symbol,         # Function Name:        :u
                   SYMB::AbstractString, # Printing symbol:      "U"
                   UNIT::Unitful.Units,  # SY quantity units:    u"kJ"
+                  USTR::AbstractString, # PrettyPrinting units: "K"
                   WHAT::AbstractString, # Description:          "internal energy"
                   DELT::Bool=false;     # Whether a Δ quantity
                   bsym::NTuple{4,Symbol}=(:none,:none,:none,:none)
@@ -241,7 +251,7 @@ function mkBasAmt(TYPE::Symbol,         # Type Name:            :uAmt
     hiStr = tyArchy(eval(SUPT))
     dcStr = """
 `struct $TYPE{𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: $SUPT{𝗽,𝘅,𝗯}`\n
-Precision-, Exactness-, and Base- parametric $WHAT amounts based in $UNIT.\n
+Precision-, Exactness-, and Base- parametric $WHAT amounts based in $USTR.\n
 `$TYPE{𝗽,𝘅,𝗯}` parameters are:\n
 - Precision `𝗽<:Union{Float16,Float32,Float64,BigFloat}`;\n
 - Exactness `𝘅<:Union{EX,MM}`, i.e., either a single, precise value or an uncertainty-bearing
@@ -319,6 +329,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         deco(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = Symbol($𝑠DT)
         deco(x::$TYPE{𝗽,𝘅,MA} where {𝗽,𝘅}) = Symbol($𝑠MA)
         deco(x::$TYPE{𝗽,𝘅,MO} where {𝗽,𝘅}) = Symbol($𝑠MO)
+        ppu(x::$TYPE{𝗽,𝘅,SY} where {𝗽,𝘅}) = $USTR
+        ppu(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = $USTR * "/s"
+        ppu(x::$TYPE{𝗽,𝘅,MA} where {𝗽,𝘅}) = $USTR * "/kg"
+        ppu(x::$TYPE{𝗽,𝘅,MO} where {𝗽,𝘅}) = $USTR * "/kmol"
         # Indirect construction from plain
         $FNAM(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
         $FNAM(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
@@ -358,39 +372,32 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Mass / Mass fraction anomalous
-mkBasAmt(:mAmt  , :BProperty, :m    , "m"   , u"kg"         , "mass"                , false ,
-         bsym=(:m, :ṁ, :mf, :M))
-
+mkBasAmt(:mAmt  , :BProperty, :m    , "m"   , u"kg"         , "kg"      , "mass"                , false , bsym=(:m , :ṁ , :mf, :M))
 # Chemical amount / Molar fraction anomalous
-mkBasAmt(:nAmt  , :BProperty, :N    , "N"   , u"kmol"       , "chemical amount"     , false ,
-         bsym=(:N, :Ṅ, :n, :y))
-
+mkBasAmt(:nAmt  , :BProperty, :N    , "N"   , u"kmol"       , "kmol"    , "chemical amount"     , false , bsym=(:N , :Ṅ , :n , :y))
 # Gas constant / System constant anomalous
-mkBasAmt(:RAmt  , :BProperty, :R    , "mR"  , u"kJ/K"       , "gas constant"        , false ,
-         bsym=(:mR, :ṁR, :R, :R̄))
-
+mkBasAmt(:RAmt  , :BProperty, :R    , "mR"  , u"kJ/K"       , "kJ/K"    , "gas constant"        , false , bsym=(:mR, :ṁR, :R , :R̄))
 # Plank function anomalous
-mkBasAmt(:rAmt  , :BProperty, :r    , "mr"  , u"kJ/K"       , "Planck function"     , false ,
-         bsym=(:mr, :ṁr, :r, :r̄))
+mkBasAmt(:rAmt  , :BProperty, :r    , "mr"  , u"kJ/K"       , "kJ/K"    , "Planck function"     , false , bsym=(:mr, :ṁr, :r , :r̄))
 
 # Regular properties
-mkBasAmt(:uAmt  , :BProperty, :u    , "U"   , u"kJ"         , "internal energy"     , false )
-mkBasAmt(:hAmt  , :BProperty, :h    , "H"   , u"kJ"         , "enthalpy"            , false )
-mkBasAmt(:gAmt  , :BProperty, :g    , "G"   , u"kJ"         , "Gibbs energy"        , false )
-mkBasAmt(:aAmt  , :BProperty, :a    , "A"   , u"kJ"         , "Helmholtz energy"    , false )
-mkBasAmt(:eAmt  , :BProperty, :e    , "E"   , u"kJ"         , "total energy"        , false )
-mkBasAmt(:ekAmt , :BProperty, :ek   , "Ek"  , u"kJ"         , "kinetic energy"      , false )
-mkBasAmt(:epAmt , :BProperty, :ep   , "Ep"  , u"kJ"         , "potential energy"    , false )
-mkBasAmt(:sAmt  , :BProperty, :s    , "S"   , u"kJ/K"       , "entropy"             , false )
-mkBasAmt(:cpAmt , :BProperty, :cp   , "Cp"  , u"kJ/K"       , "iso-P specific heat" , false )
-mkBasAmt(:cvAmt , :BProperty, :cv   , "Cv"  , u"kJ/K"       , "iso-v specific heat" , false )
-mkBasAmt(:jAmt  , :BProperty, :j    , "J"   , u"kJ/K"       , "Massieu function"    , false )
+mkBasAmt(:uAmt  , :BProperty, :u    , "U"   , u"kJ"         , "kJ"      , "internal energy"     , false )
+mkBasAmt(:hAmt  , :BProperty, :h    , "H"   , u"kJ"         , "kJ"      , "enthalpy"            , false )
+mkBasAmt(:gAmt  , :BProperty, :g    , "G"   , u"kJ"         , "kJ"      , "Gibbs energy"        , false )
+mkBasAmt(:aAmt  , :BProperty, :a    , "A"   , u"kJ"         , "kJ"      , "Helmholtz energy"    , false )
+mkBasAmt(:eAmt  , :BProperty, :e    , "E"   , u"kJ"         , "kJ"      , "total energy"        , false )
+mkBasAmt(:ekAmt , :BProperty, :ek   , "Ek"  , u"kJ"         , "kJ"      , "kinetic energy"      , false )
+mkBasAmt(:epAmt , :BProperty, :ep   , "Ep"  , u"kJ"         , "kJ"      , "potential energy"    , false )
+mkBasAmt(:sAmt  , :BProperty, :s    , "S"   , u"kJ/K"       , "kJ/K"    , "entropy"             , false )
+mkBasAmt(:cpAmt , :BProperty, :cp   , "Cp"  , u"kJ/K"       , "kJ/K"    , "iso-P specific heat" , false )
+mkBasAmt(:cvAmt , :BProperty, :cv   , "Cv"  , u"kJ/K"       , "kJ/K"    , "iso-v specific heat" , false )
+mkBasAmt(:jAmt  , :BProperty, :j    , "J"   , u"kJ/K"       , "kJ/K"    , "Massieu function"    , false )
 
 # Regular interactions
-mkBasAmt(:qAmt  , :BInteract, :q    , "Q"   , u"kJ"         , "heat"                , false )
-mkBasAmt(:wAmt  , :BInteract, :w    , "W"   , u"kJ"         , "work"                , false )
-mkBasAmt(:ΔeAmt , :BInteract, :Δe   , "E"   , u"kJ"         , "energy variation"    , true  )
-mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "entropy variation"   , true  )
+mkBasAmt(:qAmt  , :BInteract, :q    , "Q"   , u"kJ"         , "kJ"      , "heat"                , false )
+mkBasAmt(:wAmt  , :BInteract, :w    , "W"   , u"kJ"         , "kJ"      , "work"                , false )
+mkBasAmt(:ΔeAmt , :BInteract, :Δe   , "E"   , u"kJ"         , "kJ"      , "energy variation"    , true  )
+mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "kJ/K"    , "entropy variation"   , true  )
 
 
 #----------------------------------------------------------------------------------------------#
@@ -398,7 +405,7 @@ mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "entropy variati
 #----------------------------------------------------------------------------------------------#
 
 import Base: show
-import Printf: @sprintf
+import Formatting: sprintf1
 
 
 # Auxiliar method
@@ -414,13 +421,23 @@ pDeco(::Type{Float64})  = DEF[:showPrec] ? subscript(64) : ""
 pDeco(::Type{BigFloat}) = DEF[:showPrec] ? subscript(precision(BigFloat)) : ""
 
 # Custom printing
-Base.show(io::IO, x::AMOUNTS{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = begin
+Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
     print(io,
           "$(string(deco(x)))$(pDeco(𝗽)): ",
-          𝘅 == MM ? "(" : "",
-          "$(x.amt.val)",
-          𝘅 == MM ? ")" : "",
-          " $(unit(x.amt))")
+          sprintf1("%.$(DEF[:showSigD])g ", x.amt.val),
+          ppu(x))
+    # Formatting string is hardcoded apparently because @sprintf is a macro!
+end
+
+Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
+    print(io,
+          "$(string(deco(x)))$(pDeco(𝗽)): (",
+          sprintf1("%.$(DEF[:showSigD])g", x.amt.val.val),
+          " ± ",
+          sprintf1("%.2g", x.amt.val.err),
+          ") ",
+          ppu(x))
+    # Formatting string is hardcoded apparently because @sprintf is a macro!
 end
 
 
