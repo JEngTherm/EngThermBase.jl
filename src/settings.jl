@@ -7,12 +7,13 @@
 `EngThermBase` defaults\n
 """
 const DEF = Dict{Symbol,Any}(
+    # --- Bases
     :IB         => MA,      # Default Intensive Base
     :EB         => SY,      # Default Extensive Base
     :XB         => EX,      # Default Exactness Base
-    :showPrec   => true,    # Whether to Base.show the Precision
-    :showExac   => false,   # Whether to Base.show the Exactness
-    :showBase   => false,   # Whether to Base.show the ThermBase
+    # --- Print formatting
+    :showPrec   => true,    # Whether to Base.show the Precision of AMOUNTS
+    :showSFmt   => "%.2f",  # String format for Base.show AMOUNTS
 )
 
 export DEF
