@@ -422,19 +422,27 @@ pDeco(::Type{BigFloat}) = DEF[:showPrec] ? subscript(precision(BigFloat)) : ""
 
 # Custom printing
 Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
-    print(io,
-          "$(string(deco(x)))$(pDeco(𝗽)): ",
-          sprintf1("%.$(DEF[:showSigD])g", x.amt.val),
-          " ", ppu(x))
+    if DEF[:pprint]
+        print(io,
+            "$(string(deco(x)))$(pDeco(𝗽)): ",
+            sprintf1("%.$(DEF[:showSigD])g", x.amt.val),
+            " ", ppu(x))
+    else
+        Base.show_default(io, x)
+    end
 end
 
 Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
-    print(io,
-          "$(string(deco(x)))$(pDeco(𝗽)): (",
-          sprintf1("%.$(DEF[:showSigD])g", x.amt.val.val),
-          " ± ",
-          sprintf1("%.2g", x.amt.val.err),
-          ") ", ppu(x))
+    if DEF[:pprint]
+        print(io,
+            "$(string(deco(x)))$(pDeco(𝗽)): (",
+            sprintf1("%.$(DEF[:showSigD])g", x.amt.val.val),
+            " ± ",
+            sprintf1("%.2g", x.amt.val.err),
+            ") ", ppu(x))
+    else
+        Base.show_default(io, x)
+    end
 end
 
 
