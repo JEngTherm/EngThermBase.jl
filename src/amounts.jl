@@ -413,16 +413,6 @@ pDeco(::Type{Float32})  = DEF[:showPrec] ? subscript(32) : ""
 pDeco(::Type{Float64})  = DEF[:showPrec] ? subscript(64) : ""
 pDeco(::Type{BigFloat}) = DEF[:showPrec] ? subscript(precision(BigFloat)) : ""
 
-# Exactness decoration
-xDeco(::Type{EX}) = DEF[:showExec] ? "(exac)" : ""
-xDeco(::Type{MM}) = DEF[:showExec] ? "(meas)" : ""
-
-# ThermBase decoration
-bDeco(::Type{SY}) = DEF[:showBase] ? "syst" : ""
-bDeco(::Type{DT}) = DEF[:showBase] ? "rate" : ""
-bDeco(::Type{MA}) = DEF[:showBase] ? "mass" : ""
-bDeco(::Type{MO}) = DEF[:showBase] ? "molr" : ""
-
 # Custom printing
 Base.show(io::IO, x::AMOUNTS{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = begin
     print(io,
