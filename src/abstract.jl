@@ -211,14 +211,15 @@ end
 
 # AMOUNT branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :AMOUNTS       , :AbstractTherm, "thermodynamic amounts"                       , 0)
-mk2ParAbs(    :WholeAmt    , :AMOUNTS      , "whole, unbased amounts"                      , 2)
+mk2ParAbs(    :WholeAmt    , :AMOUNTS      , "whole, unbased amounts of fixed units"       , 2)
 mk2ParAbs(      :WProperty , :WholeAmt     , "whole, unbased properties"                   , 2)
 mk2ParAbs(      :WInteract , :WholeAmt     , "whole, unbased interactions"                 , 2)
 mk2ParAbs(      :WUnranked , :WholeAmt     , "whole, unbased unranked amounts"             , 2)
-mk3ParAbs(    :BasedAmt    , :AMOUNTS      , "based amount groups"                         , 2)
+mk3ParAbs(    :BasedAmt    , :AMOUNTS      , "based amount groups of fixed units"          , 2)
 mk3ParAbs(      :BProperty , :BasedAmt     , "based property groups"                       , 3)
 mk3ParAbs(      :BInteract , :BasedAmt     , "based interaction groups"                    , 3)
 mk3ParAbs(      :BUnranked , :BasedAmt     , "based unranked amount groups"                , 3)
+mk2ParAbs(    :GenericAmt  , :AMOUNTS      , "generic, arbitrary unit amounts"             , 2)
 
 Property{𝗽,𝘅} = Union{WProperty{𝗽,𝘅},BProperty{𝗽,𝘅,𝗯} where 𝗯} where {𝗽,𝘅}
 Interact{𝗽,𝘅} = Union{WInteract{𝗽,𝘅},BInteract{𝗽,𝘅,𝗯} where 𝗯} where {𝗽,𝘅}
