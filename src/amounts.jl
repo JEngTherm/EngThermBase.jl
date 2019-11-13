@@ -20,6 +20,72 @@ export deco
 
 
 #----------------------------------------------------------------------------------------------#
+#                                     Generic Amount Type                                      #
+#----------------------------------------------------------------------------------------------#
+
+"""
+`struct _Amt{𝗽<:PREC,𝘅<:EXAC} <: AMOUNTS{𝗽,𝘅}`\n
+Precision-, and Exactness- parametric generic amounts in arbitrary units.\n
+`_Amt{𝗽,𝘅}` parameters are:\n
+- Precision `𝗽<:Union{Float16,Float32,Float64,BigFloat}`;\n
+- Exactness `𝘅<:Union{EX,MM}`, i.e., either a single, precise value or an uncertainty-bearing
+  measurement, respectively;\n
+A `_Amt` can be natively constructed from the following argument types:\n
+- A plain, unitless float;\n
+- A plain, unitless `Measurement`; hence, any `AbstractFloat`;\n
+- A `Quantity{AbstractFloat}` with any units.\n
+## Hierarchy\n
+`_Amt <: $(tyArchy(AMOUNTS))`
+"""
+struct _Amt{𝗽,𝘅} <: AMOUNTS{𝗽,𝘅}
+    amt::UATY{𝗽} where 𝗽<:PREC
+    # Copy constructor
+    _Amt(x::_Amt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(x.amt)
+    _Amt(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x))
+    _Amt(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
+end
+
+# Precision-changing external constructors
+(::Type{_Amt{𝘀}})(x::_Amt{𝗽,EX}
+                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(x.amt.val))
+(::Type{_Amt{𝘀}})(x::_Amt{𝗽,MM}
+                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(x.amt.val))
+
+# Precision+Exactness-changing external constructors
+(::Type{_Amt{𝘀,EX}})(x::_Amt{𝗽,EX}
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(x.amt.val))
+(::Type{_Amt{𝘀,EX}})(x::_Amt{𝗽,MM}
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(x.amt.val.val))
+(::Type{_Amt{𝘀,MM}})(x::_Amt{𝗽,EX},
+                     e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(measurement(𝘀(x.amt.val), e))
+(::Type{_Amt{𝘀,MM}})(x::_Amt{𝗽,MM}
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(x.amt.val))
+
+# Type export
+export _Amt
+
+# Type-specific functions
+deco(x::_Amt{𝗽,𝘅} where {𝗽,𝘅}) = Symbol("?")
+
+# Conversions
+convert(::Type{_Amt{𝘀,𝘅}},
+        y::_Amt{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
+    _Amt{promote_type(𝘀,𝗽),𝘅}(y)
+end
+convert(::Type{_Amt{𝘀,𝘆}},
+        y::_Amt{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
+    _Amt{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
+end
+
+# Promotion rules
+promote_rule(::Type{_Amt{𝘀,𝘆}},
+             ::Type{_Amt{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
+    _Amt{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}
+end
+
+
+#----------------------------------------------------------------------------------------------#
 #                                  Whole Amount Type Factory                                   #
 #----------------------------------------------------------------------------------------------#
 
@@ -53,8 +119,7 @@ A `$TYPE` can be natively constructed from the following argument types:\n
 - A plain, unitless float;\n
 - A plain, unitless `Measurement`; hence, any `AbstractFloat`;\n
 - A `Quantity{AbstractFloat}` with compatible units.\n
-Constructors determine parameters from their arguments. `Quantity` constructors do not need a
-base argument. Plain, `AbstractFloat` ones require the base argument.\n
+Constructors determine all parameters from their arguments.\n
 ## Hierarchy\n
 `$(TYPE) <: $(hiStr)`
     """
@@ -66,8 +131,8 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             # Copy constructor
             $TYPE(x::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(x.amt)
             # Plain constructors enforce default units & avoid unit conversion
-            $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x * $uSY))
-            $TYPE(x::PMTY{𝗽}, ::Type{SY}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x * $uSY))
+            $TYPE(x::𝗽) where 𝗽<:PREC = new{𝗽,EX}(_qty(x * $uSY))
+            $TYPE(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x * $uSY))
             # Quantity constructors have to perform unit conversion despite matching dimensions
             $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX}(_qty(uconvert($uSY, x)))
             $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM}(_qty(uconvert($uSY, x)))
@@ -125,8 +190,8 @@ end
 # Regular properties -- \bb#<TAB> velocity/speed function names
 mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "temperature"         , false )
 mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "pressure"            , false )
-mkWhlAmt(:velo  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "velocity"            , false )
-mkWhlAmt(:spee  , :WProperty, :spee , "𝕧"   , u"m/s"        , "speed"               , false )
+mkWhlAmt(:VELO  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "velocity"            , false )
+mkWhlAmt(:SPEE  , :WProperty, :spee , "𝕧"   , u"m/s"        , "speed"               , false )
 
 # Regular unranked -- \sans#<TAB> function names
 mkWhlAmt(:time  , :WUnranked, :time , "𝗍"   , u"s"          , "time"                , false )
