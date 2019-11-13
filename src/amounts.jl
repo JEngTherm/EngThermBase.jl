@@ -426,7 +426,6 @@ Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
           "$(string(deco(x)))$(pDeco(𝗽)): ",
           sprintf1("%.$(DEF[:showSigD])g", x.amt.val),
           " ", ppu(x))
-    # Formatting string is hardcoded apparently because @sprintf is a macro!
 end
 
 Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
@@ -436,7 +435,6 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
           " ± ",
           sprintf1("%.2g", x.amt.val.err),
           ") ", ppu(x))
-    # Formatting string is hardcoded apparently because @sprintf is a macro!
 end
 
 
