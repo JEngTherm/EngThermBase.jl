@@ -37,7 +37,7 @@ A `_Amt` can be natively constructed from the following argument types:\n
 ## Hierarchy\n
 `_Amt <: $(tyArchy(AMOUNTS))`
 """
-struct _Amt{𝗽,𝘅} <: AMOUNTS{𝗽,𝘅}
+struct _Amt{𝗽,𝘅} <: GenericAmt{𝗽,𝘅}
     amt::UATY{𝗽} where 𝗽<:PREC
     # Copy constructor
     _Amt(x::_Amt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(x.amt)
