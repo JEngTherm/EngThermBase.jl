@@ -4,9 +4,16 @@
 
 """
 `const NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")`\n
-The Avogadro constant [Lide, D. R., 2006].
+The Avogadro constant, \$N_A\$, [Lide, D. R., 2006].
 """
 const NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")
+
+"""
+`const mu = m(measurement("1.66053886(28)e-27") ,SY)`\n
+The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006].
+"""
+const mu = m(measurement("1.66053886(28)e-27") ,SY)
+
 
 
 ## #----------------------------------------------------------------------------------------------#
