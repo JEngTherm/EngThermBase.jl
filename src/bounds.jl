@@ -4,29 +4,34 @@
 
 """
 `const TeraKelvin = T(1u"TK")`\n
-A practical, hardcoded temperature upper bound as a `sysT{Float64,EX}`, for state
-specifications.
+A practical, hardcoded temp. upper bound as a `sysT{Float64,EX}`, for state specifications.
 """
 const TeraKelvin = T(1u"TK")
 
 """
-`const picoKelvin = T(1u"TK")`\n
-A practical, hardcoded temperature lower bound as a `sysT{Float64,EX}`, for state
-specifications.
+`const picoKelvin = T(1u"pK")`\n
+A practical, hardcoded temp. lower bound as a `sysT{Float64,EX}`, for state specifications.
 """
 const picoKelvin = T(1u"pK")
 
 export TeraKelvin, picoKelvin
 
 
-## "`const TeraPascal = P\"b1.0e+09\"`: a practical, hardcoded pressure upper bound for state specifications"
-## const TeraPascal = P"b1.0e+09"  # since P defaults to kPa
-## "`const picoPascal = P\"b1.0e-15\"`: a practical, hardcoded pressure lower bound for state specifications"
-## const picoPascal = P"b1.0e-15"  # since P defaults to kPa
-## 
-## export TeraPascal, picoPascal
-## 
-## 
+"""
+`const TeraPascal = P(1u"TPa")`\n
+A practical, hardcoded pressure upper bound as a `sysP{Float64,EX}`, for state specifications.
+"""
+const TeraPascal = P(1u"TPa")
+
+"""
+`const picoPascal = T(1u"pPa")`\n
+A practical, hardcoded pressure lower bound as a `sysP{Float64,EX}`, for state specifications.
+"""
+const picoPascal = P(1u"pPa")
+
+export TeraPascal, picoPascal
+
+
 ## "`const YottaMassVolume = vMA\"b1.0e+24\"`: a practical, hardcoded mass-based specific volume upper bound for state specifications"
 ## const YottaMassVolume = vMA"b1.0e+24"
 ## "`const yoctoMassVolume = vMA\"b1.0e-24\"`: a practical, hardcoded mass-based specific volume lower bound for state specifications"
