@@ -9,6 +9,14 @@ The Avogadro constant, \$N_A\$, [Lide, D. R., 2006], as a `_Amt{Float64,MM}`.
 const _NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")
 
 """
+`NA(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the Avogadro constant as a `_Amt{P,X}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+NA(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_NA)
+NA(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_NA)
+
+"""
 `const _mu = m(measurement("1.66053886(28)e-27") ,SY)`\n
 The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006], as a
 `mAmt{Float64,MM,SY}`.
