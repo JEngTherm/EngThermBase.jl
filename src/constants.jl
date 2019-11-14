@@ -16,12 +16,22 @@ Arguments `P` and `X` can be ommitted and/or be supplied in any order.
 NA(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_NA)
 NA(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_NA)
 
+
 """
 `const _mu = m(measurement("1.66053886(28)e-27") ,SY)`\n
 The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006], as a
 `mAmt{Float64,MM,SY}`.
 """
 const _mu = m(measurement("1.66053886(28)e-27") ,SY)
+
+"""
+`mu(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the atomic mass constant as a `mAmt{P,X}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+mu(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = mAmt{P,X}(_mu)
+mu(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = mAmt{P,X}(_mu)
+
 
 """
 `const _R̄ = R(measurement("8.314472(15)"), MO)`\n
