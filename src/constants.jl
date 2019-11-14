@@ -20,6 +20,13 @@ The molar gas constant, \$R̄\$, [Lide, D. R., 2006].
 """
 const R̄ = R(measurement("8.314472(15)"), MO)
 
+"""
+`const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")`\n
+The Boltzmann constant, \$k_B = R̄/N_A\$, [Lide, D. R., 2006].
+"""
+const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
+
+
 
 ## #----------------------------------------------------------------------------------------------#
 ## #                                Typed Thermodynamic Constants                                 #
