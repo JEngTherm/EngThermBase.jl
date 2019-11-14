@@ -118,65 +118,6 @@ grav(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = grav{
 
 
 ## #----------------------------------------------------------------------------------------------#
-## #                                Typed Thermodynamic Constants                                 #
-## #----------------------------------------------------------------------------------------------#
-## 
-## "`const r̄ = perMole_R{Float64}(8.31447u\"kJ/kmol/K\")`: the universal gas constant"
-## const r̄ = perMole_R{Float64}(8.31447u"kJ/kmol/K")
-## 
-## "`rbar() = r̄`"
-## rbar() = r̄
-## "`rbar(::Type{Float16}) = perMole_R{Float16}(r̄)`"
-## rbar(::Type{Float16}) = perMole_R{Float16}(r̄)
-## "`rbar(::Type{Float32}) = perMole_R{Float32}(r̄)`"
-## rbar(::Type{Float32}) = perMole_R{Float32}(r̄)
-## "`rbar(::Type{Float64}) = perMole_R{Float64}(r̄)`"
-## rbar(::Type{Float64}) = perMole_R{Float64}(r̄)
-## "`rbar(::Type{BigFloat}) = perMole_R{BigFloat}(r̄)`"
-## rbar(::Type{BigFloat}) = perMole_R{BigFloat}(r̄)
-## 
-## 
-## #----------------------------------------------------------------------------------------------#
-## #                 Package User Interface -- Constant-related function methods                  #
-## #----------------------------------------------------------------------------------------------#
-## 
-## "`r() = r̄`"
-## r() = r̄
-## "`r(::Type{MO}) = r̄`"
-## r(::Type{MO}) = r̄
-## "`r(::Type{𝘁}) where 𝘁<:AbstractFloat = rbar(𝘁)`"
-## r(::Type{𝘁}) where 𝘁<:AbstractFloat = rbar(𝘁)
-## "`r(::Type{MO}, ::Type{𝘁}) where 𝘁<:AbstractFloat = rbar(𝘁)`"
-## r(::Type{MO}, ::Type{𝘁}) where 𝘁<:AbstractFloat = rbar(𝘁)
-## "`r(M::perMole_m{𝘁}, ::Type{MA}) where 𝘁 = rbar(𝘁) / M`"
-## r(M::perMole_m{𝘁}, ::Type{MA}) where 𝘁 = rbar(𝘁) / M
-## "`r(M::perMole_m{𝘁}) where 𝘁 = r(M, DEF[:DB])`"
-## r(M::perMole_m{𝘁}) where 𝘁 = r(M, DEF[:DB])
-## 
-## 
-## #----------------------------------------------------------------------------------------------#
-## #                                   Standard Property Values                                   #
-## #----------------------------------------------------------------------------------------------#
-## 
-## "`stdT() = T\"298.15\"`: the standard reference temperature"
-## stdT() = T"298.15"
-## "`stdT(::Type{𝘁}) where 𝘁<:AbstractFloat = system_T{𝘁}(stdT())`"
-## stdT(::Type{𝘁}) where 𝘁<:AbstractFloat = system_T{𝘁}(stdT())
-## 
-## "`stdP() = P\"101.325\"`: the standard reference pressure"
-## stdP() = P"101.325"
-## "`stdP(::Type{𝘁}) where 𝘁<:AbstractFloat = system_P{𝘁}(stdP())`"
-## stdP(::Type{𝘁}) where 𝘁<:AbstractFloat = system_P{𝘁}(stdP())
-## 
-## "`stdTP() = TPPair(stdT(), stdP())`: the standard reference \$(T, P)\$ state"
-## stdTP() = TPPair(stdT(), stdP())
-## "`stdTP(::Type{𝘁}) where 𝘁<:AbstractFloat = TPPair(stdT(𝘁), stdP(𝘁))`"
-## stdTP(::Type{𝘁}) where 𝘁<:AbstractFloat = TPPair(stdT(𝘁), stdP(𝘁))
-## 
-## export stdT, stdP, stdTP
-## 
-## 
-## #----------------------------------------------------------------------------------------------#
 ## #                                   Property Bound Constants                                   #
 ## #----------------------------------------------------------------------------------------------#
 ## 
