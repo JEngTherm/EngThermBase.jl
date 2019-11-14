@@ -420,6 +420,7 @@ mkBasAmt(:RAmt  , :BProperty, :R    , "mR"  , u"kJ/K"       , "kJ/K"    , "gas c
 mkBasAmt(:rAmt  , :BProperty, :r    , "mr"  , u"kJ/K"       , "kJ/K"    , "Planck function"     , false , bsym=(:mr, :ṁr, :r , :r̄))
 
 # Regular properties
+mkBasAmt(:vAmt  , :BProperty, :v    , "V"   , u"m^3"        , "m³"      , "volume"              , false )
 mkBasAmt(:uAmt  , :BProperty, :u    , "U"   , u"kJ"         , "kJ"      , "internal energy"     , false )
 mkBasAmt(:hAmt  , :BProperty, :h    , "H"   , u"kJ"         , "kJ"      , "enthalpy"            , false )
 mkBasAmt(:gAmt  , :BProperty, :g    , "G"   , u"kJ"         , "kJ"      , "Gibbs energy"        , false )
