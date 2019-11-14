@@ -78,7 +78,7 @@ const _stdT = sysT{Float64,MM}(T(25u"°C"))
 
 """
 `T(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
-Returns the Boltzmann constant as a `sysT{P,X}`.\n
+Returns the standard temperature as a `sysT{P,X}`.\n
 Arguments `P` and `X` can be ommitted and/or be supplied in any order.
 """
 T(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = sysT{P,X}(_stdT)
@@ -94,7 +94,7 @@ const _stdP = sysP{Float64,MM}(P(101350u"Pa"))
 
 """
 `P(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
-Returns the Boltzmann constant as a `sysP{P,X}`.\n
+Returns the standard atmosphere as a `sysP{P,X}`.\n
 Arguments `P` and `X` can be ommitted and/or be supplied in any order.
 """
 P(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = sysP{P,X}(_stdP)
@@ -107,6 +107,14 @@ The `grav{Float64,MM}` representation of the exact standard gravity, \$g_n ≡ 9
 [Lide, D. R., 2006].
 """
 const _gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))
+
+"""
+`grav(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the standard gravity as a `grav{P,X}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+grav(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = grav{P,X}(_gn)
+grav(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = grav{P,X}(_gn)
 
 
 ## #----------------------------------------------------------------------------------------------#
