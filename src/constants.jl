@@ -93,6 +93,15 @@ The `sysP{Float64,MM}` representation of the exact standard atmosphere, \$P_0 �
 const _stdP = sysP{Float64,MM}(P(101350u"Pa"))
 
 """
+`P(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the Boltzmann constant as a `sysP{P,X}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+P(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = sysP{P,X}(_stdP)
+P(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = sysP{P,X}(_stdP)
+
+
+"""
 `const _gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))`\n
 The `grav{Float64,MM}` representation of the exact standard gravity, \$g_n ≡ 9.80665 m/s^2\$,
 [Lide, D. R., 2006].
