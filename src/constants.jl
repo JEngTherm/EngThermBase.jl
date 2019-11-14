@@ -4,25 +4,26 @@
 
 """
 `const NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")`\n
-The Avogadro constant, \$N_A\$, [Lide, D. R., 2006].
+The Avogadro constant, \$N_A\$, [Lide, D. R., 2006], as a `_Amt{Float64,MM}`.
 """
 const NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")
 
 """
 `const mu = m(measurement("1.66053886(28)e-27") ,SY)`\n
-The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006].
+The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006], as a
+`mAmt{Float64,MM,SY}`.
 """
 const mu = m(measurement("1.66053886(28)e-27") ,SY)
 
 """
 `const R̄ = R(measurement("8.314472(15)"), MO)`\n
-The molar gas constant, \$R̄\$, [Lide, D. R., 2006].
+The molar gas constant, \$R̄\$, [Lide, D. R., 2006], as a `RAmt{Float64,MM,MO}`.
 """
 const R̄ = R(measurement("8.314472(15)"), MO)
 
 """
 `const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")`\n
-The Boltzmann constant, \$k_B = R̄/N_A\$, [Lide, D. R., 2006].
+The Boltzmann constant, \$k_B = R̄/N_A\$, [Lide, D. R., 2006], as a `_Amt{Float64,MM}`.
 """
 const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
 
