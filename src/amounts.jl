@@ -14,7 +14,13 @@ Interface to pretty-print units.
 """
 function ppu end
 
-export deco, ppu
+"""
+`function amt end`\n
+Interface to get an `AMOUNTS`' `:amt` field in a type-stable manner.
+"""
+function amt end
+
+export deco, ppu, amt
 
 
 #----------------------------------------------------------------------------------------------#
@@ -64,6 +70,10 @@ end
 
 # Type export
 export _Amt
+
+# Type-stable wrapped amount obtaining function
+amt(x::_Amt{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽}
+amt(x::_Amt{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽}}
 
 # Type-specific functions
 deco(x::_Amt{𝗽,𝘅} where {𝗽,𝘅}) = Symbol("?")
@@ -160,6 +170,9 @@ Constructors determine all parameters from their arguments.\n
                              ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(Measurement{𝘀}(x.amt.val))
         # Type export
         export $TYPE
+        # Type-stable wrapped amount obtaining function
+        amt(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑SY,$𝑢SY}
+        amt(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑SY,$𝑢SY}
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = $USTR
@@ -326,6 +339,13 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         export $TYPE
         # Type-stable wrapped amount obtaining function
         amt(x::$TYPE{𝗽,EX,SY}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑SY,$𝑢SY}
+        amt(x::$TYPE{𝗽,EX,DT}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑DT,$𝑢DT}
+        amt(x::$TYPE{𝗽,EX,MA}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑MA,$𝑢MA}
+        amt(x::$TYPE{𝗽,EX,MO}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑MO,$𝑢MO}
+        amt(x::$TYPE{𝗽,MM,SY}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑SY,$𝑢SY}
+        amt(x::$TYPE{𝗽,MM,DT}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑DT,$𝑢DT}
+        amt(x::$TYPE{𝗽,MM,MA}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑MA,$𝑢MA}
+        amt(x::$TYPE{𝗽,MM,MO}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑MO,$𝑢MO}
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅,SY} where {𝗽,𝘅}) = Symbol($𝑠SY)
         deco(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = Symbol($𝑠DT)
