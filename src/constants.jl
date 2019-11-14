@@ -14,6 +14,11 @@ The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006].
 """
 const mu = m(measurement("1.66053886(28)e-27") ,SY)
 
+"""
+`const R̄ = R(measurement("8.314472(15)"), MO)`\n
+The molar gas constant, \$R̄\$, [Lide, D. R., 2006].
+"""
+const R̄ = R(measurement("8.314472(15)"), MO)
 
 
 ## #----------------------------------------------------------------------------------------------#
