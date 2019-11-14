@@ -46,6 +46,13 @@ The `sysP{Float64,MM}` representation of the exact standard atmosphere, \$P_0 �
 """
 const stdP = sysP{Float64,MM}(P(101350u"Pa"))
 
+"""
+`const gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))`\n
+The `grav{Float64,MM}` representation of the exact standard gravity, \$g_n ≡ 9.80665 m/s^2\$,
+[Lide, D. R., 2006].
+"""
+const gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))
+
 
 ## #----------------------------------------------------------------------------------------------#
 ## #                                Typed Thermodynamic Constants                                 #
