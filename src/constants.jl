@@ -40,6 +40,15 @@ The molar gas constant, \$R̄\$, [Lide, D. R., 2006], as a `RAmt{Float64,MM,MO}`
 const _R̄ = R(measurement("8.314472(15)"), MO)
 
 """
+`R(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the molar gas constant as a `RAmt{P,X,MO}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+R(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = RAmt{P,X}(_R̄)
+R(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = RAmt{P,X}(_R̄)
+
+
+"""
 `const _kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")`\n
 The Boltzmann constant, \$k_B = R̄/N_A\$, [Lide, D. R., 2006], as a `_Amt{Float64,MM}`.
 """
