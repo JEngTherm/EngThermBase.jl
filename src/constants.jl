@@ -3,29 +3,29 @@
 #----------------------------------------------------------------------------------------------#
 
 """
-`const NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")`\n
+`const _NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")`\n
 The Avogadro constant, \$N_A\$, [Lide, D. R., 2006], as a `_Amt{Float64,MM}`.
 """
-const NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")
+const _NA = _Amt(measurement("6.0221415(10)e+23") / u"mol")
 
 """
-`const mu = m(measurement("1.66053886(28)e-27") ,SY)`\n
+`const _mu = m(measurement("1.66053886(28)e-27") ,SY)`\n
 The atomic mass constant, \$m_u = (1/12)m(¹²C)\$, [Lide, D. R., 2006], as a
 `mAmt{Float64,MM,SY}`.
 """
-const mu = m(measurement("1.66053886(28)e-27") ,SY)
+const _mu = m(measurement("1.66053886(28)e-27") ,SY)
 
 """
-`const R̄ = R(measurement("8.314472(15)"), MO)`\n
+`const _R̄ = R(measurement("8.314472(15)"), MO)`\n
 The molar gas constant, \$R̄\$, [Lide, D. R., 2006], as a `RAmt{Float64,MM,MO}`.
 """
-const R̄ = R(measurement("8.314472(15)"), MO)
+const _R̄ = R(measurement("8.314472(15)"), MO)
 
 """
-`const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")`\n
+`const _kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")`\n
 The Boltzmann constant, \$k_B = R̄/N_A\$, [Lide, D. R., 2006], as a `_Amt{Float64,MM}`.
 """
-const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
+const _kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
 
 
 #----------------------------------------------------------------------------------------------#
@@ -33,25 +33,25 @@ const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
 #----------------------------------------------------------------------------------------------#
 
 """
-`const stdT = sysT{Float64,MM}(T(25u"°C"))`\n
+`const _stdT = sysT{Float64,MM}(T(25u"°C"))`\n
 The `sysT{Float64,MM}` representation of the exact standard temperature, \$T_0 ≡ 25°C\$, [Lide,
 D. R., 2006].
 """
-const stdT = sysT{Float64,MM}(T(25u"°C"))
+const _stdT = sysT{Float64,MM}(T(25u"°C"))
 
 """
-`const stdP = sysP{Float64,MM}(P(101350u"Pa"))`\n
+`const _stdP = sysP{Float64,MM}(P(101350u"Pa"))`\n
 The `sysP{Float64,MM}` representation of the exact standard atmosphere, \$P_0 ≡ 101350Pa\$,
 [Lide, D. R., 2006].
 """
-const stdP = sysP{Float64,MM}(P(101350u"Pa"))
+const _stdP = sysP{Float64,MM}(P(101350u"Pa"))
 
 """
-`const gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))`\n
+`const _gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))`\n
 The `grav{Float64,MM}` representation of the exact standard gravity, \$g_n ≡ 9.80665 m/s^2\$,
 [Lide, D. R., 2006].
 """
-const gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))
+const _gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))
 
 
 ## #----------------------------------------------------------------------------------------------#
