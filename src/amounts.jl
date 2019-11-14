@@ -14,6 +14,25 @@ Interface to pretty-print units.
 """
 function ppu end
 
+# A 191113-212130 benchmark showed amt(x) is faster than x.amt:
+#
+# ```julia-repl
+# julia> u1 = u(1.0f0 ± 0.1f0, MO)
+# ū₃₂: (1 ± 0.1) kJ/kmol
+#
+# julia> typeof(u1)
+# uAmt{Float32,MM,MO}
+#
+# julia> @benchmark u1.amt
+# BenchmarkTools.Trial:
+#   median time:      26.918 ns (0.00% GC)
+#
+# julia> @benchmark amt(u1)
+# BenchmarkTools.Trial:
+#   median time:      16.710 ns (0.00% GC)
+#
+# ```
+
 """
 `function amt end`\n
 Interface to get an `AMOUNTS`' `:amt` field in a type-stable manner.
