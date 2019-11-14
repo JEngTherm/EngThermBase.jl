@@ -32,17 +32,35 @@ const picoPascal = P(1u"pPa")
 export TeraPascal, picoPascal
 
 
-## "`const YottaMassVolume = vMA\"b1.0e+24\"`: a practical, hardcoded mass-based specific volume upper bound for state specifications"
-## const YottaMassVolume = vMA"b1.0e+24"
-## "`const yoctoMassVolume = vMA\"b1.0e-24\"`: a practical, hardcoded mass-based specific volume lower bound for state specifications"
-## const yoctoMassVolume = vMA"b1.0e-24"
-## 
-## "`const YottaMoleVolume = vMO\"b1.0e+24\"`: a practical, hardcoded mole-based specific volume upper bound for state specifications"
-## const YottaMoleVolume = vMO"b1.0e+24"
-## "`const yoctoMoleVolume = vMO\"b1.0e-24\"`: a practical, hardcoded mole-based specific volume lower bound for state specifications"
-## const yoctoMoleVolume = vMO"b1.0e-24"
-## 
-## 
+"""
+`const YottaMassVolume = v(1.0e+24, MA)`\n
+A practical, hardcoded mass-based specific volume upper bound as a `vAmt{Float64,EX,MA}`, for
+state specifications.
+"""
+const YottaMassVolume = v(1.0e+24, MA)
+
+"""
+`const yoctoMassVolume = v(1.0e-24, MA)`\n
+A practical, hardcoded mass-based specific volume lower bound as a `vAmt{Float64,EX,MA}`, for
+state specifications.
+"""
+const yoctoMassVolume = v(1.0e-24, MA)
+
+"""
+`const YottaMoleVolume = v(1.0e+24, MO)`\n
+A practical, hardcoded mole-based specific volume upper bound as a `vAmt{Float64,EX,MO}`, for
+state specifications.
+"""
+const YottaMoleVolume = v(1.0e+24, MO)
+
+"""
+`const yoctoMoleVolume = v(1.0e-24, MO)`\n
+A practical, hardcoded mole-based specific volume lower bound as a `vAmt{Float64,EX,MO}`, for
+state specifications.
+"""
+const yoctoMoleVolume = v(1.0e-24, MO)
+
+
 ## "`minT(::Type{𝘁})::system_T{𝘁} where 𝘁`"
 ## function minT(::Type{𝘁}) where 𝘁<:AbstractFloat
 ##     max(system_T{𝘁}(picoKelvin), nextfloat(zero(system_T{𝘁})))
