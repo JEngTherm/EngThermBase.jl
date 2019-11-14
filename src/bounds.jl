@@ -2,6 +2,9 @@
 #                                   Property Bound Constants                                   #
 #----------------------------------------------------------------------------------------------#
 
+# Raw bound constants
+# -------------------
+
 """
 `const TeraKelvin = T(1u"TK")`\n
 A practical, hardcoded temp. upper bound as a `sysT{Float64,EX}`, for state specifications.
@@ -61,17 +64,34 @@ state specifications.
 const yoctoMoleVolume = v(1.0e-24, MO)
 
 
-## "`minT(::Type{𝘁})::system_T{𝘁} where 𝘁`"
-## function minT(::Type{𝘁}) where 𝘁<:AbstractFloat
-##     max(system_T{𝘁}(picoKelvin), nextfloat(zero(system_T{𝘁})))
-## end
-## 
-## "`maxT(::Type{𝘁})::system_T{𝘁} where 𝘁`"
-## function maxT(::Type{𝘁}) where 𝘁<:AbstractFloat
-##     min(system_T{𝘁}(TeraKelvin), prevfloat(system_T{𝘁}(Inf)))
-## end
-## 
-## 
+# Bound functions
+# ---------------
+
+"""
+`minT(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=E𝖷) where {𝗽<:𝖯REC,𝘅<:E𝖷AC}`\n
+Returns the hardcoded temperature lower bound as a `sysT{𝖯,𝖷}`.\n
+Arguments `𝖯` and `𝖷` can be ommitted and/or be supplied in any order.
+"""
+minT(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = begin
+    sysT{𝖯,𝖷}(max(picoKelvin, T(nextfloat(zero(𝖯)))))   # calls isless()
+end
+minT(𝖷::Type{𝘅}, 𝖯::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = begin
+    sysT{𝖯,𝖷}(max(picoKelvin, T(nextfloat(zero(𝖯)))))   # calls isless()
+end
+
+"""
+`maxT(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=E𝖷) where {𝗽<:𝖯REC,𝘅<:E𝖷AC}`\n
+Returns the hardcoded temperature upper bound as a `sysT{𝖯,𝖷}`.\n
+Arguments `𝖯` and `𝖷` can be ommitted and/or be supplied in any order.
+"""
+maxT(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = begin
+    sysT{𝖯,𝖷}(min(TeraKelvin, T(prevfloat(𝖯(Inf)))))    # calls isless()
+end
+maxT(𝖷::Type{𝘅}, 𝖯::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = begin
+    sysT{𝖯,𝖷}(min(TeraKelvin, T(prevfloat(𝖯(Inf)))))    # calls isless()
+end
+
+
 ## "`minP(::Type{𝘁})::system_P{𝘁} where 𝘁`"
 ## function minP(::Type{𝘁}) where 𝘁<:AbstractFloat
 ##     max(system_P{𝘁}(picoPascal), nextfloat(zero(system_P{𝘁})))
