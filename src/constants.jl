@@ -32,11 +32,18 @@ const kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
 #----------------------------------------------------------------------------------------------#
 
 """
-`const stdT = sysT{Float64,MM}(T(273.15))`\n
-The standard reference temperature, \$T_0\$, [Lide, D. R., 2006].
+`const stdT = sysT{Float64,MM}(T(25u"°C"))`\n
+The `sysT{Float64,MM}` representation of the exact standard temperature, \$T_0 ≡ 25°C\$, [Lide,
+D. R., 2006].
 """
-const stdT = sysT{Float64,MM}(T(273.15))
+const stdT = sysT{Float64,MM}(T(25u"°C"))
 
+"""
+`const stdP = sysP{Float64,MM}(P(101350u"Pa"))`\n
+The `sysP{Float64,MM}` representation of the exact standard atmosphere, \$P_0 ≡ 101350Pa\$,
+[Lide, D. R., 2006].
+"""
+const stdP = sysP{Float64,MM}(P(101350u"Pa"))
 
 
 ## #----------------------------------------------------------------------------------------------#
