@@ -62,6 +62,8 @@ Arguments `P` and `X` can be ommitted and/or be supplied in any order.
 kB(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_kB)
 kB(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_kB)
 
+export NA, mu, kB   # as R is already exported on "amounts.jl"
+
 
 #----------------------------------------------------------------------------------------------#
 #                                     Reference Constants                                      #
@@ -73,6 +75,15 @@ The `sysT{Float64,MM}` representation of the exact standard temperature, \$T_0 �
 D. R., 2006].
 """
 const _stdT = sysT{Float64,MM}(T(25u"°C"))
+
+"""
+`T(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the Boltzmann constant as a `sysT{P,X}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+T(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = sysT{P,X}(_stdT)
+T(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = sysT{P,X}(_stdT)
+
 
 """
 `const _stdP = sysP{Float64,MM}(P(101350u"Pa"))`\n
