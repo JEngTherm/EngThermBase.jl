@@ -24,12 +24,10 @@ function ppu end
 # uAmt{Float32,MM,MO}
 #
 # julia> @benchmark u1.amt
-# BenchmarkTools.Trial:
-#   median time:      26.918 ns (0.00% GC)
+# ✂ ✂ ✂   median time:      26.918 ns (0.00% GC)   ✂ ✂ ✂
 #
 # julia> @benchmark amt(u1)
-# BenchmarkTools.Trial:
-#   median time:      16.710 ns (0.00% GC)
+# ✂ ✂ ✂   median time:      16.710 ns (0.00% GC)   ✂ ✂ ✂
 #
 # ```
 
@@ -65,27 +63,27 @@ A `_Amt` can be natively constructed from the following argument types:\n
 struct _Amt{𝗽,𝘅} <: GenericAmt{𝗽,𝘅}
     amt::UATY{𝗽} where 𝗽<:PREC
     # Copy constructor
-    _Amt(x::_Amt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(x.amt)
+    _Amt(x::_Amt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
     _Amt(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x))
     _Amt(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
 end
 
 # Precision-changing external constructors
 (::Type{_Amt{𝘀}})(x::_Amt{𝗽,EX}
-                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(x.amt.val))
+                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(amt(x).val))
 (::Type{_Amt{𝘀}})(x::_Amt{𝗽,MM}
-                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(x.amt.val))
+                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(amt(x).val))
 
 # Precision+Exactness-changing external constructors
 (::Type{_Amt{𝘀,EX}})(x::_Amt{𝗽,EX}
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(x.amt.val))
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(amt(x).val))
 (::Type{_Amt{𝘀,EX}})(x::_Amt{𝗽,MM}
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(x.amt.val.val))
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(amt(x).val.val))
 (::Type{_Amt{𝘀,MM}})(x::_Amt{𝗽,EX},
-                     e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(measurement(𝘀(x.amt.val), e))
+                     e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(measurement(𝘀(amt(x).val), e))
 (::Type{_Amt{𝘀,MM}})(x::_Amt{𝗽,MM}
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(x.amt.val))
+                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(amt(x).val))
 
 # Type export
 export _Amt
@@ -96,7 +94,7 @@ amt(x::_Amt{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽}}
 
 # Type-specific functions
 deco(x::_Amt{𝗽,𝘅} where {𝗽,𝘅}) = Symbol("?")
-ppu(x::_Amt) = "$(unit(x.amt))"
+ppu(x::_Amt) = "$(unit(amt(x)))"
 
 # Conversions
 convert(::Type{_Amt{𝘀,𝘅}},
@@ -162,7 +160,7 @@ Constructors determine all parameters from their arguments.\n
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽,$𝑑SY,$𝑢SY} where 𝗽<:PREC
             # Copy constructor
-            $TYPE(x::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(x.amt)
+            $TYPE(x::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
             # Plain constructors enforce default units & avoid unit conversion
             $TYPE(x::𝗽) where 𝗽<:PREC = new{𝗽,EX}(_qty(x * $uSY))
             $TYPE(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x * $uSY))
@@ -174,19 +172,19 @@ Constructors determine all parameters from their arguments.\n
         @doc $dcStr $TYPE
         # Precision-changing external constructors
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX}
-                          ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(x.amt.val))
+                          ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(amt(x).val))
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM}
-                          ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(Measurement{𝘀}(x.amt.val))
+                          ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(Measurement{𝘀}(amt(x).val))
         # Precision+Exactness-changing external constructors
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX}
-                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(x.amt.val))
+                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(amt(x).val))
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM}
-                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(x.amt.val.val))
+                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(amt(x).val.val))
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX},
-                              e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
-                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(measurement(𝘀(x.amt.val), e))
+                              e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
+                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(measurement(𝘀(amt(x).val), e))
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM}
-                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(Measurement{𝘀}(x.amt.val))
+                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(Measurement{𝘀}(amt(x).val))
         # Type export
         export $TYPE
         # Type-stable wrapped amount obtaining function
@@ -306,7 +304,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             amt::Union{UATY{𝗽,$𝑑SY,$𝑢SY},UATY{𝗽,$𝑑DT,$𝑢DT},
                        UATY{𝗽,$𝑑MA,$𝑢MA},UATY{𝗽,$𝑑MO,$𝑢MO}} where 𝗽<:PREC
             # Copy constructor
-            $TYPE(x::$TYPE{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(x.amt)
+            $TYPE(x::$TYPE{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(amt(x))
             # Plain constructors enforce default units & avoid unit conversion
             # Plain Exact (𝗽<:PREC) float constructors
             $TYPE(x::𝗽, ::Type{SY}) where 𝗽<:PREC = new{𝗽,EX,SY}(_qty(x * $uSY))
@@ -334,25 +332,25 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         @doc $dcStr $TYPE
         # Precision-changing external constructors
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(𝘀(x.amt.val), 𝗯)
+            $TYPE(𝘀(amt(x).val), 𝗯)
         end
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(Measurement{𝘀}(x.amt.val), 𝗯)
+            $TYPE(Measurement{𝘀}(amt(x).val), 𝗯)
         end
         # Precision+Exactness-changing external constructors
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(𝘀(x.amt.val), 𝗯)
+            $TYPE(𝘀(amt(x).val), 𝗯)
         end
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(𝘀(x.amt.val.val), 𝗯)
+            $TYPE(𝘀(amt(x).val.val), 𝗯)
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX,𝗯},
-                            e::𝘀=𝘀(max(eps(𝘀),eps(x.amt.val)))
+                            e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
                             ) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(measurement(𝘀(x.amt.val), e), 𝗯)
+            $TYPE(measurement(𝘀(amt(x).val), e), 𝗯)
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(Measurement{𝘀}(x.amt.val), 𝗯)
+            $TYPE(Measurement{𝘀}(amt(x).val), 𝗯)
         end
         # Type export
         export $TYPE
@@ -466,7 +464,7 @@ Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
     if DEF[:pprint]
         print(io,
             "$(string(deco(x)))$(pDeco(𝗽)): ",
-            sprintf1("%.$(DEF[:showSigD])g", x.amt.val),
+            sprintf1("%.$(DEF[:showSigD])g", amt(x).val),
             " ", ppu(x))
     else
         Base.show_default(io, x)
@@ -477,9 +475,9 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
     if DEF[:pprint]
         print(io,
             "$(string(deco(x)))$(pDeco(𝗽)): (",
-            sprintf1("%.$(DEF[:showSigD])g", x.amt.val.val),
+            sprintf1("%.$(DEF[:showSigD])g", amt(x).val.val),
             " ± ",
-            sprintf1("%.2g", x.amt.val.err),
+            sprintf1("%.2g", amt(x).val.err),
             ") ", ppu(x))
     else
         Base.show_default(io, x)
