@@ -1,15 +1,24 @@
-## #----------------------------------------------------------------------------------------------#
-## #                                   Property Bound Constants                                   #
-## #----------------------------------------------------------------------------------------------#
-## 
-## "`const TeraKelvin = T\"b1.0e+12\"`: a practical, hardcoded temperature upper bound for state specifications"
-## const TeraKelvin = T"b1.0e+12"  # since T defaults to K
-## "`const picoKelvin = T\"b1.0e-12\"`: a practical, hardcoded temperature lower bound for state specifications"
-## const picoKelvin = T"b1.0e-12"  # since T defaults to K
-## 
-## export TeraKelvin, picoKelvin
-## 
-## 
+#----------------------------------------------------------------------------------------------#
+#                                   Property Bound Constants                                   #
+#----------------------------------------------------------------------------------------------#
+
+"""
+`const TeraKelvin = T(1u"TK")`\n
+A practical, hardcoded temperature upper bound as a `sysT{Float64,EX}`, for state
+specifications.
+"""
+const TeraKelvin = T(1u"TK")
+
+"""
+`const picoKelvin = T(1u"TK")`\n
+A practical, hardcoded temperature lower bound as a `sysT{Float64,EX}`, for state
+specifications.
+"""
+const picoKelvin = T(1u"pK")
+
+export TeraKelvin, picoKelvin
+
+
 ## "`const TeraPascal = P\"b1.0e+09\"`: a practical, hardcoded pressure upper bound for state specifications"
 ## const TeraPascal = P"b1.0e+09"  # since P defaults to kPa
 ## "`const picoPascal = P\"b1.0e-15\"`: a practical, hardcoded pressure lower bound for state specifications"
