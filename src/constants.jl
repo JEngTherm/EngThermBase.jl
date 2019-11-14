@@ -54,6 +54,14 @@ The Boltzmann constant, \$k_B = R̄/N_A\$, [Lide, D. R., 2006], as a `_Amt{Float
 """
 const _kB = _Amt(measurement("1.3806505(24)e-23") * u"J/K")
 
+"""
+`kB(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC}`\n
+Returns the Boltzmann constant as a `_Amt{P,X}`.\n
+Arguments `P` and `X` can be ommitted and/or be supplied in any order.
+"""
+kB(P::Type{𝗽}=Float64, X::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_kB)
+kB(X::Type{𝘅}, P::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = _Amt{P,X}(_kB)
+
 
 #----------------------------------------------------------------------------------------------#
 #                                     Reference Constants                                      #
