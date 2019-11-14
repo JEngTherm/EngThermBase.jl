@@ -441,12 +441,48 @@ mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "kJ/K"    , "ent
 
 
 #----------------------------------------------------------------------------------------------#
+#                                      AMOUNT Type Unions                                      #
+#----------------------------------------------------------------------------------------------#
+
+# Unions of amounts of like units and thermodynamic classification, for same-unit operations
+
+"""
+`ENERGYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
+Energy property type union.
+"""
+ENERGYP{𝗽,𝘅,𝗯} = Union{uAmt{𝗽,𝘅,𝗯},hAmt{𝗽,𝘅,𝗯},
+                       gAmt{𝗽,𝘅,𝗯},aAmt{𝗽,𝘅,𝗯},
+                       eAmt{𝗽,𝘅,𝗯},ekAmt{𝗽,𝘅,𝗯},
+                       epAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+"""
+`ENERGYI{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
+Energy interaction type union.
+"""
+ENERGYI{𝗽,𝘅,𝗯} = Union{qAmt{𝗽,𝘅,𝗯},wAmt{𝗽,𝘅,𝗯},
+                       ΔeAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+"""
+`NTROPYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
+Entropy property type union.
+"""
+NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},rAmt{𝗽,𝘅,𝗯},
+                       sAmt{𝗽,𝘅,𝗯},jAmt{𝗽,𝘅,𝗯},
+                       cpAmt{𝗽,𝘅,𝗯},cvAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+"""
+`NTROPYI{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
+Entropy interaction type union.
+"""
+NTROPYI{𝗽,𝘅,𝗯} = Union{ΔsAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+
+#----------------------------------------------------------------------------------------------#
 #                                       Pretty Printing                                        #
 #----------------------------------------------------------------------------------------------#
 
 import Base: show
 import Formatting: sprintf1
-
 
 # Auxiliar method
 function subscript(x::Int)
