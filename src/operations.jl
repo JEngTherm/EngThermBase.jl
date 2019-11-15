@@ -12,18 +12,16 @@ import Base: +, -
 #                               Same-Unit (Same-Base) Operations                               #
 #----------------------------------------------------------------------------------------------#
 
-# Binary
-+(x::ENERGYP{𝗽,𝘅,𝗯}, y::ENERGYP{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    +(promote(map(x -> ΔeAmt(amt(x)), (x, y)))...)
-end
-
+# Energy fallback sum,sub of same-parameter ΔeAmt's
 +(x::ΔeAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝗽,𝘅,𝗯}) = ΔeAmt(+(amt(x), amt(y)))
+-(x::ΔeAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝗽,𝘅,𝗯}) = ΔeAmt(-(amt(x), amt(y)))
 
-
--(x::ENERGYP{𝗽,𝘅,𝗯}, y::ENERGYP{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+# Energy converting/promoting sum,sub of same-base amounts
++(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     +(promote(map(x -> ΔeAmt(amt(x)), (x, y)))...)
 end
-
--(x::ΔeAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝗽,𝘅,𝗯}) = ΔeAmt(-(amt(x), amt(y)))
+-(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    +(promote(map(x -> ΔeAmt(amt(x)), (x, y)))...)
+end
 
 
