@@ -463,6 +463,13 @@ ENERGYI{𝗽,𝘅,𝗯} = Union{qAmt{𝗽,𝘅,𝗯},wAmt{𝗽,𝘅,𝗯},
                        ΔeAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
+`ENERGYA{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
+Energy amount type union.
+"""
+ENERGYA{𝗽,𝘅,𝗯} = Union{ENERGYP{𝗽,𝘅,𝗯},ENERGYI{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+
+"""
 `NTROPYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Entropy property type union.
 """
@@ -475,6 +482,12 @@ NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},rAmt{𝗽,𝘅,𝗯},
 Entropy interaction type union.
 """
 NTROPYI{𝗽,𝘅,𝗯} = Union{ΔsAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+"""
+`NTROPYA{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
+Entropy amount type union.
+"""
+NTROPYA{𝗽,𝘅,𝗯} = Union{NTROPYP{𝗽,𝘅,𝗯},NTROPYI{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 
 #----------------------------------------------------------------------------------------------#
