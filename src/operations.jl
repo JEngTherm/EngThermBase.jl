@@ -21,7 +21,7 @@ import Base: +, -
     +(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
 end
 -(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    +(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
+    -(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
 end
 
 
@@ -34,7 +34,7 @@ end
     +(promote(map(x -> ΔsAmt(amt(x)), (x, y)))...)
 end
 -(x::NTROPYA{𝗽,𝘅,𝗯}, y::NTROPYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    +(promote(map(x -> ΔsAmt(amt(x)), (x, y)))...)
+    -(promote(map(x -> ΔsAmt(amt(x)), (x, y)))...)
 end
 
 
@@ -44,7 +44,7 @@ end
 
 # Remaining BasedAmt promoting sum,sub of same-{type,base} amounts
 +(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
--(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
+-(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(promote(x, y)...)
 
 
 # Fallback remaining same-{type,prec,exac} WholeAmt sub,sum
@@ -53,7 +53,7 @@ end
 
 # Remaining WholeAmt promoting sum,sub of same-{type} amounts
 +(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
--(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
+-(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = -(promote(x, y)...)
 
 
 # Currently, the dimensions of a `(GenericAmt{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}).amt are unknown. One
@@ -71,7 +71,7 @@ end
 
 # Remaining GenericAmt promoting sum,sub of same-{type} amounts
 +(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
--(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
+-(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = -(promote(x, y)...)
 
 
 
