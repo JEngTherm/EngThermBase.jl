@@ -39,21 +39,21 @@ end
 
 
 # Fallback remaining same-{type,prec,exac,base} BasedAmt sub,sum
-+(x::𝖠{𝗽,𝘅,𝗯}, y::𝖠{𝗽,𝘅,𝗯}) where {𝖠<:BasedAmt,𝗽,𝘅,𝗯} = 𝖠(+(amt(x), amt(y)))
--(x::𝖠{𝗽,𝘅,𝗯}, y::𝖠{𝗽,𝘅,𝗯}) where {𝖠<:BasedAmt,𝗽,𝘅,𝗯} = 𝖠(-(amt(x), amt(y)))
++(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = BasedAmt(+(amt(x), amt(y)))
+-(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = BasedAmt(-(amt(x), amt(y)))
 
 # Remaining BasedAmt promoting sum,sub of same-{type,base} amounts
-+(x::𝖠{𝗽,𝘅,𝗯}, y::𝖠{𝘀,𝘆,𝗯}) where {𝖠<:BasedAmt,𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
--(x::𝖠{𝗽,𝘅,𝗯}, y::𝖠{𝘀,𝘆,𝗯}) where {𝖠<:BasedAmt,𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
++(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
+-(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
 
 
 # Fallback remaining same-{type,prec,exac} WholeAmt sub,sum
-+(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:WholeAmt,𝗽,𝘅} = 𝖠(+(amt(x), amt(y)))
--(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:WholeAmt,𝗽,𝘅} = 𝖠(-(amt(x), amt(y)))
++(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝗽,𝘅}) where {𝗽,𝘅} = WholeAmt(+(amt(x), amt(y)))
+-(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝗽,𝘅}) where {𝗽,𝘅} = WholeAmt(-(amt(x), amt(y)))
 
 # Remaining WholeAmt promoting sum,sub of same-{type} amounts
-+(x::𝖠{𝗽,𝘅}, y::𝖠{𝘀,𝘆}) where {𝖠<:WholeAmt},𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
--(x::𝖠{𝗽,𝘅}, y::𝖠{𝘀,𝘆}) where {𝖠<:WholeAmt},𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
++(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
+-(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
 
 
 # Currently, the dimensions of a `(GenericAmt{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}).amt are unknown. One
@@ -66,12 +66,12 @@ end
 # to the underlying `Unitful` package to handle.
 
 # Fallback remaining same-{type,prec,exac} GenericAmt sub,sum
-+(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:GenericAmt,𝗽,𝘅} = 𝖠(+(amt(x), amt(y))) # Underlying `Unitful`
--(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:GenericAmt,𝗽,𝘅} = 𝖠(-(amt(x), amt(y))) # handles exceptions.
++(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝗽,𝘅}) where {𝗽,𝘅} = GenericAmt(+(amt(x), amt(y)))
+-(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝗽,𝘅}) where {𝗽,𝘅} = GenericAmt(-(amt(x), amt(y)))
 
 # Remaining GenericAmt promoting sum,sub of same-{type} amounts
-+(x::𝖠{𝗽,𝘅}, y::𝖠{𝘀,𝘆}) where {𝖠<:GenericAmt,𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
--(x::𝖠{𝗽,𝘅}, y::𝖠{𝘀,𝘆}) where {𝖠<:GenericAmt,𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
++(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
+-(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
 
 
 
