@@ -18,10 +18,10 @@ import Base: +, -
 
 # Energy converting/promoting sum,sub of same-base amounts
 +(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    +(promote(map(x -> ΔeAmt(amt(x)), (x, y)))...)
+    +(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
 end
 -(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    +(promote(map(x -> ΔeAmt(amt(x)), (x, y)))...)
+    +(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
 end
 
 
