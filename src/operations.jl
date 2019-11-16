@@ -51,8 +51,17 @@ end
 -(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:WholeAmt,𝗽,𝘅} = 𝖠(-(amt(x), amt(y)))
 
 # Fallback remaining same-{type,prec,exac} GenericAmt sub,sum
-+(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:GenericAmt,𝗽,𝘅} = 𝖠(+(amt(x), amt(y))) # Unknown dims... refactor?
--(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:GenericAmt,𝗽,𝘅} = 𝖠(-(amt(x), amt(y))) # Add dimension parameter to GenericAmt?
+# ----------------------------------------------------------------------------------------------
+# Currently, the dimensions of a `(GenericAmt{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}).amt are unknown. One
+# can ask whether to refactor the code, e.g., by adding a dimensions parameter `D` in the
+# `GenericAmt` type (thus a `GenericAmt{𝗽,𝘅,D} where {𝗽<:PREC,𝘅<:EXAC} where D`). However, given
+# the facts that (i) `Unitful` defines the +,- operations for `Quantity`'s of incompatible
+# dimensions (raising a `DimensionError: xxx and yyy are not dimensionally compatible.` error),
+# and therefore (ii) the pertinent exception is caught; and (iii) adding a `D` parameter would
+# render `EngThermBase`'s `AMOUNTS` design non-uniform, incompatible dimension handlings is left
+# to the underlying `Unitful` package to handle.
++(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:GenericAmt,𝗽,𝘅} = 𝖠(+(amt(x), amt(y))) # Underlying `Unitful`
+-(x::𝖠{𝗽,𝘅}, y::𝖠{𝗽,𝘅}) where {𝖠<:GenericAmt,𝗽,𝘅} = 𝖠(-(amt(x), amt(y))) # handles exceptions.
 
 # Remaining WholeAmt promoting sum,sub of same-{type} amounts
 +(x::𝖠{𝗽,𝘅}, y::𝖠{𝘀,𝘆}) where {𝖠<:Union{WholeAmt,GenericAmt},𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
