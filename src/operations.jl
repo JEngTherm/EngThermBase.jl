@@ -192,6 +192,36 @@ min(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(min((amt(i) for i in x)...))
 max(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(max((amt(i) for i in x)...))
 
 
+import Base: widen, eps
+
+widen(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧.name.wrapper{widen(𝗽)}
+widen(x::AMOUNTS) = widen(typeof(x))(x)
+
+eps(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = (𝗧.name.wrapper)(eps(𝗽))
+eps(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(eps(amt(x)))
+
+"""
+`precof(::Type{𝗧} | x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗽`\n
+Returns the precision of the `AMOUNTS` subtype or instance as a `DataType`.
+"""
+precof(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗽
+precof(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗽
+
+"""
+`exacof(::Type{𝗧} | x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗽`\n
+Returns the exactness of the `AMOUNTS` subtype or instance as a `DataType`.
+"""
+exacof(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽,𝘅} where {𝗽,𝘅} = 𝘅
+exacof(x::𝗧) where 𝗧<:AMOUNTS{𝗽,𝘅} where {𝗽,𝘅} = 𝘅
+
+"""
+`baseof(::Type{𝗧} | x::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗯`\n
+Returns the thermodynamic base of the `AMOUNTS` subtype or instance as a `DataType`.
+"""
+baseof(::Type{𝗧}) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗯
+baseof(x::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗯
+
+export precof, exacof, baseof
 
 
 
