@@ -47,7 +47,7 @@ export deco, ppu, amt
 import Base: cp, convert
 
 """
-`struct _Amt{𝗽<:PREC,𝘅<:EXAC} <: GenericAmt{𝗽,𝘅}`\n
+`struct _Amt{𝗽<:PREC,𝘅<:EXAC} <: GenerAmt{𝗽,𝘅}`\n
 Precision-, and Exactness- parametric generic amounts in arbitrary units.\n
 `_Amt{𝗽,𝘅}` parameters are:\n
 - Precision `𝗽<:Union{Float16,Float32,Float64,BigFloat}`;\n
@@ -58,9 +58,9 @@ A `_Amt` can be natively constructed from the following argument types:\n
 - A plain, unitless `Measurement`; hence, any `AbstractFloat`;\n
 - A `Quantity{AbstractFloat}` with any units.\n
 ## Hierarchy\n
-`_Amt <: $(tyArchy(GenericAmt))`
+`_Amt <: $(tyArchy(GenerAmt))`
 """
-struct _Amt{𝗽,𝘅} <: GenericAmt{𝗽,𝘅}
+struct _Amt{𝗽,𝘅} <: GenerAmt{𝗽,𝘅}
     amt::UATY{𝗽} where 𝗽<:PREC
     # Copy constructor
     _Amt(x::_Amt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
