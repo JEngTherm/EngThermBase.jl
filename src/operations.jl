@@ -167,4 +167,10 @@ import Base: inv
 inv(x::AMOUNTS) = AMT(inv(amt(x)))
 
 
+import Base: ^, sqrt, cbrt
+
+^(x::AMOUNTS, y::Real) = AMT(^(amt(x), y))
+sqrt(x::AMOUNTS) = AMT(sqrt(amt(x)))
+cbrt(x::AMOUNTS) = AMT(cbrt(amt(x)))
+
 
