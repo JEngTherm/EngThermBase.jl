@@ -10,9 +10,6 @@
 #                               Same-Unit (Same-Base) Operations                               #
 #----------------------------------------------------------------------------------------------#
 
-# Same-type, Diff-parameters promoting sum,sub of BasedAmt's
-# TODO
-
 # Diff-{type,parameters} converting/promoting sum,sub of same-base energies
 +(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     +(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
@@ -29,9 +26,6 @@ end
     -(promote(map(x -> ΔsAmt(amt(x)), (x, y))...)...)
 end
 
-# Same-type, Diff-parameters promoting sum,sub of WholeAmt's
-# TODO
-
 # Diff-{type,parameters} converting/promoting sum,sub of velocities
 +(x::VELOCYP{𝗽,𝘅}, y::VELOCYP{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
     +(promote(map(x -> VELO(amt(x)), (x, y))...)...)
@@ -40,32 +34,20 @@ end
     -(promote(map(x -> VELO(amt(x)), (x, y))...)...)
 end
 
-# Currently, the dimensions of a `(GenerAmt{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}).amt are unknown. One
-# can ask whether to refactor the code, e.g., by adding a dimensions parameter `D` in the
-# `GenerAmt` type (thus a `GenerAmt{𝗽,𝘅,D} where {𝗽<:PREC,𝘅<:EXAC} where D`). However, given the
-# facts that (i) `Unitful` defines the +,- operations for `Quantity`'s of incompatible
-# dimensions (raising a `DimensionError: xxx and yyy are not dimensionally compatible.` error),
-# and therefore (ii) the pertinent exception is caught; and (iii) adding a `D` parameter would
-# render `EngThermBase`'s `AMOUNTS` design non-uniform, incompatible dimension handlings are
-# left to the underlying `Unitful` package.
-
-# Same-type, Diff-parameters promoting sum,sub of GenerAmt's
-# TODO
-
-# Diff-{type,parameters} converting/promoting sum,sub of GenerAmt's
-+(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    +(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
-end
--(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    -(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
-end
+## # Diff-{type,parameters} converting/promoting sum,sub of GenerAmt's
+## +(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+##     +(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+## end
+## -(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+##     -(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+## end
 
 # Diff-{type,parameters} converting/promoting sum,sub of AMOUNTS'
 +(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    +(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+    AMT(amt(+(promote(map(x -> _Amt(amt(x)), (x, y))...)...)))
 end
 -(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    -(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+    AMT(amt(-(promote(map(x -> _Amt(amt(x)), (x, y))...)...)))
 end
 
 
