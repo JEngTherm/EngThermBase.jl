@@ -174,3 +174,13 @@ sqrt(x::AMOUNTS) = AMT(sqrt(amt(x)))
 cbrt(x::AMOUNTS) = AMT(cbrt(amt(x)))
 
 
+import Base: log, log2, log10
+
+log(x::AMOUNTS) = _Amt(log(amt(x).val))
+log2(x::AMOUNTS) = _Amt(log2(amt(x).val))
+log10(x::AMOUNTS) = _Amt(log10(amt(x).val))
+
+
+
+
+
