@@ -31,10 +31,10 @@ end
 
 # Entropy converting/promoting sum,sub of same-base amounts
 +(x::NTROPYA{𝗽,𝘅,𝗯}, y::NTROPYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    +(promote(map(x -> ΔsAmt(amt(x)), (x, y)))...)
+    +(promote(map(x -> ΔsAmt(amt(x)), (x, y))...)...)
 end
 -(x::NTROPYA{𝗽,𝘅,𝗯}, y::NTROPYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -(promote(map(x -> ΔsAmt(amt(x)), (x, y)))...)
+    -(promote(map(x -> ΔsAmt(amt(x)), (x, y))...)...)
 end
 
 
@@ -123,9 +123,24 @@ export AMT
 
 
 #----------------------------------------------------------------------------------------------#
-#                                    Products and Divisions                                    #
+#                              Known-type Products and Divisions                               #
 #----------------------------------------------------------------------------------------------#
 
 import Base: *, /
+
+
+#----------------------------------------------------------------------------------------------#
+#                          Generic (fallback) Products and Divisions                           #
+#----------------------------------------------------------------------------------------------#
+
+*(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝗽,𝘅}) where {𝗽,𝘅} = AMT(*(amt(x), amt(y)))
+/(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝗽,𝘅}) where {𝗽,𝘅} = AMT(/(amt(x), amt(y)))
+
+*(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    *(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+end
+/(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    /(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+end
 
 
