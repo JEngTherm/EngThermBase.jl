@@ -280,6 +280,8 @@ end
 #                           Thermodynamic Whole Amount Declarations                            #
 #----------------------------------------------------------------------------------------------#
 
+import Base: time
+
 # Regular properties -- \bb#<TAB> velocity/speed function names
 mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "K"       , "temperature"         , false )
 mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "kPa"     , "pressure"            , false )
