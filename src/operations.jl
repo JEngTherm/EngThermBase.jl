@@ -103,6 +103,44 @@ export AMT
 #                              Known-type Products and Divisions                               #
 #----------------------------------------------------------------------------------------------#
 
+# MA-based * mass => SY-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,MA}, y::mAmt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::mAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+
+# MO-based * mole => SY-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::nAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+
+# DT-based * time => SY-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,DT}, y::time{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::time{𝘀,𝘆}, x::BasedAmt{𝗽,𝘅,DT}) where {𝗽,𝘀,𝘅,𝘆} = x * y        # as to fallback
+
+
+# SY-based / mass => MA-based; with Unitful promotion
+# SY-based / mole => MO-based; with Unitful promotion
+# SY-based / time => DT-based; with Unitful promotion
+/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{mAmt{𝘀,𝘆,SY},nAmt{𝘀,𝘆,SY},time{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+end
+
+
+# MA-based * MO-based mass => MO-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,MA}, y::mAmt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::mAmt{𝘀,𝘆,MO}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+
+# MO-based * MA-based mole => MA-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::nAmt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 
 #----------------------------------------------------------------------------------------------#
