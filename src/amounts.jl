@@ -446,6 +446,7 @@ mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "kJ/K"    , "ent
 
 # Unions of amounts of like units and thermodynamic classification, for same-unit operations
 
+# --- energy
 """
 `ENERGYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Energy property type union.
@@ -469,6 +470,7 @@ Energy amount type union.
 ENERGYA{𝗽,𝘅,𝗯} = Union{ENERGYP{𝗽,𝘅,𝗯},ENERGYI{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 
+# --- entropy
 """
 `NTROPYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Entropy property type union.
@@ -488,6 +490,14 @@ NTROPYI{𝗽,𝘅,𝗯} = Union{ΔsAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:
 Entropy amount type union.
 """
 NTROPYA{𝗽,𝘅,𝗯} = Union{NTROPYP{𝗽,𝘅,𝗯},NTROPYI{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+
+
+# --- velocity
+"""
+`VELOCYP{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
+Velocity property type union.
+"""
+VELOCYP{𝗽,𝘅,𝗯} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 #----------------------------------------------------------------------------------------------#
