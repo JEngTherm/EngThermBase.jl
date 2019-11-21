@@ -280,8 +280,6 @@ end
 #                           Thermodynamic Whole Amount Declarations                            #
 #----------------------------------------------------------------------------------------------#
 
-import Base: time
-
 # Regular properties -- \bb#<TAB> velocity/speed function names
 mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "K"       , "temperature"         , false )
 mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "kPa"     , "pressure"            , false )
@@ -289,7 +287,7 @@ mkWhlAmt(:VELO  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "√kJ/kg"  ,
 mkWhlAmt(:SPEE  , :WProperty, :spee , "𝕧"   , u"m/s"        , "m/s"     , "speed"               , false )
 
 # Regular unranked -- \sans#<TAB> function names
-mkWhlAmt(:time  , :WUnranked, :time , "𝗍"   , u"s"          , "s"       , "time"                , false )
+mkWhlAmt(:TIME  , :WUnranked, :TIME , "𝗍"   , u"s"          , "s"       , "time"                , false )
 mkWhlAmt(:grav  , :WUnranked, :grav , "𝗀"   , u"m/s^2"      , "m/s²"    , "gravity"             , false )
 mkWhlAmt(:alti  , :WUnranked, :alti , "𝗓"   , u"m"          , "m"       , "altitude"            , false )
 
