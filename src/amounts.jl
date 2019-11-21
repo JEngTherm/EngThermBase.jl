@@ -45,79 +45,122 @@ export deco, ppu, amt
 #----------------------------------------------------------------------------------------------#
 
 import Base: cp, convert
+import Unicode: normalize
+import Base: +, -, *, /
 
 """
-`struct _Amt{𝗽<:PREC,𝘅<:EXAC} <: GenerAmt{𝗽,𝘅}`\n
-Precision-, and Exactness- parametric generic amounts in arbitrary units.\n
-`_Amt{𝗽,𝘅}` parameters are:\n
+Generic Amount type factory.
+"""
+function mkGenAmt(TYPE::Symbol,         # Type name:            :_Amt
+                  SUPT::Symbol,         # Supertype:            :GenerAmt
+                  SYMB::AbstractString, # Printing symbol:      "?"
+                  WHAT::AbstractString, # Description:          "generic amounts"
+                  DELT::Bool=false,     # Whether a Δ quantity
+                 )
+    # Constants
+    i, f = DELT ? (3, 4) : (1, 2)
+    𝑠SY = normalize((DELT ? "Δ" : "") * string(SYMB))
+    # Documentation
+    hiStr = tyArchy(eval(SUPT))
+    dcStr = """
+`struct $TYPE{𝗽<:PREC,𝘅<:EXAC} <: $SUPT{𝗽,𝘅}`\n
+Precision-, and Exactness- parametric $WHAT amounts based in arbitrary units.\n
+`$TYPE{𝗽,𝘅}` parameters are:\n
 - Precision `𝗽<:Union{Float16,Float32,Float64,BigFloat}`;\n
 - Exactness `𝘅<:Union{EX,MM}`, i.e., either a single, precise value or an uncertainty-bearing
   measurement, respectively;\n
-A `_Amt` can be natively constructed from the following argument types:\n
+A `$TYPE` can be natively constructed from the following argument types:\n
 - A plain, unitless float;\n
 - A plain, unitless `Measurement`; hence, any `AbstractFloat`;\n
 - A `Quantity{AbstractFloat}` with any units.\n
 ## Hierarchy\n
-`_Amt <: $(tyArchy(GenerAmt))`
-"""
-struct _Amt{𝗽,𝘅} <: GenerAmt{𝗽,𝘅}
-    amt::UATY{𝗽} where 𝗽<:PREC
-    # Copy constructor
-    _Amt(x::_Amt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
-    _Amt(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x))
-    _Amt(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
+`$(TYPE) <: $(hiStr)`
+    """
+    # @eval block
+    @eval begin
+        # Concrete type definition
+        struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
+            amt::UATY{𝗽} where 𝗽<:PREC
+            # Copy constructor
+            $TYPE(x::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
+            $TYPE(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x))
+            $TYPE(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
+        end
+        # Type documentation
+        @doc $dcStr $TYPE
+        # Precision-changing external constructors
+        (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX}) where {𝘀<:PREC,𝗽<:PREC} = begin
+            $TYPE(𝘀(amt(x).val) * unit(amt(x)))
+        end
+        (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
+            $TYPE(Measurement{𝘀}(amt(x).val) * unit(amt(x)))
+        end
+        # Precision+Exactness-changing external constructors
+        (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX}) where {𝘀<:PREC,𝗽<:PREC} = begin
+            $TYPE(𝘀(amt(x).val) * unit(amt(x)))
+        end
+        (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
+            $TYPE(𝘀(amt(x).val.val) * unit(amt(x)))
+        end
+        (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX},
+                              e::𝘀=𝘀(max(eps(𝘀), eps(amt(x).val)))) where {𝘀<:PREC,
+                                                                           𝗽<:PREC} = begin
+            $TYPE(measurement(𝘀(amt(x).val), e) * unit(amt(x)))
+        end
+        (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
+            $TYPE(Measurement{𝘀}(amt(x).val) * unit(amt(x)))
+        end
+        # Type export
+        export $TYPE
+        # Type-stabler wrapped amount obtaining function
+        amt(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽}
+        amt(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽}}
+        # Type-specific functions
+        deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
+        ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = string(unit(amt(x)))
+        # Conversions
+        convert(::Type{$TYPE{𝘀,𝘅}},
+                y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
+            $TYPE{promote_type(𝘀,𝗽),𝘅}(y)
+        end
+        convert(::Type{$TYPE{𝘀,𝘆}},
+                y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
+        end
+        # Promotion rules
+        promote_rule(::Type{$TYPE{𝘀,𝘆}},
+                     ::Type{$TYPE{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}
+        end
+        # same-type sum,sub with Unitful promotion
+        +(x::$TYPE{𝘀,𝘆}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
+            $TYPE(+(amt(x), amt(y)))
+        end
+        -(x::$TYPE{𝘀,𝘆}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
+            $TYPE(-(amt(x), amt(y)))
+        end
+        # scalar mul,div with Unitful promotion
+        *(y::plnF{𝘀}, x::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
+        *(x::$TYPE{𝗽}, y::plnF{𝘀}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
+        /(x::$TYPE{𝗽}, y::plnF{𝘀}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(/(amt(x), y))
+        # Type-preserving scalar mul,div
+        *(y::REAL, x::$TYPE{𝗽}) where 𝗽<:PREC = $TYPE(*(amt(x), 𝗽(y)))
+        *(x::$TYPE{𝗽}, y::REAL) where 𝗽<:PREC = $TYPE(*(amt(x), 𝗽(y)))
+        /(x::$TYPE{𝗽}, y::REAL) where 𝗽<:PREC = $TYPE(/(amt(x), 𝗽(y)))
+    end
 end
 
-# Precision-changing external constructors
-(::Type{_Amt{𝘀}})(x::_Amt{𝗽,EX}
-                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(amt(x).val))
-(::Type{_Amt{𝘀}})(x::_Amt{𝗽,MM}
-                 ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(amt(x).val))
+#----------------------------------------------------------------------------------------------#
+#                                 Generic Amount Declarations                                  #
+#----------------------------------------------------------------------------------------------#
 
-# Precision+Exactness-changing external constructors
-(::Type{_Amt{𝘀,EX}})(x::_Amt{𝗽,EX}
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(amt(x).val))
-(::Type{_Amt{𝘀,EX}})(x::_Amt{𝗽,MM}
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(𝘀(amt(x).val.val))
-(::Type{_Amt{𝘀,MM}})(x::_Amt{𝗽,EX},
-                     e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(measurement(𝘀(amt(x).val), e))
-(::Type{_Amt{𝘀,MM}})(x::_Amt{𝗽,MM}
-                    ) where {𝘀<:PREC,𝗽<:PREC} = _Amt(Measurement{𝘀}(amt(x).val))
-
-# Type export
-export _Amt
-
-# Type-stable wrapped amount obtaining function
-amt(x::_Amt{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽}
-amt(x::_Amt{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽}}
-
-# Type-specific functions
-deco(x::_Amt{𝗽,𝘅} where {𝗽,𝘅}) = Symbol("?")
-ppu(x::_Amt) = "$(unit(amt(x)))"
-
-# Conversions
-convert(::Type{_Amt{𝘀,𝘅}},
-        y::_Amt{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
-    _Amt{promote_type(𝘀,𝗽),𝘅}(y)
-end
-convert(::Type{_Amt{𝘀,𝘆}},
-        y::_Amt{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-    _Amt{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
-end
-
-# Promotion rules
-promote_rule(::Type{_Amt{𝘀,𝘆}},
-             ::Type{_Amt{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-    _Amt{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}
-end
+# The fallback generic amount
+mkGenAmt(:_Amt  , :GenerAmt , "?"   , "generic amounts"     , false )
 
 
 #----------------------------------------------------------------------------------------------#
 #                                  Whole Amount Type Factory                                   #
 #----------------------------------------------------------------------------------------------#
-
-import Unicode: normalize
 
 """
 Whole Amount type factory.
