@@ -224,4 +224,23 @@ baseof(x::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = �
 export precof, exacof, baseof
 
 
+import Base: prevfloat, nextfloat, zero, one, typemin, typemax
+
+prevfloat(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(prevfloat(amt(x)))
+nextfloat(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(nextfloat(amt(x)))
+
+zero(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(zero(𝗽))
+zero(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(zero(𝗽))
+
+one(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(one(𝗽))
+one(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(one(𝗽))
+
+typemin(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemin(𝗽))
+typemin(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemin(𝗽))
+
+typemax(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
+typemax(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
+
+
+
 
