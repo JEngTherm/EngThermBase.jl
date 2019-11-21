@@ -195,7 +195,7 @@ Constructors determine all parameters from their arguments.\n
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = $USTR
         # Indirect construction from plain
         $FNAM(x::plnF) = $TYPE(x)
-        $FNAM(x::plnR) = $TYPE(float(x))
+        $FNAM(x::REAL) = $TYPE(float(x))
         # Indirect construction from quantity
         $FNAM(x::UATY{𝗽,$𝑑SY}) where 𝗽<:PREC = $TYPE(x)
         $FNAM(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
@@ -214,6 +214,17 @@ Constructors determine all parameters from their arguments.\n
                      ::Type{$TYPE{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
             $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}
         end
+        # Type-preserving same-{type,prec,exac} sum,sub
+        +(x::$TYPE{𝗽,𝘅}, y::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = $TYPE(+(amt(x), amt(y)))
+        -(x::$TYPE{𝗽,𝘅}, y::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = $TYPE(-(amt(x), amt(y)))
+        # Type-preserving scalar mul,div (may promote exactness for Measurement scalar)
+        *(y::plnF{𝗽}, x::$TYPE{𝗽}) where 𝗽<:PREC = $TYPE(*(amt(x), y))
+        *(x::$TYPE{𝗽}, y::plnF{𝗽}) where 𝗽<:PREC = $TYPE(*(amt(x), y))
+        /(x::$TYPE{𝗽}, y::plnF{𝗽}) where 𝗽<:PREC = $TYPE(/(amt(x), y))
+        # Type-preserving scalar mul,div
+        *(y::REAL, x::$TYPE{𝗽}) where 𝗽<:PREC = $TYPE(*(amt(x), 𝗽(y)))
+        *(x::$TYPE{𝗽}, y::REAL) where 𝗽<:PREC = $TYPE(*(amt(x), 𝗽(y)))
+        /(x::$TYPE{𝗽}, y::REAL) where 𝗽<:PREC = $TYPE(/(amt(x), 𝗽(y)))
     end
 end
 
@@ -374,7 +385,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         ppu(x::$TYPE{𝗽,𝘅,MO} where {𝗽,𝘅}) = $USTR * "/kmol"
         # Indirect construction from plain
         $FNAM(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
-        $FNAM(x::plnR, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        $FNAM(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
         # Indirect construction from quantity
         $FNAM(x::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},
                        UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}}) where 𝗽<:PREC = begin
