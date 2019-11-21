@@ -12,13 +12,8 @@ import Base: +, -
 #                               Same-Unit (Same-Base) Operations                               #
 #----------------------------------------------------------------------------------------------#
 
-# Same-{type,parameters} fallback sum,sub
-+(x::𝗧, y::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗧(+(amt(x), amt(y)))
--(x::𝗧, y::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗧(-(amt(x), amt(y)))
-+(x::𝗧, y::𝗧) where 𝗧<:WholeAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(+(amt(x), amt(y)))
--(x::𝗧, y::𝗧) where 𝗧<:WholeAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(-(amt(x), amt(y)))
-+(x::𝗧, y::𝗧) where 𝗧<:GenerAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(+(amt(x), amt(y)))
--(x::𝗧, y::𝗧) where 𝗧<:GenerAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(-(amt(x), amt(y)))
+# Same-type, Diff-parameters promoting sum,sub of BasedAmt's
+# TODO
 
 # Diff-{type,parameters} converting/promoting sum,sub of same-base energies
 +(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
@@ -36,6 +31,9 @@ end
     -(promote(map(x -> ΔsAmt(amt(x)), (x, y))...)...)
 end
 
+# Same-type, Diff-parameters promoting sum,sub of WholeAmt's
+# TODO
+
 # Diff-{type,parameters} converting/promoting sum,sub of velocities
 +(x::VELOCYP{𝗽,𝘅}, y::VELOCYP{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
     +(promote(map(x -> VELO(amt(x)), (x, y))...)...)
@@ -52,6 +50,9 @@ end
 # and therefore (ii) the pertinent exception is caught; and (iii) adding a `D` parameter would
 # render `EngThermBase`'s `AMOUNTS` design non-uniform, incompatible dimension handlings are
 # left to the underlying `Unitful` package.
+
+# Same-type, Diff-parameters promoting sum,sub of GenerAmt's
+# TODO
 
 # Diff-{type,parameters} converting/promoting sum,sub of GenerAmt's
 +(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
