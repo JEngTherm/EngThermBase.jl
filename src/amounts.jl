@@ -417,6 +417,25 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
                                                   𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = begin
             $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅),𝗯}
         end
+        # same-type sum,sub with Unitful promotion
+        +(x::$TYPE{𝘀,𝘆,𝗯}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,
+                                                   𝘆<:EXAC,𝘅<:EXAC,
+                                                   𝗯<:BASE} = begin
+            $TYPE(+(amt(x), amt(y)))
+        end
+        -(x::$TYPE{𝘀,𝘆,𝗯}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,
+                                                   𝘆<:EXAC,𝘅<:EXAC,
+                                                   𝗯<:BASE} = begin
+            $TYPE(-(amt(x), amt(y)))
+        end
+        # scalar mul,div with Unitful promotion
+        *(y::plnF{𝘀}, x::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
+        *(x::$TYPE{𝗽}, y::plnF{𝘀}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
+        /(x::$TYPE{𝗽}, y::plnF{𝘀}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(/(amt(x), y))
+        # Type-preserving scalar mul,div
+        *(y::REAL, x::$TYPE{𝗽}) where 𝗽<:PREC = $TYPE(*(amt(x), 𝗽(y)))
+        *(x::$TYPE{𝗽}, y::REAL) where 𝗽<:PREC = $TYPE(*(amt(x), 𝗽(y)))
+        /(x::$TYPE{𝗽}, y::REAL) where 𝗽<:PREC = $TYPE(/(amt(x), 𝗽(y)))
     end
 end
 
