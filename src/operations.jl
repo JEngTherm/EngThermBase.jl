@@ -16,7 +16,7 @@ function AMT(x::Number)
     elseif  D == dimension(u"K");           sysT(X)
     elseif  D == dimension(u"kPa");         sysP(X)
     elseif  D == dimension(u"m/s");         VELO(X)
-    elseif  D == dimension(u"s");           time(X)
+    elseif  D == dimension(u"s");           TIME(X)
     elseif  D == dimension(u"m/s^2");       grav(X)
     elseif  D == dimension(u"m");           alti(X)
     # --- BasedAmt
@@ -115,17 +115,17 @@ end
 end
 *(y::nAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
-# DT-based * time => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,DT}, y::time{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+# DT-based * TIME => SY-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,DT}, y::TIME{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::time{𝘀,𝘆}, x::BasedAmt{𝗽,𝘅,DT}) where {𝗽,𝘀,𝘅,𝘆} = x * y        # as to fallback
+*(y::TIME{𝘀,𝘆}, x::BasedAmt{𝗽,𝘅,DT}) where {𝗽,𝘀,𝘅,𝘆} = x * y        # as to fallback
 
 
 # SY-based / mass => MA-based; with Unitful promotion
 # SY-based / mole => MO-based; with Unitful promotion
-# SY-based / time => DT-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{mAmt{𝘀,𝘆,SY},nAmt{𝘀,𝘆,SY},time{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+# SY-based / TIME => DT-based; with Unitful promotion
+/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{mAmt{𝘀,𝘆,SY},nAmt{𝘀,𝘆,SY},TIME{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
