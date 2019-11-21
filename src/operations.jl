@@ -242,5 +242,25 @@ typemax(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
 typemax(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
 
 
+import Base: floor, ceil, trunc, round, sign, signbit
+
+floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
+ceil(x::𝗧)  where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(ceil(amt(x).val)  * unit(amt(x)))
+trunc(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(trunc(amt(x).val) * unit(amt(x)))
+round(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(round(amt(x).val) * unit(amt(x)))
+round(x::𝗧, r::RoundingMode; digits, sigdigits, base) where 𝗧<:AMOUNTS = begin
+    (𝗧.name.wrapper)(round(amt(x).val, r,
+                           digits=digits,
+                           sigdigits=sigdigits,
+                           base=base) * unit(amt(x)))
+end
+floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
+floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
+floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
+
+sign(x::AMOUNTS) = sign(amt(x))
+signbit(x::AMOUNTS) = signbit(amt(x))
+
+
 
 
