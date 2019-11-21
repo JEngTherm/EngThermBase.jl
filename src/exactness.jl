@@ -40,16 +40,13 @@ UATY{𝗽,𝗱,𝘂} = Union{UETY{𝗽,𝗱,𝘂},UMTY{𝗽,𝗱,𝘂}} where {�
 #                  |    plain       united      |
 #  ----------------+----------------------------+
 #   float-based    |    plnF{𝗽}     UATY{𝗽,𝗱,𝘂} |
-#   non-float reals|    plnR{𝘁}     uniR{𝘁,𝗱,𝘂} |
+#   non-float reals|    REAL        uniR{𝘁,𝗱,𝘂} |
 
 # REAL: plain Julia Reals other than `PREC` (since Unitful.Quantity <: Number)
 REAL = Union{AbstractIrrational,Integer,Rational}
 
 # Plain, unitless floats
 plnF{𝗽} = Union{𝗽, Measurement{𝗽}} where 𝗽<:PREC
-
-# Plain, unitless non-float reals
-plnR{𝘁} = Union{𝘁, Measurement{𝘁}} where 𝘁<:REAL
 
 # Unit-ed reals
 uniR{𝘁,𝗱,𝘂} = Union{Quantity{𝘁,𝗱,𝘂}, Quantity{Measurement{𝘁},𝗱,𝘂}} where {𝘁<:REAL,𝗱,𝘂}
