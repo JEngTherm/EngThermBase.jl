@@ -181,6 +181,16 @@ log2(x::AMOUNTS) = _Amt(log2(amt(x).val))
 log10(x::AMOUNTS) = _Amt(log10(amt(x).val))
 
 
+import Base: real, abs, abs2, min, max
+
+real(x::AMOUNTS) = x
+abs(x::𝗧) where 𝗧<:AMOUNTS = 𝗧(abs(amt(x)))
+abs2(x::AMOUNTS) = x^2
+
+min(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(min((amt(i) for i in x)...))
+max(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(max((amt(i) for i in x)...))
+
+
 
 
 
