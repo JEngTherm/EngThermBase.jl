@@ -12,11 +12,15 @@ import Base: +, -
 #                               Same-Unit (Same-Base) Operations                               #
 #----------------------------------------------------------------------------------------------#
 
-# Energy fallback sum,sub of same-parameter ΔeAmt's
-+(x::ΔeAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = ΔeAmt(+(amt(x), amt(y)))
--(x::ΔeAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = ΔeAmt(-(amt(x), amt(y)))
+# Same-{type,parameters} fallback sum,sub
++(x::𝗧, y::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗧(+(amt(x), amt(y)))
+-(x::𝗧, y::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = 𝗧(-(amt(x), amt(y)))
++(x::𝗧, y::𝗧) where 𝗧<:WholeAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(+(amt(x), amt(y)))
+-(x::𝗧, y::𝗧) where 𝗧<:WholeAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(-(amt(x), amt(y)))
++(x::𝗧, y::𝗧) where 𝗧<:GenerAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(+(amt(x), amt(y)))
+-(x::𝗧, y::𝗧) where 𝗧<:GenerAmt{𝗽,𝘅} where {𝗽,𝘅} = 𝗧(-(amt(x), amt(y)))
 
-# Energy converting/promoting sum,sub of same-base amounts
+# Diff-{type,parameters} converting/promoting sum,sub of same-base energies
 +(x::ENERGYA{𝗽,𝘅,𝗯}, y::ENERGYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     +(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
 end
@@ -24,12 +28,7 @@ end
     -(promote(map(x -> ΔeAmt(amt(x)), (x, y))...)...)
 end
 
-
-# Entropy fallback sum,sub of same-parameter ΔeAmt's
-+(x::ΔsAmt{𝗽,𝘅,𝗯}, y::ΔsAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = ΔsAmt(+(amt(x), amt(y)))
--(x::ΔsAmt{𝗽,𝘅,𝗯}, y::ΔsAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = ΔsAmt(-(amt(x), amt(y)))
-
-# Entropy converting/promoting sum,sub of same-base amounts
+# Diff-{type,parameters} converting/promoting sum,sub of same-base entropies
 +(x::NTROPYA{𝗽,𝘅,𝗯}, y::NTROPYA{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     +(promote(map(x -> ΔsAmt(amt(x)), (x, y))...)...)
 end
@@ -37,41 +36,38 @@ end
     -(promote(map(x -> ΔsAmt(amt(x)), (x, y))...)...)
 end
 
+# Diff-{type,parameters} converting/promoting sum,sub of velocities
++(x::VELOCYP{𝗽,𝘅}, y::VELOCYP{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    +(promote(map(x -> VELO(amt(x)), (x, y))...)...)
+end
+-(x::VELOCYP{𝗽,𝘅}, y::VELOCYP{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    -(promote(map(x -> VELO(amt(x)), (x, y))...)...)
+end
 
-# Fallback remaining same-{type,prec,exac,base} BasedAmt sub,sum
-+(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = BasedAmt(+(amt(x), amt(y)))
--(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘅,𝗯} = BasedAmt(-(amt(x), amt(y)))
-
-# Remaining BasedAmt promoting sum,sub of same-{type,base} amounts
-+(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = +(promote(x, y)...)
--(x::BasedAmt{𝗽,𝘅,𝗯}, y::BasedAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(promote(x, y)...)
-
-
-# Fallback remaining same-{type,prec,exac} WholeAmt sub,sum
-+(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝗽,𝘅}) where {𝗽,𝘅} = WholeAmt(+(amt(x), amt(y)))
--(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝗽,𝘅}) where {𝗽,𝘅} = WholeAmt(-(amt(x), amt(y)))
-
-# Remaining WholeAmt promoting sum,sub of same-{type} amounts
-+(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
--(x::WholeAmt{𝗽,𝘅}, y::WholeAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = -(promote(x, y)...)
-
-
-# Currently, the dimensions of a `(GenericAmt{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}).amt are unknown. One
+# Currently, the dimensions of a `(GenerAmt{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}).amt are unknown. One
 # can ask whether to refactor the code, e.g., by adding a dimensions parameter `D` in the
-# `GenericAmt` type (thus a `GenericAmt{𝗽,𝘅,D} where {𝗽<:PREC,𝘅<:EXAC} where D`). However, given
-# the facts that (i) `Unitful` defines the +,- operations for `Quantity`'s of incompatible
+# `GenerAmt` type (thus a `GenerAmt{𝗽,𝘅,D} where {𝗽<:PREC,𝘅<:EXAC} where D`). However, given the
+# facts that (i) `Unitful` defines the +,- operations for `Quantity`'s of incompatible
 # dimensions (raising a `DimensionError: xxx and yyy are not dimensionally compatible.` error),
 # and therefore (ii) the pertinent exception is caught; and (iii) adding a `D` parameter would
-# render `EngThermBase`'s `AMOUNTS` design non-uniform, incompatible dimension handlings is left
-# to the underlying `Unitful` package to handle.
+# render `EngThermBase`'s `AMOUNTS` design non-uniform, incompatible dimension handlings are
+# left to the underlying `Unitful` package.
 
-# Fallback remaining same-{type,prec,exac} GenericAmt sub,sum
-+(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝗽,𝘅}) where {𝗽,𝘅} = GenericAmt(+(amt(x), amt(y)))
--(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝗽,𝘅}) where {𝗽,𝘅} = GenericAmt(-(amt(x), amt(y)))
+# Diff-{type,parameters} converting/promoting sum,sub of GenerAmt's
++(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    +(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+end
+-(x::GenerAmt{𝗽,𝘅}, y::GenerAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    -(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+end
 
-# Remaining GenericAmt promoting sum,sub of same-{type} amounts
-+(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = +(promote(x, y)...)
--(x::GenericAmt{𝗽,𝘅}, y::GenericAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = -(promote(x, y)...)
+# Diff-{type,parameters} converting/promoting sum,sub of AMOUNTS'
++(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    +(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+end
+-(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    -(promote(map(x -> _Amt(amt(x)), (x, y))...)...)
+end
 
 
 #----------------------------------------------------------------------------------------------#
@@ -86,7 +82,7 @@ argument. This function is extensively used in operations that result in a unit 
 """
 function AMT(x::Number)
     X, D = float(real(x)), dimension(x)
-    # --- GenericAmt default
+    # --- GenerAmt default
     if      D == dimension(1);              _Amt(X)
     # --- WholeAmt
     elseif  D == dimension(u"K");           sysT(X)
@@ -114,7 +110,7 @@ function AMT(x::Number)
     elseif  D == dimension(u"kJ/K/s");      ΔsAmt(X)
     elseif  D == dimension(u"kJ/K/kg");     ΔsAmt(X)
     elseif  D == dimension(u"kJ/K/kmol");   ΔsAmt(X)
-    # --- GenericAmt fallback
+    # --- GenerAmt fallback
     else                                    _Amt(X)
     end
 end
