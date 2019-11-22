@@ -167,6 +167,8 @@ import Base: inv
 inv(x::AMOUNTS) = AMT(inv(amt(x)))
 
 
+#----------------------------------------------------------------------------------------------#
+
 import Base: ^, sqrt, cbrt
 
 ^(x::AMOUNTS, y::Real) = AMT(^(amt(x), y))
@@ -174,12 +176,16 @@ sqrt(x::AMOUNTS) = AMT(sqrt(amt(x)))
 cbrt(x::AMOUNTS) = AMT(cbrt(amt(x)))
 
 
+#----------------------------------------------------------------------------------------------#
+
 import Base: log, log2, log10
 
 log(x::AMOUNTS) = _Amt(log(amt(x).val))
 log2(x::AMOUNTS) = _Amt(log2(amt(x).val))
 log10(x::AMOUNTS) = _Amt(log10(amt(x).val))
 
+
+#----------------------------------------------------------------------------------------------#
 
 import Base: real, float, abs, abs2, min, max
 
@@ -191,6 +197,8 @@ abs2(x::AMOUNTS) = x^2
 min(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(min((amt(i) for i in x)...))
 max(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(max((amt(i) for i in x)...))
 
+
+#----------------------------------------------------------------------------------------------#
 
 import Base: widen, eps
 
@@ -224,6 +232,8 @@ baseof(x::𝗧) where 𝗧<:BasedAmt{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯} = �
 export precof, exacof, baseof
 
 
+#----------------------------------------------------------------------------------------------#
+
 import Base: prevfloat, nextfloat, zero, one, typemin, typemax
 
 prevfloat(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(prevfloat(amt(x)))
@@ -241,6 +251,8 @@ typemin(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemin(𝗽))
 typemax(::Type{𝗧}) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
 typemax(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
 
+
+#----------------------------------------------------------------------------------------------#
 
 import Base: floor, ceil, trunc, round, sign, signbit
 
@@ -262,5 +274,41 @@ sign(x::AMOUNTS) = sign(amt(x))
 signbit(x::AMOUNTS) = signbit(amt(x))
 
 
+#----------------------------------------------------------------------------------------------#
+
+## import Base: ==, >, <, isequal, isless, isapprox
+## 
+## ==(x::AMOUNTS{𝘀}, y::AMOUNTS{𝗽}) where {𝘀,𝗽} = begin
+##     # (1<<3)*eps(...) means we don't care about the 3 least significant bits
+##     isapprox(x.val, y.val, rtol=(1<<3)*eps(promote_type(𝘀, 𝗽)))
+## end
+## ==(x::AMOUNTS{𝘀}, y::Quantity{𝗽}) where {𝘀,𝗽<:Real} = begin
+##     # (1<<3)*eps(...) means we don't care about the 3 least significant bits
+##     isapprox(x.val, y.val, rtol=(1<<3)*eps(promote_type(𝘀, 𝗽)))
+## end
+## ==(y::Quantity{𝗽}, x::AMOUNTS{𝘀}) where {𝘀,𝗽<:Real} = ==(x, y)   # falls back
+## 
+## >(x::AMOUNTS, y::AMOUNTS) = x.val > y.val
+## >(x::AMOUNTS, y::Quantity) = x.val > y
+## >(y::Quantity, x::AMOUNTS) = y > x.val
+## 
+## <(x::AMOUNTS, y::AMOUNTS) = x.val < y.val
+## <(x::AMOUNTS, y::Quantity) = x.val < y
+## <(y::Quantity, x::AMOUNTS) = y < x.val
+## 
+## isequal(x::AMOUNTS, y::AMOUNTS) = isequal(x.val, y.val)
+## isequal(x::AMOUNTS, y::Quantity) = isequal(x.val, y)
+## isequal(y::Quantity, x::AMOUNTS) = isequal(y, x.val)
+## 
+## isless(x::AMOUNTS, y::AMOUNTS) = isless(x.val, y.val)
+## isless(x::AMOUNTS, y::Quantity) = isless(x.val, y)
+## isless(y::Quantity, x::AMOUNTS) = isless(y, x.val)
+## 
+## function isapprox(x::AMOUNTS{𝘅}, y::AMOUNTS{𝘆}; atol::Real=0,
+##                   rtol::Real=rtoldefault(x,y,atol), nans::Bool=false) where {𝘅,𝘆}
+##     isapprox(x.val, y.val, atol=atol, rtol=rtol, nans=nans)
+## end
+## 
+## 
 
 
