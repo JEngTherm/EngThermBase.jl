@@ -266,9 +266,6 @@ round(x::𝗧, r::RoundingMode; digits, sigdigits, base) where 𝗧<:AMOUNTS = b
                            sigdigits=sigdigits,
                            base=base) * unit(amt(x)))
 end
-floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
-floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
-floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
 
 sign(x::AMOUNTS) = sign(amt(x))
 signbit(x::AMOUNTS) = signbit(amt(x))
