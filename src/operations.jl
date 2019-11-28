@@ -256,10 +256,10 @@ typemax(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
 
 import Base: floor, ceil, trunc, round, sign, signbit
 
-floor(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(floor(amt(x).val) * unit(amt(x)))
-ceil(x::𝗧)  where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(ceil(amt(x).val)  * unit(amt(x)))
-trunc(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(trunc(amt(x).val) * unit(amt(x)))
-round(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(round(amt(x).val) * unit(amt(x)))
+for FUN in (:floor, :ceil, :trunc, :round, :sign, :signbit)
+    @eval $FUN(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(($FUN)(amt(x).val) * unit(amt(x)))
+end
+
 round(x::𝗧, r::RoundingMode; digits, sigdigits, base) where 𝗧<:AMOUNTS = begin
     (𝗧.name.wrapper)(round(amt(x).val, r,
                            digits=digits,
@@ -267,8 +267,9 @@ round(x::𝗧, r::RoundingMode; digits, sigdigits, base) where 𝗧<:AMOUNTS = b
                            base=base) * unit(amt(x)))
 end
 
-sign(x::AMOUNTS) = sign(amt(x))
-signbit(x::AMOUNTS) = signbit(amt(x))
+for FUN in (:sign, :signbit)
+    @eval $FUN(x::𝗧) where 𝗧<:AMOUNTS = ($FUN)(amt(x))
+end
 
 
 #----------------------------------------------------------------------------------------------#
