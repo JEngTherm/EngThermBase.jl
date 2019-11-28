@@ -273,6 +273,9 @@ signbit(x::AMOUNTS) = signbit(amt(x))
 
 #----------------------------------------------------------------------------------------------#
 
+## import Base: isfinite, isnan
+
+
 ## import Base: ==, >, <, isequal, isless, isapprox
 ## 
 ## ==(x::AMOUNTS{𝘀}, y::AMOUNTS{𝗽}) where {𝘀,𝗽} = begin
