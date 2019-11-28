@@ -273,7 +273,14 @@ signbit(x::AMOUNTS) = signbit(amt(x))
 
 #----------------------------------------------------------------------------------------------#
 
-## import Base: isfinite, isnan
+import Base: isfinite, isnan, isinf
+
+for FUN in (:isfinite, :isnan, :isinf)
+    @eval $FUN(x::𝗧) where 𝗧<:AMOUNTS = ($FUN)(amt(x))
+end
+
+
+#----------------------------------------------------------------------------------------------#
 
 
 ## import Base: ==, >, <, isequal, isless, isapprox
