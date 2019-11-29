@@ -207,6 +207,8 @@ Constructors determine all parameters from their arguments.\n
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽,$𝑑SY,$𝑢SY} where 𝗽<:PREC
+            # Inner, non-converting, parameter-determining constructors
+            # ---------------------------------------------------------
             # Copy constructor
             $TYPE(x::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
             # Plain constructors enforce default units & avoid unit conversion
@@ -215,6 +217,12 @@ Constructors determine all parameters from their arguments.\n
             # Quantity constructors have to perform unit conversion despite matching dimensions
             $TYPE(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,EX}(_qty(uconvert($uSY, x)))
             $TYPE(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = new{𝗽,MM}(_qty(uconvert($uSY, x)))
+            # Inner, non-converting, fully-specified constructors
+            # ---------------------------------------------------
+            (::Type{$TYPE{𝗽,EX}})(x::𝗽) where 𝗽<:PREC = new{𝗽,EX}(_qty(x * $uSY))
+            (::Type{$TYPE{𝗽,EX}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x.val * $uSY))
+            (::Type{$TYPE{𝗽,MM}})(x::𝗽) where 𝗽<:PREC = new{𝗽,MM}(_qty(measurement(x) * $uSY))
+            (::Type{$TYPE{𝗽,MM}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x * $uSY))
         end
         # Type documentation
         @doc $dcStr $TYPE
@@ -366,6 +374,8 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         struct $TYPE{𝗽,𝘅,𝗯} <: $SUPT{𝗽,𝘅,𝗯}
             amt::Union{UATY{𝗽,$𝑑SY,$𝑢SY},UATY{𝗽,$𝑑DT,$𝑢DT},
                        UATY{𝗽,$𝑑MA,$𝑢MA},UATY{𝗽,$𝑑MO,$𝑢MO}} where 𝗽<:PREC
+            # Inner, non-converting, parameter-determining constructors
+            # ---------------------------------------------------------
             # Copy constructor
             $TYPE(x::$TYPE{𝗽,𝘅,𝗯}) where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = new{𝗽,𝘅,𝗯}(amt(x))
             # Plain constructors enforce default units & avoid unit conversion
