@@ -256,7 +256,7 @@ typemax(x::𝗧) where 𝗧<:AMOUNTS{𝗽} where 𝗽 = 𝗧(typemax(𝗽))
 
 import Base: floor, ceil, trunc, round, sign, signbit
 
-for FUN in (:floor, :ceil, :trunc, :round, :sign, :signbit)
+for FUN in (:floor, :ceil, :trunc, :round)
     @eval $FUN(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(($FUN)(amt(x).val) * unit(amt(x)))
 end
 
