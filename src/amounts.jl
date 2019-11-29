@@ -400,6 +400,60 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             $TYPE(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = new{𝗽,MM,DT}(_qty(uconvert($uDT, x)))
             $TYPE(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = new{𝗽,MM,MA}(_qty(uconvert($uMA, x)))
             $TYPE(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = new{𝗽,MM,MO}(_qty(uconvert($uMO, x)))
+            # Inner, non-converting, fully-specified constructors
+            # ---------------------------------------------------
+            # SY-based constructors
+            (::Type{$TYPE{𝗽,EX,SY}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,EX,SY}(_qty(             x * $uSY))
+            end
+            (::Type{$TYPE{𝗽,EX,SY}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,EX,SY}(_qty(         x.val * $uSY))
+            end
+            (::Type{$TYPE{𝗽,MM,SY}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,MM,SY}(_qty(measurement(x) * $uSY))
+            end
+            (::Type{$TYPE{𝗽,MM,SY}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,MM,SY}(_qty(             x * $uSY))
+            end
+            # DT-based constructors
+            (::Type{$TYPE{𝗽,EX,DT}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,EX,DT}(_qty(             x * $uDT))
+            end
+            (::Type{$TYPE{𝗽,EX,DT}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,EX,DT}(_qty(         x.val * $uDT))
+            end
+            (::Type{$TYPE{𝗽,MM,DT}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,MM,DT}(_qty(measurement(x) * $uDT))
+            end
+            (::Type{$TYPE{𝗽,MM,DT}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,MM,DT}(_qty(             x * $uDT))
+            end
+            # MA-based constructors
+            (::Type{$TYPE{𝗽,EX,MA}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,EX,MA}(_qty(             x * $uMA))
+            end
+            (::Type{$TYPE{𝗽,EX,MA}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,EX,MA}(_qty(         x.val * $uMA))
+            end
+            (::Type{$TYPE{𝗽,MM,MA}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,MM,MA}(_qty(measurement(x) * $uMA))
+            end
+            (::Type{$TYPE{𝗽,MM,MA}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,MM,MA}(_qty(             x * $uMA))
+            end
+            # MO-based constructors
+            (::Type{$TYPE{𝗽,EX,MO}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,EX,MO}(_qty(             x * $uMO))
+            end
+            (::Type{$TYPE{𝗽,EX,MO}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,EX,MO}(_qty(         x.val * $uMO))
+            end
+            (::Type{$TYPE{𝗽,MM,MO}})(x::𝗽) where 𝗽<:PREC = begin
+                new{𝗽,MM,MO}(_qty(measurement(x) * $uMO))
+            end
+            (::Type{$TYPE{𝗽,MM,MO}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
+                new{𝗽,MM,MO}(_qty(             x * $uMO))
+            end
         end
         # Type documentation
         @doc $dcStr $TYPE
