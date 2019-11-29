@@ -81,10 +81,15 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽} where 𝗽<:PREC
-            # Copy constructor
+            # Inner, non-converting, parameter-determining constructors
             $TYPE(x::$TYPE{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = new{𝗽,𝘅}(amt(x))
             $TYPE(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x))
             $TYPE(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
+            # Inner, non-converting, fully-specified constructors
+            (::Type{$TYPE{𝗽,EX}})(x::𝗽) where 𝗽<:PREC = new{𝗽,EX}(_qty(x))
+            (::Type{$TYPE{𝗽,EX}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x.val))
+            (::Type{$TYPE{𝗽,MM}})(x::𝗽) where 𝗽<:PREC = new{𝗽,MM}(_qty(measurement(x)))
+            (::Type{$TYPE{𝗽,MM}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
         end
         # Type documentation
         @doc $dcStr $TYPE
