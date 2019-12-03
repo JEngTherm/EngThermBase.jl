@@ -19,7 +19,7 @@ include("exactness.jl")
 include("amounts.jl")
 include("operations.jl")
 include("constants.jl")
-## include("states.jl")
+include("states.jl")
 
 # Includes - functionalities
 include("utils.jl")
