@@ -292,7 +292,7 @@ import Base: ==, >, <, isequal, isless, isapprox
     isapprox(amt(x), amt(y), rtol=RTOL)
 end
 
-for FUN in (:>, :<, :isequal, :isless, :isapprox)
+for FUN in (:>, :<, :isequal, :isless)
     @eval ($FUN)(x::𝗧, y::𝗧) where 𝗧<:AMOUNTS = ($FUN)(amt(x),amt(y))
 end
 
