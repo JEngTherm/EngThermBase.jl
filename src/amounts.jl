@@ -502,6 +502,8 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         # Indirect construction from plain
         $FNAM(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
         $FNAM(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        # Indirect construction from type
+        $FNAM(x::$TYPE{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯}) = x
         # Indirect construction from quantity
         $FNAM(x::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},
                        UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}}) where 𝗽<:PREC = begin
