@@ -255,6 +255,8 @@ Constructors determine all parameters from their arguments.\n
         # Indirect construction from quantity
         $FNAM(x::UATY{𝗽,$𝑑SY}) where 𝗽<:PREC = $TYPE(x)
         $FNAM(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
+        # Indirect construction from another WholeAmt
+        $FNAM(x::WholeAmt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = $FNAM(amt(x)) # quantity fallback
         export $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
