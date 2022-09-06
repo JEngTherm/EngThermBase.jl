@@ -4,8 +4,6 @@ authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
 version = "0.1.0"
 
 [deps]
-Formatting = "59287772-0a20-5a39-b81b-1366585eb4c0"
-InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Unicode = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
