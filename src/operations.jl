@@ -109,11 +109,23 @@ end
 end
 *(y::mAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
+# MA-based * mass-DT => DT-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,MA}, y::mAmt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::mAmt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+
 # MO-based * mole => SY-based; with Unitful promotion
 *(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
 *(y::nAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+
+# MO-based * mole-DT => SY-based; with Unitful promotion
+*(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+end
+*(y::nAmt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # DT-based * TIME => SY-based; with Unitful promotion
 *(x::BasedAmt{𝗽,𝘅,DT}, y::TIME{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
@@ -126,6 +138,13 @@ end
 # SY-based / mole => MO-based; with Unitful promotion
 # SY-based / TIME => DT-based; with Unitful promotion
 /(x::BasedAmt{𝗽,𝘅,SY}, y::Union{mAmt{𝘀,𝘆,SY},nAmt{𝘀,𝘆,SY},TIME{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+end
+
+
+# DT-based / mass-DT => MA-based; with Unitful promotion
+# DT-based / mole-DT => MO-based; with Unitful promotion
+/(x::BasedAmt{𝗽,𝘅,DT}, y::Union{mAmt{𝘀,𝘆,DT},nAmt{𝘀,𝘆,DT}}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
