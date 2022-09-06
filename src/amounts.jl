@@ -160,7 +160,7 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # The fallback generic amount
-mkGenAmt(:_Amt  , :GenerAmt , "?"   , "generic amounts"     , false )
+mkGenAmt(:_Amt, :GenerAmt, "?", "generic amounts", false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -294,15 +294,15 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Regular properties -- \bb#<TAB> velocity/speed function names
-mkWhlAmt(:sysT  , :WProperty, :T    , "T"   , u"K"          , "K"       , "temperature"         , false )
-mkWhlAmt(:sysP  , :WProperty, :P    , "P"   , u"kPa"        , "kPa"     , "pressure"            , false )
-mkWhlAmt(:VELO  , :WProperty, :velo , "𝕍"   , u"√(kJ/kg)"   , "√kJ/kg"  , "velocity"            , false )
-mkWhlAmt(:SPEE  , :WProperty, :spee , "𝕧"   , u"m/s"        , "m/s"     , "speed"               , false )
+mkWhlAmt(:sysT, :WProperty, :T   , "T", u"K"       , "K"       , "temperature", false)
+mkWhlAmt(:sysP, :WProperty, :P   , "P", u"kPa"     , "kPa"     , "pressure"   , false)
+mkWhlAmt(:VELO, :WProperty, :velo, "𝕍", u"√(kJ/kg)", "√(kJ/kg)", "velocity"   , false)
+mkWhlAmt(:SPEE, :WProperty, :spee, "𝕧", u"m/s"     , "m/s"     , "speed"      , false)
 
 # Regular unranked -- \sans#<TAB> function names
-mkWhlAmt(:TIME  , :WUnranked, :TIME , "𝗍"   , u"s"          , "s"       , "time"                , false )
-mkWhlAmt(:grav  , :WUnranked, :grav , "𝗀"   , u"m/s^2"      , "m/s²"    , "gravity"             , false )
-mkWhlAmt(:alti  , :WUnranked, :alti , "𝗓"   , u"m"          , "m"       , "altitude"            , false )
+mkWhlAmt(:TIME, :WUnranked, :TIME, "𝗍", u"s"       , "s"       , "time"       , false)
+mkWhlAmt(:grav, :WUnranked, :grav, "𝗀", u"m/s^2"   , "m/s²"    , "gravity"    , false)
+mkWhlAmt(:alti, :WUnranked, :alti, "𝗓", u"m"       , "m"       , "altitude"   , false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -559,33 +559,33 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Mass / Mass fraction anomalous
-mkBasAmt(:mAmt  , :BProperty, :m    , "m"   , u"kg"         , "kg"      , "mass"                , false , bsym=(:m , :ṁ , :mf, :M))
+mkBasAmt(:mAmt , :BProperty, :m , "m" , u"kg"  , "kg"  , "mass"               , false, bsym=(:m , :ṁ , :mf, :M))
 # Chemical amount / Molar fraction anomalous
-mkBasAmt(:nAmt  , :BProperty, :N    , "N"   , u"kmol"       , "kmol"    , "chemical amount"     , false , bsym=(:N , :Ṅ , :n , :y))
+mkBasAmt(:nAmt , :BProperty, :N , "N" , u"kmol", "kmol", "chemical amount"    , false, bsym=(:N , :Ṅ , :n , :y))
 # Gas constant / System constant anomalous
-mkBasAmt(:RAmt  , :BProperty, :R    , "mR"  , u"kJ/K"       , "kJ/K"    , "gas constant"        , false , bsym=(:mR, :ṁR, :R , :R̄))
+mkBasAmt(:RAmt , :BProperty, :R , "mR", u"kJ/K", "kJ/K", "gas constant"       , false, bsym=(:mR, :ṁR, :R , :R̄))
 # Plank function anomalous
-mkBasAmt(:rAmt  , :BProperty, :r    , "mr"  , u"kJ/K"       , "kJ/K"    , "Planck function"     , false , bsym=(:mr, :ṁr, :r , :r̄))
+mkBasAmt(:rAmt , :BProperty, :r , "mr", u"kJ/K", "kJ/K", "Planck function"    , false, bsym=(:mr, :ṁr, :r , :r̄))
 
 # Regular properties
-mkBasAmt(:vAmt  , :BProperty, :v    , "V"   , u"m^3"        , "m³"      , "volume"              , false )
-mkBasAmt(:uAmt  , :BProperty, :u    , "U"   , u"kJ"         , "kJ"      , "internal energy"     , false )
-mkBasAmt(:hAmt  , :BProperty, :h    , "H"   , u"kJ"         , "kJ"      , "enthalpy"            , false )
-mkBasAmt(:gAmt  , :BProperty, :g    , "G"   , u"kJ"         , "kJ"      , "Gibbs energy"        , false )
-mkBasAmt(:aAmt  , :BProperty, :a    , "A"   , u"kJ"         , "kJ"      , "Helmholtz energy"    , false )
-mkBasAmt(:eAmt  , :BProperty, :e    , "E"   , u"kJ"         , "kJ"      , "total energy"        , false )
-mkBasAmt(:ekAmt , :BProperty, :ek   , "Ek"  , u"kJ"         , "kJ"      , "kinetic energy"      , false )
-mkBasAmt(:epAmt , :BProperty, :ep   , "Ep"  , u"kJ"         , "kJ"      , "potential energy"    , false )
-mkBasAmt(:sAmt  , :BProperty, :s    , "S"   , u"kJ/K"       , "kJ/K"    , "entropy"             , false )
-mkBasAmt(:cpAmt , :BProperty, :cp   , "Cp"  , u"kJ/K"       , "kJ/K"    , "iso-P specific heat" , false )
-mkBasAmt(:cvAmt , :BProperty, :cv   , "Cv"  , u"kJ/K"       , "kJ/K"    , "iso-v specific heat" , false )
-mkBasAmt(:jAmt  , :BProperty, :j    , "J"   , u"kJ/K"       , "kJ/K"    , "Massieu function"    , false )
+mkBasAmt(:vAmt , :BProperty, :v , "V" , u"m^3" , "m³"  , "volume"             , false)
+mkBasAmt(:uAmt , :BProperty, :u , "U" , u"kJ"  , "kJ"  , "internal energy"    , false)
+mkBasAmt(:hAmt , :BProperty, :h , "H" , u"kJ"  , "kJ"  , "enthalpy"           , false)
+mkBasAmt(:gAmt , :BProperty, :g , "G" , u"kJ"  , "kJ"  , "Gibbs energy"       , false)
+mkBasAmt(:aAmt , :BProperty, :a , "A" , u"kJ"  , "kJ"  , "Helmholtz energy"   , false)
+mkBasAmt(:eAmt , :BProperty, :e , "E" , u"kJ"  , "kJ"  , "total energy"       , false)
+mkBasAmt(:ekAmt, :BProperty, :ek, "Ek", u"kJ"  , "kJ"  , "kinetic energy"     , false)
+mkBasAmt(:epAmt, :BProperty, :ep, "Ep", u"kJ"  , "kJ"  , "potential energy"   , false)
+mkBasAmt(:sAmt , :BProperty, :s , "S" , u"kJ/K", "kJ/K", "entropy"            , false)
+mkBasAmt(:cpAmt, :BProperty, :cp, "Cp", u"kJ/K", "kJ/K", "iso-P specific heat", false)
+mkBasAmt(:cvAmt, :BProperty, :cv, "Cv", u"kJ/K", "kJ/K", "iso-v specific heat", false)
+mkBasAmt(:jAmt , :BProperty, :j , "J" , u"kJ/K", "kJ/K", "Massieu function"   , false)
 
 # Regular interactions
-mkBasAmt(:qAmt  , :BInteract, :q    , "Q"   , u"kJ"         , "kJ"      , "heat"                , false )
-mkBasAmt(:wAmt  , :BInteract, :w    , "W"   , u"kJ"         , "kJ"      , "work"                , false )
-mkBasAmt(:ΔeAmt , :BInteract, :Δe   , "E"   , u"kJ"         , "kJ"      , "energy variation"    , true  )
-mkBasAmt(:ΔsAmt , :BInteract, :Δs   , "S"   , u"kJ/K"       , "kJ/K"    , "entropy variation"   , true  )
+mkBasAmt(:qAmt , :BInteract, :q , "Q" , u"kJ"  , "kJ"  , "heat"               , false)
+mkBasAmt(:wAmt , :BInteract, :w , "W" , u"kJ"  , "kJ"  , "work"               , false)
+mkBasAmt(:ΔeAmt, :BInteract, :Δe, "E" , u"kJ"  , "kJ"  , "energy variation"   , true )
+mkBasAmt(:ΔsAmt, :BInteract, :Δs, "S" , u"kJ/K", "kJ/K", "entropy variation"  , true )
 
 
 #----------------------------------------------------------------------------------------------#
@@ -653,12 +653,20 @@ VELOCYP{𝗽,𝘅,𝗯} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅}} where {𝗽<:PR
 #----------------------------------------------------------------------------------------------#
 
 import Base: show
-import Formatting: sprintf1
 
-# Auxiliar method
+# Auxiliary methods
 function subscript(x::Int)
     asSub(c::Char) = Char(Int(c) - Int('0') + Int('₀'))
     map(asSub, "$(x)")
+end
+
+function valFmt(x::𝗽, sigD = DEF[:showSigD]) where 𝗽<:PREC
+    y = Float64(x)
+    buffr = repeat([0x0, ], 64)
+    bytes = ccall(
+        :sprintf, Int32, (Ptr{UInt8}, Cstring, Int64, Float64),
+        buffr, "%.*g", sigD, y)
+    return bytes < 64 ? unsafe_string(pointer(buffr)) : "#VALUE!"
 end
 
 # Precision decoration
@@ -672,7 +680,7 @@ Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
     if DEF[:pprint]
         print(io,
             "$(string(deco(x)))$(pDeco(𝗽)): ",
-            sprintf1("%.$(DEF[:showSigD])g", amt(x).val),
+            valFmt(amt(x).val),
             " ", ppu(x))
     else
         Base.show_default(io, x)
@@ -683,9 +691,9 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
     if DEF[:pprint]
         print(io,
             "$(string(deco(x)))$(pDeco(𝗽)): (",
-            sprintf1("%.$(DEF[:showSigD])g", amt(x).val.val),
+            valFmt(amt(x).val.val),
             " ± ",
-            sprintf1("%.2g", amt(x).val.err),
+            valFmt(amt(x).val.err, 2),
             ") ", ppu(x))
     else
         Base.show_default(io, x)
