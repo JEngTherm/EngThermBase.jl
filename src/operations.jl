@@ -15,7 +15,7 @@ function AMT(x::Number)
     # --- WholeAmt
     elseif  D == dimension(u"K");           sysT(X)
     elseif  D == dimension(u"kPa");         sysP(X)
-    elseif  D == dimension(u"m/s");         VELO(X)     # 𝕍   fallback (𝕧, 𝔠)
+    elseif  D == dimension(u"m/s");         VELO(X)     # 𝕍   fallback (𝕧, 𝕔)
     elseif  D == dimension(u"s");           TIME(X)
     elseif  D == dimension(u"m/s^2");       grav(X)
     elseif  D == dimension(u"m");           alti(X)
@@ -101,6 +101,16 @@ end
 -(x::AMOUNTS{𝗽,𝘅}, y::AMOUNTS{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
     AMT(amt(-(promote(map(x -> _Amt(amt(x)), (x, y))...)...)))
 end
+
+
+#----------------------------------------------------------------------------------------------#
+#                           Generic (fallback) Sums and Subtractions                           #
+#----------------------------------------------------------------------------------------------#
+
++(x::AMOUNTS, y::Union{Real,Quantity}) =  x + _Amt(y)
++(y::Union{Real,Quantity}, x::AMOUNTS) =  x + y          # fallsback
+-(x::AMOUNTS, y::Union{Real,Quantity}) =  x - _Amt(y)
+-(y::Union{Real,Quantity}, x::AMOUNTS) = -x + y          # fallsback
 
 
 #----------------------------------------------------------------------------------------------#
@@ -225,11 +235,11 @@ import Base: real, float, abs, abs2, min, max
 
 real(x::AMOUNTS) = x
 float(x::AMOUNTS) = x
-abs(x::𝗧) where 𝗧<:AMOUNTS = 𝗧(abs(amt(x)))
+abs(x::𝗧) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(abs(amt(x)))
 abs2(x::AMOUNTS) = x^2
 
-min(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(min((amt(i) for i in x)...))
-max(x::𝗧...) where 𝗧<:AMOUNTS = 𝗧(max((amt(i) for i in x)...))
+min(x::𝗧...) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(min((amt(i) for i in x)...))
+max(x::𝗧...) where 𝗧<:AMOUNTS = (𝗧.name.wrapper)(max((amt(i) for i in x)...))
 
 
 #----------------------------------------------------------------------------------------------#
