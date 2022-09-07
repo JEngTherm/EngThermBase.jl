@@ -703,13 +703,13 @@ Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
         print(io,
             "$(string(deco(x)))$(pDeco(𝗽)): ",
             valFmt(amt(x).val),
-            " ", ppu(x))
+            ppu(x) == "" ? "" : " $(ppu(x))"
+        )
     else
-        #Base.show_default(io, x)
         print(io,
             "$(typeof(x))(",
             valFmt(amt(x).val),
-            " ", ppu(x), ")"
+            ppu(x) == "" ? ")" : " $(ppu(x)))"
         )
     end
 end
@@ -721,15 +721,15 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
             valFmt(amt(x).val.val),
             " ± ",
             valFmt(amt(x).val.err, 2),
-            ") ", ppu(x))
+            ppu(x) == "" ? "" : " $(ppu(x))"
+        )
     else
-        #Base.show_default(io, x)
         print(io,
             "$(typeof(x))(",
             valFmt(amt(x).val.val),
             " ± ",
             valFmt(amt(x).val.err, 2),
-            " ", ppu(x), ")"
+            ppu(x) == "" ? ")" : " $(ppu(x)))"
         )
     end
 end
