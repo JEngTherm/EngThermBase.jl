@@ -11,14 +11,18 @@ argument. This function is extensively used in operations that result in a unit 
 function AMT(x::Number)
     X, D = float(real(x)), dimension(x)
     # --- GenerAmt default
-    if      D == dimension(1);              _Amt(X)
+    if      D == dimension(1);              _Amt(X)     # gen.fallback (γ, k, Ma)
     # --- WholeAmt
     elseif  D == dimension(u"K");           sysT(X)
     elseif  D == dimension(u"kPa");         sysP(X)
-    elseif  D == dimension(u"m/s");         VELO(X)
+    elseif  D == dimension(u"m/s");         VELO(X)     # 𝕍   fallback (𝕧, 𝔠)
     elseif  D == dimension(u"s");           TIME(X)
     elseif  D == dimension(u"m/s^2");       grav(X)
     elseif  D == dimension(u"m");           alti(X)
+    # --- WholeAmt - Derived
+    elseif  D == dimension(inv(u"K"));      beta(X)
+    elseif  D == dimension(inv(u"kPa"));    kapT(X)     # κT  fallback (κS)
+    elseif  D == dimension(u"K/kPa");       muJT(X)     # μJT fallback (μS)
     # --- BasedAmt
     elseif  D == dimension(u"kg");          mAmt(X)
     elseif  D == dimension(u"kg/s");        mAmt(X)
@@ -160,6 +164,17 @@ end
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
 *(y::nAmt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+
+
+# Ma from velocity ratios (as this is just labeling dimensionless velocity ratios)
+/(x::VELOCYP{𝗽,𝘅}, y::VELOCYP{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    Ma(/(promote(map(x -> amt(x), (x, y))...)...))
+end
+
+# γ from entropy amount ratios (as specific heats might auto-convert to ΔsAmt's)
+/(x::NTROPYA{𝗽,𝘅}, y::NTROPYA{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    γ(/(promote(map(x -> amt(x), (x, y))...)...))
+end
 
 
 #----------------------------------------------------------------------------------------------#

@@ -315,7 +315,7 @@ mkWhlAmt(:beta, :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficien
 mkWhlAmt(:kapT, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"       , false)
 mkWhlAmt(:kapS, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"       , false)
 mkWhlAmt(:thek, :WProperty, :k   , "k"  , dless      , ""        , "isentropic expansion exponent"    , false)
-mkWhlAmt(:thec, :WProperty, :c   , "𝔠"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"         , false)
+mkWhlAmt(:thec, :WProperty, :c   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"         , false)
 mkWhlAmt(:Ma  , :WProperty, :Ma  , "Ma" , dless      , ""        , "Mach number"                      , false)
 mkWhlAmt(:muJT, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"        , false)
 mkWhlAmt(:muS , :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient" , false)
@@ -663,7 +663,7 @@ NTROPYA{𝗽,𝘅,𝗯} = Union{NTROPYP{𝗽,𝘅,𝗯},NTROPYI{𝗽,𝘅,𝗯}}
 `VELOCYP{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
 Velocity property type union.
 """
-VELOCYP{𝗽,𝘅,𝗯} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
+VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},thec{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 #----------------------------------------------------------------------------------------------#
