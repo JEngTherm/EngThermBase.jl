@@ -515,6 +515,8 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
                        uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
             $TYPE(float(x.val) * unit(x))
         end
+        # Indirect construction from another BasedAmt
+        $FNAM(x::BasedAmt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = $FNAM(amt(x)) # quantity fallback
         export $FNAM
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
