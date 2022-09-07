@@ -721,7 +721,7 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
             valFmt(amt(x).val.val),
             " ± ",
             valFmt(amt(x).val.err, 2),
-            ppu(x) == "" ? "" : " $(ppu(x))"
+            ppu(x) == "" ? "" : " $(ppu(x)))"
         )
     else
         print(io,
