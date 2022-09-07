@@ -60,9 +60,9 @@ mkNonPAbs(    :ExactBase   , :BASES        , "type-exactness bases"             
 mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                                 )
 mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
-# AUX branch
-mkNonPAbs(  :AUX           , :AbstractTherm, "ancillary EngTherm types"                       )
-mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"                            )
+# # AUX branch
+# mkNonPAbs(  :AUX           , :AbstractTherm, "ancillary EngTherm types"                       )
+# mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions"                            )
 
 
 #----------------------------------------------------------------------------------------------#
