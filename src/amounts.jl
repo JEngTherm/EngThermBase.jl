@@ -705,7 +705,12 @@ Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin
             valFmt(amt(x).val),
             " ", ppu(x))
     else
-        Base.show_default(io, x)
+        #Base.show_default(io, x)
+        print(io,
+            "$(typeof(x))(",
+            valFmt(amt(x).val),
+            " ", ppu(x), ")"
+        )
     end
 end
 
@@ -718,7 +723,14 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
             valFmt(amt(x).val.err, 2),
             ") ", ppu(x))
     else
-        Base.show_default(io, x)
+        #Base.show_default(io, x)
+        print(io,
+            "$(typeof(x))(",
+            valFmt(amt(x).val.val),
+            " ± ",
+            valFmt(amt(x).val.err, 2),
+            " ", ppu(x), ")"
+        )
     end
 end
 
