@@ -306,6 +306,20 @@ mkWhlAmt(:TIME, :WUnranked, :TIME, "𝗍", u"s"       , "s"       , "time"      
 mkWhlAmt(:grav, :WUnranked, :grav, "𝗀", u"m/s^2"   , "m/s²"    , "gravity"    , false)
 mkWhlAmt(:alti, :WUnranked, :alti, "𝗓", u"m"       , "m"       , "altitude"   , false)
 
+# A dimensionless unit
+dless = Unitful.FreeUnits{(), NoDims, nothing}()
+
+# Derived thermodynamic properties
+mkWhlAmt(:gamm, :WProperty, :γ   , "γ"  , dless      , ""        , "specific heat ratio"              , false)
+mkWhlAmt(:beta, :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficient of volume expansion"  , false)
+mkWhlAmt(:kapT, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"       , false)
+mkWhlAmt(:kapS, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"       , false)
+mkWhlAmt(:thek, :WProperty, :k   , "k"  , dless      , ""        , "isentropic expansion exponent"    , false)
+mkWhlAmt(:thec, :WProperty, :c   , "𝔠"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"         , false)
+mkWhlAmt(:Ma  , :WProperty, :Ma  , "Ma" , dless      , ""        , "Mach number"                      , false)
+mkWhlAmt(:muJT, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"        , false)
+mkWhlAmt(:muS , :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient" , false)
+
 
 #----------------------------------------------------------------------------------------------#
 #                                  Based Amount Type Factory                                   #
