@@ -123,6 +123,12 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = string(unit(amt(x)))
+        # Indirect construction from non-float plain
+        $TYPE(x::REAL) = $TYPE(float(x))
+        # Indirect construction from non-float quantity
+        $TYPE(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
+        # Indirect construction from another AMOUNTS
+        $TYPE(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -255,8 +261,8 @@ Constructors determine all parameters from their arguments.\n
         # Indirect construction from quantity
         $FNAM(x::UATY{𝗽,$𝑑SY}) where 𝗽<:PREC = $TYPE(x)
         $FNAM(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
-        # Indirect construction from another WholeAmt
-        $FNAM(x::WholeAmt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = $FNAM(amt(x)) # quantity fallback
+        # Indirect construction from another AMOUNTS
+        $FNAM(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
         export $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
@@ -310,15 +316,16 @@ mkWhlAmt(:alti, :WUnranked, :alti, "𝗓", u"m"       , "m"       , "altitude"  
 dless = Unitful.FreeUnits{(), NoDims, nothing}()
 
 # Derived thermodynamic properties
-mkWhlAmt(:gamm, :WProperty, :γ   , "γ"  , dless      , ""        , "specific heat ratio"              , false)
-mkWhlAmt(:beta, :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficient of volume expansion"  , false)
-mkWhlAmt(:kapT, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"       , false)
-mkWhlAmt(:kapS, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"       , false)
-mkWhlAmt(:thek, :WProperty, :k   , "k"  , dless      , ""        , "isentropic expansion exponent"    , false)
-mkWhlAmt(:thec, :WProperty, :c   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"         , false)
-mkWhlAmt(:Ma  , :WProperty, :Ma  , "Ma" , dless      , ""        , "Mach number"                      , false)
-mkWhlAmt(:muJT, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"        , false)
-mkWhlAmt(:muS , :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient" , false)
+mkWhlAmt(:cprf, :WProperty, :Z   , "Z"  , dless      , ""        , "generalized compressibility factor", false)
+mkWhlAmt(:gamm, :WProperty, :γ   , "γ"  , dless      , ""        , "specific heat ratio"               , false)
+mkWhlAmt(:beta, :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficient of volume expansion"   , false)
+mkWhlAmt(:kapT, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"        , false)
+mkWhlAmt(:kapS, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"        , false)
+mkWhlAmt(:thek, :WProperty, :k   , "k"  , dless      , ""        , "isentropic expansion exponent"     , false)
+mkWhlAmt(:thec, :WProperty, :c   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"          , false)
+mkWhlAmt(:Mach, :WProperty, :Ma  , "Ma" , dless      , ""        , "Mach number"                       , false)
+mkWhlAmt(:muJT, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
+mkWhlAmt(:muS , :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -529,8 +536,8 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
                        uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
             $TYPE(float(x.val) * unit(x))
         end
-        # Indirect construction from another BasedAmt
-        $FNAM(x::BasedAmt{𝗽,𝘅}) where {𝗽<:PREC,𝘅<:EXAC} = $FNAM(amt(x)) # quantity fallback
+        # Indirect construction from another AMOUNTS
+        $FNAM(x::AMOUNTS) = $FNAM(amt(x)) # AMOUNTS fallback
         export $FNAM
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
@@ -680,11 +687,11 @@ end
 
 function valFmt(x::𝗽, sigD = DEF[:showSigD]) where 𝗽<:PREC
     y = Float64(x)
-    buffr = repeat([0x0, ], 64)
+    buffr = repeat([0x0, ], 1024+14)
     bytes = ccall(
         :sprintf, Int32, (Ptr{UInt8}, Cstring, Int64, Float64),
-        buffr, "%.*g", sigD, y)
-    return bytes < 64 ? unsafe_string(pointer(buffr)) : "#VALUE!"
+        buffr, "%#.*g", sigD, y)
+    return bytes < length(buffr) ? unsafe_string(pointer(buffr)) : "#VALUE!"
 end
 
 # Precision decoration
