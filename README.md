@@ -40,7 +40,7 @@ in this packages, such as:
 
 # Examples
 
-Amount instantiation, display, and basic operations:
+## Amount instantiation, display, and basic operations:
 
 ```julia
 julia> using EngThermBase
@@ -69,4 +69,44 @@ This example shows that:
 3. Package behavior can be changed, such as whether or not to "pretty-print" quantities;
 4. Same-unit quantities can be added (such as `heat + work`, as in an energy balance), resulting
    in a correctly labeled energy variation quantity.
+
+## Amount inference:
+
+```julia
+julia> [ i isa Interact for i in (heat, work, work_rate, period) ]
+4-element Vector{Bool}:
+ 1
+ 1
+ 1
+ 0
+
+julia> [ i isa Property for i in (heat, work, work_rate, period) ]
+4-element Vector{Bool}:
+ 0
+ 0
+ 0
+ 0
+
+julia> [ i isa EngThermBase.ENERGYI for i in (heat, work, work_rate, period) ]
+4-element Vector{Bool}:
+ 1
+ 1
+ 1
+ 0
+
+julia> [ i isa EngThermBase.ENERGYP for i in (heat, work, work_rate, period) ]
+4-element Vector{Bool}:
+ 0
+ 0
+ 0
+ 0
+
+```
+
+Thus `heat`, `work`, and `work_rate`:
+
+1. They are    `Interact` (i.e., interactions);
+2. They aren't `Property` (i.e., properties);
+3. They are    `ENERGYI`  (i.e., energy interactions);
+4. They aren't `ENERGYP`  (i.e., energy properties).
 
