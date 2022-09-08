@@ -110,3 +110,20 @@ Thus `heat`, `work`, and `work_rate`:
 3. They are    `ENERGYI`  (i.e., energy interactions);
 4. They aren't `ENERGYP`  (i.e., energy properties).
 
+Moreover:
+
+```julia
+julia> [ i isa BInteract{Float64, EX, DT} for i in (heat, work, work_rate, period) ]
+4-element Vector{Bool}:
+ 0
+ 0
+ 1
+ 0
+
+```
+
+5. Only `work_rate` is a `BInteract{Float64, EX, DT}`, i.e., a based
+   interaction (`BInteract`), with an exact (`EX`) `Float64` precision
+   *time-derivative* (`DT`) amount among `heat`, `work`, and `work_rate`, and
+   `period`.
+
