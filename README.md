@@ -40,7 +40,7 @@ in this packages, such as:
 
 # Examples
 
-Amount inferences:
+Amount instantiation, display, and basic operations:
 
 ```julia
 julia> using EngThermBase
@@ -50,5 +50,23 @@ julia> heat, work_rate, period = q(1250u"J"), w(-0.65u"kW"), TIME(2u"minute")
 
 julia> work = work_rate * period
 W₆₄: -78.000 kJ
+
+julia> DEF[:pprint] = false # Disables pretty-printing of quantities
+false
+
+julia> heat, work
+(qAmt{Float64, EX, SY}(1.2500 kJ), wAmt{Float64, EX, SY}(-78.000 kJ))
+
+julia> heat + work
+ΔeAmt{Float64, EX, SY}(-76.750 kJ)
 ```
+
+This example shows that:
+
+1. Thermodynamic quantities are stored and displayed with standard engineering units;
+2. Certain usual known-type operations are implemented, such as `work_rate * period` yielding a
+   `work` amount (correctly labeled as such);
+3. Package behavior can be changed, such as whether or not to "pretty-print" quantities;
+4. Same-unit quantities can be added (such as `heat + work`, as in an energy balance), resulting
+   in a correctly labeled energy variation quantity.
 
