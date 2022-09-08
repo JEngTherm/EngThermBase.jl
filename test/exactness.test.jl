@@ -14,3 +14,10 @@
     end
 end
 
+@testset "exactness.test.jl: Promotion rules                                      " begin
+    @test promote_type(EX, EX) == EX
+    @test promote_type(EX, MM) == MM
+    @test promote_type(MM, EX) == MM
+    @test promote_type(MM, MM) == MM
+end
+
