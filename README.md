@@ -129,9 +129,14 @@ AMOUNTS
 ```
 
 Either "based-" and "whole-" amounts — respectively `BasedAmt`, and `WholeAmt` — distinguishes
-whether the quantity (amount) is a **property**, i.e., a thermodynamic state function, whose
-variation are process-path-independent and have an exact differential; or an **interaction**,
-whose value is process-path-dependent and do not have exact differentials.
+whether the quantity (amount) is a:
+
+- **property**, i.e., a thermodynamic state function, whose variation are
+  process-path-independent and have an exact differential; or an
+
+- **interaction**, whose value is process-path-dependent and have an inexact differential; or an
+
+- **unranked** one, i.e., one who is not classified in the above scheme.
 
 
 - `AMOUNTS`: whether properties or interactions, based or otherwise thermodynamic quantities,
