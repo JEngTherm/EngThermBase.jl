@@ -326,7 +326,7 @@ julia> [ i isa BInteract{Float64, EX, DT} for i in (heat, work, work_rate, perio
  0
  0
  1
- 0      # Whether these are based interactions
+ 0      # Whether these are `BInteract{Float64, EX, DT}`
 
 ```
 
