@@ -101,9 +101,7 @@ The kind of thermodynamic concepts dealt with abstract types include `BASES`, `A
 ### Thermodynamic Bases:
 
 ```julia
-julia> using EngThermBase
-
-julia> using TypeTree
+julia> using EngThermBase, TypeTree
 
 julia> print(tt(BASES)...)
 BASES
@@ -168,30 +166,92 @@ whether the quantity (amount) is a:
 
 - **unranked** one, i.e., one who is not classified in the above scheme.
 
+Here's the type tree under `BasedAmt`, for instance:
 
-HERE HERE HERE
+```julia
+julia> print(tt(BasedAmt)...)
+BasedAmt
+ ├─ BInteract{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ qAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ wAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ ΔeAmt{𝗽, 𝘅, 𝗯} where ...
+ │   └─ ΔsAmt{𝗽, 𝘅, 𝗯} where ...
+ ├─ BProperty{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ RAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ aAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ cpAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ cvAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ eAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ ekAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ epAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ gAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ hAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ jAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ mAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ nAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ rAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ sAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ uAmt{𝗽, 𝘅, 𝗯} where ...
+ │   └─ vAmt{𝗽, 𝘅, 𝗯} where ...
+ └─ BUnranked{𝗽, 𝘅, 𝗯} where ...
+```
 
+Moreover, all defined types are documented:
 
-- `AMOUNTS`: whether properties or interactions, based or otherwise thermodynamic quantities,
-  with a precision (floating-point width) parameter;
-- `MODELS`: for substance (medium), it's heat-capacity, and systems; and etc.
+```julia
+help?> jAmt
+search: jAmt
 
-Moreover, parameter in types are also used to label the numerical precision, one of: `Float16`,
-`Float32`, `Float64`, and `BigFloat`.
+  struct jAmt{𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: BProperty{𝗽,𝘅,𝗯}
 
-## Amounts (Concrete Types)
+  Precision-, Exactness-, and Base- parametric Massieu function amounts based in kJ/K.
 
-Concrete types include many thermodynamic *properties* and *interactions*, their conversions and
-operations.
+  jAmt{𝗽,𝘅,𝗯} parameters are:
 
-## Constants (Concrete Type Instances)
+    •  Precision 𝗽<:Union{Float16,Float32,Float64,BigFloat};
 
-Some thermodynamic constants that aren't associated with any particular substance, are defined
-in this packages, such as:
+    •  Exactness 𝘅<:Union{EX,MM}, i.e., either a single, precise value or an
+       uncertainty-bearing measurement, respectively;
 
-- The standard temperature and pressure;
-- The universal gas constant;
-- The constants (numbers) of Avogadro and Boltzmann.
+    •  Thermodynamic base 𝗯<:Union{SY,DT,MA,MO} respectively for system, rate, mass, or
+       molar quantities, respectively in units of kJ K^-1, kJ K^-1 s^-1, kJ kg^-1 K^-1,
+       or kJ K^-1 kmol^-1.
+
+  A jAmt can be natively constructed from the following argument types:
+
+    •  A plain, unitless float;
+
+    •  A plain, unitless Measurement; hence, any AbstractFloat;
+
+    •  A Quantity{AbstractFloat} with compatible units.
+
+  Constructors determine parameters from their arguments. Quantity constructors do not need
+  a base argument. Plain, AbstractFloat ones require the base argument.
+
+  Hierarchy
+  ===========
+
+  jAmt <: BProperty <: BasedAmt <: AMOUNTS <: AbstractTherm <: Any
+```
+
+### Thermodynamic Models:
+
+This includes the parametric abstract type structure for hooking substance and/or property
+models by other packages:
+
+```julia
+julia> print(tt(MODELS)...)
+MODELS
+ ├─ Heat{𝗽, 𝘅} where ...
+ │   ├─ BivarHeat{𝗽, 𝘅} where ...
+ │   ├─ ConstHeat{𝗽, 𝘅} where ...
+ │   └─ UnvarHeat{𝗽, 𝘅} where ...
+ ├─ Medium{𝗽, 𝘅} where ...
+ │   └─ Substance{𝗽, 𝘅} where ...
+ └─ System{𝗽, 𝘅} where ...
+     ├─ Closed{𝗽, 𝘅} where ...
+     └─ Open{𝗽, 𝘅} where ...
+```
 
 # Examples
 
@@ -233,37 +293,30 @@ julia> [ i isa Interact for i in (heat, work, work_rate, period) ]
  1
  1
  1
- 0
+ 0      # Whether these are interactions
 
 julia> [ i isa Property for i in (heat, work, work_rate, period) ]
 4-element Vector{Bool}:
  0
  0
  0
- 0
+ 0      # Whether these are properties (state functions)
 
 julia> [ i isa EngThermBase.ENERGYI for i in (heat, work, work_rate, period) ]
 4-element Vector{Bool}:
  1
  1
  1
- 0
+ 0      # Whether these are energy interactions
 
 julia> [ i isa EngThermBase.ENERGYP for i in (heat, work, work_rate, period) ]
 4-element Vector{Bool}:
  0
  0
  0
- 0
+ 0      # Whether these are energy properties (state functions)
 
 ```
-
-Thus `heat`, `work`, and `work_rate`:
-
-1. They are    `Interact` (i.e., interactions);
-2. They aren't `Property` (i.e., properties);
-3. They are    `ENERGYI`  (i.e., energy interactions);
-4. They aren't `ENERGYP`  (i.e., energy properties).
 
 Moreover:
 
@@ -273,12 +326,7 @@ julia> [ i isa BInteract{Float64, EX, DT} for i in (heat, work, work_rate, perio
  0
  0
  1
- 0
+ 0      # Whether these are based interactions
 
 ```
-
-5. Only `work_rate` is a `BInteract{Float64, EX, DT}`, i.e., a based
-   interaction (`BInteract`), with an exact (`EX`) `Float64` precision
-   *time-derivative* (`DT`) amount among `heat`, `work`, and `work_rate`, and
-   `period`.
 
