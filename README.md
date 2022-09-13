@@ -7,13 +7,16 @@ Basic types and functionality for Engineering Thermodynamics
 The `EngThermBase.jl` package is, as the name suggests, a base package for engineering        
 thermodynamic calculations that supports:
 
-- **amount tagging**,
-- **units** (through `Unitful.jl`), and
-- **uncertainty propagation** (though `Measurements.jl`).
+- Thermodynamic **amount tagging**,
+- **Units** (through `Unitful.jl`), and
+- **Uncertainty propagation** (through `Measurements.jl`).
 
-Tagged thermodynamic amounts have default (SI) units, and are parametric with respect to
-**precision** and **thermodynamic      base**, i.e., whether `MA` (mass) or `MO` (molar) ones,
-and also `SY` (system) for extensive  amounts and `DT` (time derivative) for extensive rates:                                       
+Tagged thermodynamic amounts have default (SI) units following mainstream Engineering
+Thermodynamics Textbooks, and are parametric with respect to floating point **precision**,
+amount **exactness** — i.e., whether or not the amount has uncertainty: `MM` (measurement) and
+`EX` (exact), respectively; and **thermodynamic base**, i.e., whether `MA` (mass) or `MO`
+(molar) ones, and also `SY` (system) for extensive amounts and `DT` (time derivative) for
+extensive rates:
 
 ```julia
 julia> using EngThermBase
@@ -137,6 +140,9 @@ whether the quantity (amount) is a:
 - **interaction**, whose value is process-path-dependent and have an inexact differential; or an
 
 - **unranked** one, i.e., one who is not classified in the above scheme.
+
+
+HERE HERE HERE
 
 
 - `AMOUNTS`: whether properties or interactions, based or otherwise thermodynamic quantities,
