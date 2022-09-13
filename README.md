@@ -330,3 +330,34 @@ julia> [ i isa BInteract{Float64, EX, DT} for i in (heat, work, work_rate, perio
 
 ```
 
+## Author
+
+Prof. C. Naaktgeboren, PhD. [Lattes](http://lattes.cnpq.br/8621139258082919).
+
+Federal University of Technology, Paraná
+[(site)](http://portal.utfpr.edu.br/english), Guarapuava Campus.
+
+`NaaktgeborenC <dot!> PhD {at!} gmail [dot!] com`
+
+## License
+
+This project is [licensed](https://github.com/JEngTherm/EngThermBase.jl/blob/master/LICENSE)
+under the MIT license.
+
+## Citations
+
+How to cite this project:
+
+```bibtex
+@Misc{2022-NaaktgeborenC-EngThermBase,
+  author       = {C. Naaktgeboren},
+  title        = {{EngThermBase.jl} -- Basic types and functionality for Engineering Thermodynamics in Julia},
+  howpublished = {Online},
+  year         = {2022},
+  journal      = {GitHub repository},
+  publisher    = {GitHub},
+  url          = {https://github.com/JEngTherm/EngThermBase.jl},
+}
+```
+
+
