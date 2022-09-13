@@ -46,7 +46,7 @@ aAmt{Float64, MM, MA}(-758.19 ± 50. kJ/kg)
 
 julia> DEF[:pprint] = true;    # Now turning on the pretty-printing
 
-julia> [a1, s1, u1, T1]        # which is just as informative and more concise
+julia> [a1, s1, u1, T1]        # which is just as informative but more concise
 4-element Vector{AMOUNTS}:
  a₆₄: (-758.19 ± 50. kJ/kg)
  s₃₂: 4.2200 kJ/K/kg
@@ -66,7 +66,32 @@ julia> [a1, s1, u1, T1]        # causes the output to be a bit more concise
 Being a basic package, `EngThermBase.jl` capabilities mainly lie in the type structure it
 provides around organizing thermodynamic concepts and amounts. The former is achieved with
 abstract types, while the latter with concrete types. Moreover, the package defines some
-thermodynamic constants that are not associated with any particular substance.
+thermodynamic constants that are not associated with any particular substance:
+
+```julia
+julia> using EngThermBase
+
+julia> NA()								# Avogadro's number (generic amounts pretty-print "?")
+?₆₄: 6.0221e+23 mol^-1
+
+julia> NA(MM)							# ... with uncertainty
+?₆₄: (6.0221e+23 ± 1.0e+17 mol^-1)
+
+julia> mu(MM)							# The atomic mass constant, with uncertainty
+m₆₄: (1.6605e-27 ± 2.8e-34 kg)
+
+julia> R(Float32, MM)					# The universal gas constant, with uncertainty
+R̄₃₂: (8.3145 ± 1.5e-05 kJ/K/kmol)
+
+julia> kB()								# Boltzmann's constant
+?₆₄: 1.3807e-23 J K^-1
+
+julia> s(kB(MM))						# Re-tagged kB with uncertainty
+S₆₄: (1.3807e-26 ± 2.4e-32 kJ/K)
+
+julia> T(), P(), grav()					# Standard T, P, and g
+(T₆₄: 298.15 K, P₆₄: 101.35 kPa, 𝗀₆₄: 9.8066 m/s²)
+```
 
 ## Thermodynamic Concepts (Abstract Types)
 
@@ -76,6 +101,8 @@ The kind of thermodynamic concepts dealt with abstract types include `BASES`, `A
 ### Thermodynamic Bases:
 
 ```julia
+julia> using EngThermBase
+
 julia> using TypeTree
 
 julia> print(tt(BASES)...)
