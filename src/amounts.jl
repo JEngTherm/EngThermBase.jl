@@ -53,7 +53,8 @@ Generic Amount type factory.
 """
 function mkGenAmt(TYPE::Symbol,         # Type name:            :_Amt
                   SUPT::Symbol,         # Supertype:            :GenerAmt
-                  SYMB::AbstractString, # Printing symbol:      "?"
+                  FNAM::Symbol,         # Function Name:        :_
+                  SYMB::AbstractString, # Printing symbol:      "_"
                   WHAT::AbstractString, # Description:          "generic amounts"
                   DELT::Bool=false,     # Whether a Δ quantity
                  )
@@ -76,6 +77,7 @@ A `$TYPE` can be natively constructed from the following argument types:\n
 ## Hierarchy\n
 `$(TYPE) <: $(hiStr)`
     """
+    fnStr = "Function to return $WHAT amounts of arbitrary units."
     # @eval block
     @eval begin
         # Concrete type definition
@@ -123,12 +125,17 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = string(unit(amt(x)))
+        # Function interface
+        function $FNAM end
+        @doc $fnStr $FNAM
         # Indirect construction from non-float plain
-        $TYPE(x::REAL) = $TYPE(float(x))
+        $FNAM(x::REAL) = $TYPE(float(x))
         # Indirect construction from non-float quantity
-        $TYPE(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
+        $FNAM(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
         # Indirect construction from another AMOUNTS
-        $TYPE(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
+        $FNAM(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
+        # Function export
+        export $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -166,7 +173,7 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # The fallback generic amount
-mkGenAmt(:_Amt, :GenerAmt, "?", "generic", false)
+mkGenAmt(:_Amt, :GenerAmt, :_a, "_", "generic", false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -208,6 +215,7 @@ Constructors determine all parameters from their arguments.\n
 ## Hierarchy\n
 `$(TYPE) <: $(hiStr)`
     """
+    fnStr = "Function to return $WHAT amounts in ($USTR)."
     # @eval block
     @eval begin
         # Concrete type definition
@@ -255,6 +263,9 @@ Constructors determine all parameters from their arguments.\n
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = $USTR
+        # Function interface
+        function $FNAM end
+        @doc $fnStr $FNAM
         # Indirect construction from plain
         $FNAM(x::plnF) = $TYPE(x)
         $FNAM(x::REAL) = $TYPE(float(x))
@@ -263,6 +274,7 @@ Constructors determine all parameters from their arguments.\n
         $FNAM(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
         # Indirect construction from another AMOUNTS
         $FNAM(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
+        # Function export
         export $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
@@ -308,21 +320,22 @@ mkWhlAmt(:VELO, :WProperty, :velo, "𝕍", u"√(kJ/kg)", "√(kJ/kg)", "velocit
 mkWhlAmt(:SPEE, :WProperty, :spee, "𝕧", u"m/s"     , "m/s"     , "speed"      , false)
 
 # Regular unranked -- \sans#<TAB> function names
-mkWhlAmt(:TIME, :WUnranked, :TIME, "𝗍", u"s"       , "s"       , "time"       , false)
-mkWhlAmt(:grav, :WUnranked, :grav, "𝗀", u"m/s^2"   , "m/s²"    , "gravity"    , false)
-mkWhlAmt(:alti, :WUnranked, :alti, "𝗓", u"m"       , "m"       , "altitude"   , false)
+mkWhlAmt(:TIME, :WUnranked, :t   , "𝗍", u"s"       , "s"       , "time"       , false)
+mkWhlAmt(:GRAV, :WUnranked, :grav, "𝗀", u"m/s^2"   , "m/s²"    , "gravity"    , false)
+mkWhlAmt(:zAmt, :WUnranked, :z   , "𝗓", u"m"       , "m"       , "altitude"   , false)
 
 # Derived thermodynamic properties
-mkWhlAmt(:cprf, :WProperty, :Z   , "Z"  , ULESS()    , ""        , "generalized compressibility factor", false)
-mkWhlAmt(:gamm, :WProperty, :γ   , "γ"  , ULESS()    , ""        , "specific heat ratio"               , false)
-mkWhlAmt(:beta, :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficient of volume expansion"   , false)
-mkWhlAmt(:kapT, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"        , false)
-mkWhlAmt(:kapS, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"        , false)
-mkWhlAmt(:thek, :WProperty, :k   , "k"  , ULESS()    , ""        , "isentropic expansion exponent"     , false)
-mkWhlAmt(:thec, :WProperty, :c   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"          , false)
-mkWhlAmt(:Mach, :WProperty, :Ma  , "Ma" , ULESS()    , ""        , "Mach number"                       , false)
-mkWhlAmt(:muJT, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
-mkWhlAmt(:muS , :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
+mkWhlAmt(:ZAmt , :WProperty, :Z   , "Z"  , ULESS()    , "–"       , "generalized compressibility factor", false)
+mkWhlAmt(:γAmt , :WProperty, :γ   , "γ"  , ULESS()    , "–"       , "specific heat ratio"               , false)
+mkWhlAmt(:βAmt , :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficient of volume expansion"   , false)
+mkWhlAmt(:κTAmt, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"        , false)
+mkWhlAmt(:κsAmt, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"        , false)
+mkWhlAmt(:kAmt , :WProperty, :k   , "k"  , ULESS()    , "–"       , "isentropic expansion exponent"     , false)
+mkWhlAmt(:𝕔Amt , :WProperty, :𝕔   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"          , false)
+mkWhlAmt(:MaAmt, :WProperty, :Ma  , "Ma" , ULESS()    , "–"       , "Mach number"                       , false)
+mkWhlAmt(:μJAmt, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
+mkWhlAmt(:μSAmt, :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
+mkWhlAmt(:xAmt , :WProperty, :x   , "x"  , ULESS()    , "–"       , "saturated mixture quality"         , false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -388,6 +401,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
 ## Hierarchy\n
 `$(TYPE) <: $(hiStr)`
     """
+    fnStr = "Function to return $WHAT amounts in ($USTR)."
     # @eval block
     @eval begin
         # Concrete type definition
@@ -519,6 +533,9 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         ppu(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = $USTR * "/s"
         ppu(x::$TYPE{𝗽,𝘅,MA} where {𝗽,𝘅}) = $USTR * "/kg"
         ppu(x::$TYPE{𝗽,𝘅,MO} where {𝗽,𝘅}) = $USTR * "/kmol"
+        # Function interface
+        function $FNAM end
+        @doc $fnStr $FNAM
         # Indirect construction from plain
         $FNAM(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
         $FNAM(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
@@ -535,6 +552,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         end
         # Indirect construction from another AMOUNTS
         $FNAM(x::AMOUNTS) = $FNAM(amt(x)) # AMOUNTS fallback
+        # Function export
         export $FNAM
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
@@ -601,6 +619,7 @@ mkBasAmt(:epAmt, :BProperty, :ep, "Ep", u"kJ"  , "kJ"  , "potential energy"   , 
 mkBasAmt(:sAmt , :BProperty, :s , "S" , u"kJ/K", "kJ/K", "entropy"            , false)
 mkBasAmt(:cpAmt, :BProperty, :cp, "Cp", u"kJ/K", "kJ/K", "iso-P specific heat", false)
 mkBasAmt(:cvAmt, :BProperty, :cv, "Cv", u"kJ/K", "kJ/K", "iso-v specific heat", false)
+mkBasAmt(:cAmt , :BProperty, :c , "C" , u"kJ/K", "kJ/K", "incompressible substance specific heat", false)
 mkBasAmt(:jAmt , :BProperty, :j , "J" , u"kJ/K", "kJ/K", "Massieu function"   , false)
 
 # Regular interactions
@@ -645,8 +664,8 @@ ENERGYA{𝗽,𝘅,𝗯} = Union{ENERGYP{𝗽,𝘅,𝗯},ENERGYI{𝗽,𝘅,𝗯}}
 `NTROPYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Entropy property type union.
 """
-NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},rAmt{𝗽,𝘅,𝗯},
-                       sAmt{𝗽,𝘅,𝗯},jAmt{𝗽,𝘅,𝗯},
+NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},rAmt{𝗽,𝘅,𝗯},sAmt{𝗽,𝘅,𝗯},
+                       jAmt{𝗽,𝘅,𝗯},cAmt{𝗽,𝘅,𝗯},
                        cpAmt{𝗽,𝘅,𝗯},cvAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
@@ -667,7 +686,7 @@ NTROPYA{𝗽,𝘅,𝗯} = Union{NTROPYP{𝗽,𝘅,𝗯},NTROPYI{𝗽,𝘅,𝗯}}
 `VELOCYP{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
 Velocity property type union.
 """
-VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},thec{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
+VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},𝕔Amt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 #----------------------------------------------------------------------------------------------#

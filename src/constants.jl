@@ -106,14 +106,14 @@ P(𝖷::Type{𝘅}, 𝖯::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = sy
 The `grav{Float64,MM}` representation of the exact standard gravity, \$g_n ≡ 9.80665 m/s^2\$,
 [Lide, D. R., 2006].
 """
-const _gn = grav{Float64,MM}(grav(9_806_650u"μm/s^2"))
+const _gn = GRAV{Float64,MM}(grav(9_806_650u"μm/s^2"))
 
 """
 `grav(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=E𝖷) where {𝗽<:PREC,𝘅<:EXAC}`\n
 Returns the standard gravity as a `grav{𝖯,𝖷}`.\n
 Arguments `𝖯` and `𝖷` can be ommitted and/or be supplied in any order.
 """
-grav(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = grav{𝖯,𝖷}(_gn)
-grav(𝖷::Type{𝘅}, 𝖯::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = grav{𝖯,𝖷}(_gn)
+grav(𝖯::Type{𝗽}=Float64, 𝖷::Type{𝘅}=EX) where {𝗽<:PREC,𝘅<:EXAC} = GRAV{𝖯,𝖷}(_gn)
+grav(𝖷::Type{𝘅}, 𝖯::Type{𝗽}=Float64) where {𝗽<:PREC,𝘅<:EXAC} = GRAV{𝖯,𝖷}(_gn)
 
 
