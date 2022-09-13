@@ -12,10 +12,10 @@ thermodynamic calculations that supports:
 - **Uncertainty propagation** (through `Measurements.jl`).
 
 Tagged thermodynamic amounts have default (SI) units following mainstream Engineering
-Thermodynamics Textbooks, and are parametric with respect to floating point **precision**,
-amount **exactness** — i.e., whether or not the amount has uncertainty: `MM` (measurement) and
-`EX` (exact), respectively; and **thermodynamic base**, i.e., whether `MA` (mass) or `MO`
-(molar) ones, and also `SY` (system) for extensive amounts and `DT` (time derivative) for
+Thermodynamics Textbooks, and are parametric with respect to (i) floating point **precision**,
+(ii) amount **exactness** — i.e., whether or not the amount has uncertainty: `MM` (measurement)
+and `EX` (exact), respectively; and (iii) **thermodynamic base**, i.e., whether `MA` (mass) or
+`MO` (molar) ones, and also `SY` (system) for extensive amounts and `DT` (time derivative) for
 extensive rates:
 
 ```julia
