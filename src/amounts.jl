@@ -335,7 +335,7 @@ mkWhlAmt(:𝕔Amt , :WProperty, :𝕔   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)",
 mkWhlAmt(:MaAmt, :WProperty, :Ma  , "Ma" , ULESS()    , "–"       , "Mach number"                       , false)
 mkWhlAmt(:μJAmt, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
 mkWhlAmt(:μSAmt, :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
-mkWhlAmt(:xAmt , :WProperty, :x   , "x"  , ULESS()    , "–"       , "saturated mixture quality"         , false)
+mkWhlAmt(:xAmt , :WProperty, :x   , "x"  , ULESS()    , "–"       , "saturated vapor mass fraction"     , false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -599,13 +599,19 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Mass / Mass fraction anomalous
-mkBasAmt(:mAmt , :BProperty, :m , "m" , u"kg"  , "kg"  , "mass"               , false, bsym=(:m , :ṁ , :mf, :M))
+mkBasAmt(:mAmt , :BProperty, :m , "m" , u"kg"  , "kg"  , "mass"               , false, bsym=(:m  , :ṁ  , :mf, :M ))
 # Chemical amount / Molar fraction anomalous
-mkBasAmt(:nAmt , :BProperty, :N , "N" , u"kmol", "kmol", "chemical amount"    , false, bsym=(:N , :Ṅ , :n , :y))
+mkBasAmt(:nAmt , :BProperty, :N , "N" , u"kmol", "kmol", "chemical amount"    , false, bsym=(:N  , :Ṅ  , :n , :y ))
 # Gas constant / System constant anomalous
-mkBasAmt(:RAmt , :BProperty, :R , "mR", u"kJ/K", "kJ/K", "gas constant"       , false, bsym=(:mR, :ṁR, :R , :R̄))
+mkBasAmt(:RAmt , :BProperty, :R , "mR", u"kJ/K", "kJ/K", "gas constant"       , false, bsym=(:mR , :ṁR , :R , :R̄ ))
 # Plank function anomalous
-mkBasAmt(:rAmt , :BProperty, :r , "mr", u"kJ/K", "kJ/K", "Planck function"    , false, bsym=(:mr, :ṁr, :r , :r̄))
+mkBasAmt(:rAmt , :BProperty, :r , "mr", u"kJ/K", "kJ/K", "Planck function"    , false, bsym=(:mr , :ṁr , :r , :r̄ ))
+# Pv product anomalous
+mkBasAmt(:PvAmt, :BProperty, :Pv, "PV", u"kJ"  , "kJ"  , "flux work"          , false, bsym=(:PV , :PV̇ , :Pv, :Pv̄))
+# RT product anomalous
+mkBasAmt(:RTAmt, :BProperty, :RT, "RT", u"kJ"  , "kJ"  , "RT product"         , false, bsym=(:mRT, :ṁRT, :RT, :R̄T))
+# Ts product anomalous
+mkBasAmt(:TsAmt, :BProperty, :Ts, "Ts", u"kJ"  , "kJ"  , "Ts product"         , false, bsym=(:TS , :TṠ , :Ts, :Ts̄))
 
 # Regular properties
 mkBasAmt(:vAmt , :BProperty, :v , "V" , u"m^3" , "m³"  , "volume"             , false)
@@ -643,7 +649,8 @@ Energy property type union.
 ENERGYP{𝗽,𝘅,𝗯} = Union{uAmt{𝗽,𝘅,𝗯},hAmt{𝗽,𝘅,𝗯},
                        gAmt{𝗽,𝘅,𝗯},aAmt{𝗽,𝘅,𝗯},
                        eAmt{𝗽,𝘅,𝗯},ekAmt{𝗽,𝘅,𝗯},
-                       epAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+                       epAmt{𝗽,𝘅,𝗯},PvAmt{𝗽,𝘅,𝗯},
+                       RTAmt{𝗽,𝘅,𝗯},TsAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
 `ENERGYI{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
