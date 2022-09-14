@@ -59,6 +59,35 @@ export AMT
 
 
 #----------------------------------------------------------------------------------------------#
+#                                   Known-type Sums and Subs                                   #
+#----------------------------------------------------------------------------------------------#
+
+# u + Pv --> h  with Unitful promotion
++(x::uAmt{𝗽,𝘅,𝗯}, y::PvAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    hAmt(+(amt(x), amt(y)))
+end
++(y::PvAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
+
+# h - Pv --> u  with Unitful promotion
+-(x::hAmt{𝗽,𝘅,𝗯}, y::PvAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    uAmt(-(amt(x), amt(y)))
+end
+-(y::PvAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
+
+# u + RT --> h  with Unitful promotion
++(x::uAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    hAmt(+(amt(x), amt(y)))
+end
++(y::RTAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
+
+# h - RT --> u  with Unitful promotion
+-(x::hAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    uAmt(-(amt(x), amt(y)))
+end
+-(y::RTAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
+
+
+#----------------------------------------------------------------------------------------------#
 #                               Same-Unit (Same-Base) Operations                               #
 #----------------------------------------------------------------------------------------------#
 
@@ -186,25 +215,53 @@ end
     γ(/(promote(map(x -> amt(x), (x, y))...)...))
 end
 
+
 # P * v --> Pv
 *(x::sysP{𝗽,𝘅}, y::vAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    PvAmt(*(amt(x), amt(y)))
+    Pv(*(amt(x), amt(y)))
 end
 *(y::vAmt{𝘀,𝘆,𝗯}, x::sysP{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 
 # R * T --> RT
 *(x::sysT{𝗽,𝘅}, y::RAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    RTAmt(*(amt(x), amt(y)))
+    RT(*(amt(x), amt(y)))
 end
 *(y::RAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
+# RT / T --> R
+/(x::RTAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    R(/(amt(x), amt(y)))
+end
 
 
 # T * s --> Ts
 *(x::sysT{𝗽,𝘅}, y::sAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    TsAmt(*(amt(x), amt(y)))
+    Ts(*(amt(x), amt(y)))
 end
 *(y::sAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
+# Ts / T --> s
+/(x::TsAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    s(/(amt(x), amt(y)))
+end
+
+
+# Pv / RT --> Z
+/(x::PvAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    Z(/(amt(x), amt(y)))
+end
+
+# Pv / Z --> RT
+/(x::PvAmt{𝗽,𝘅,𝗯}, y::ZAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    RT(/(amt(x), amt(y)))
+end
+
+# Z * RT --> Pv
+*(x::ZAmt{𝗽,𝘅}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    Pv(*(amt(x), amt(y)))
+end
+*(y::RTAmt{𝘀,𝘆,𝗯}, x::ZAmt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 
 #----------------------------------------------------------------------------------------------#
