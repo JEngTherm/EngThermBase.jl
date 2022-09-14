@@ -67,24 +67,32 @@ export AMT
     hAmt(+(amt(x), amt(y)))
 end
 +(y::PvAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
+# u + RT --> h  with Unitful promotion
++(x::uAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    hAmt(+(amt(x), amt(y)))
+end
++(y::RTAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
+# u + Δe --> h  with Unitful promotion
++(x::uAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    hAmt(+(amt(x), amt(y)))
+end
++(y::ΔeAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
 
 # h - Pv --> u  with Unitful promotion
 -(x::hAmt{𝗽,𝘅,𝗯}, y::PvAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     uAmt(-(amt(x), amt(y)))
 end
 -(y::PvAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
-
-# u + RT --> h  with Unitful promotion
-+(x::uAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    hAmt(+(amt(x), amt(y)))
-end
-+(y::RTAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
-
 # h - RT --> u  with Unitful promotion
 -(x::hAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     uAmt(-(amt(x), amt(y)))
 end
 -(y::RTAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
+# h - Δe --> u  with Unitful promotion
+-(x::hAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    uAmt(-(amt(x), amt(y)))
+end
+-(y::ΔeAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
 
 
 #----------------------------------------------------------------------------------------------#
