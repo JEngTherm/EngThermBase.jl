@@ -222,18 +222,11 @@ end
 end
 *(y::vAmt{𝘀,𝘆,𝗯}, x::sysP{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
-
 # R * T --> RT
 *(x::sysT{𝗽,𝘅}, y::RAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     RT(*(amt(x), amt(y)))
 end
 *(y::RAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
-
-# RT / T --> R
-/(x::RTAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    R(/(amt(x), amt(y)))
-end
-
 
 # T * s --> Ts
 *(x::sysT{𝗽,𝘅}, y::sAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
@@ -241,11 +234,16 @@ end
 end
 *(y::sAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
+
+# RT / T --> R
+/(x::RTAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    R(/(amt(x), amt(y)))
+end
+
 # Ts / T --> s
 /(x::TsAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     s(/(amt(x), amt(y)))
 end
-
 
 # Pv / RT --> Z
 /(x::PvAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
