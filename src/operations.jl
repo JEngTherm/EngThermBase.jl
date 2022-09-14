@@ -186,6 +186,26 @@ end
     γ(/(promote(map(x -> amt(x), (x, y))...)...))
 end
 
+# P * v --> Pv
+*(x::sysP{𝗽,𝘅}, y::vAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    PvAmt(*(amt(x), amt(y)))
+end
+*(y::vAmt{𝘀,𝘆,𝗯}, x::sysP{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
+
+# R * T --> RT
+*(x::sysT{𝗽,𝘅}, y::RAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    RTAmt(*(amt(x), amt(y)))
+end
+*(y::RAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
+
+# T * s --> Ts
+*(x::sysT{𝗽,𝘅}, y::sAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    TsAmt(*(amt(x), amt(y)))
+end
+*(y::sAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
 
 #----------------------------------------------------------------------------------------------#
 #                          Generic (fallback) Products and Divisions                           #
