@@ -114,6 +114,17 @@ end
 end
 +(y::ΔeAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
 
+# u - Ts --> a  with Unitful promotion
+-(x::uAmt{𝗽,𝘅,𝗯}, y::TsAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    a(-(amt(x), amt(y)))
+end
+-(y::TsAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
+# u - Δe --> a  with Unitful promotion
+-(x::uAmt{𝗽,𝘅,𝗯}, y::ΔeAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    a(-(amt(x), amt(y)))
+end
+-(y::ΔeAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
+
 
 #----------------------------------------------------------------------------------------------#
 #                               Same-Unit (Same-Base) Operations                               #
