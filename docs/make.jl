@@ -3,7 +3,9 @@ using EngThermBase
 
 makedocs(
     sitename = "EngThermBase",
-    format = Documenter.HTML(),
+    format = Documenter.HTML(
+        prettyurls = get(ENV, "CI", nothing) == true
+    ),
     modules = [EngThermBase]
 )
 
