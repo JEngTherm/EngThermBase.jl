@@ -268,6 +268,17 @@ end
 *(y::nAmt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 
+# MA-based / MA-based mole => MO-based; with Unitful promotion
+/(x::BasedAmt{𝗽,𝘅,MA}, y::nAmt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+end
+
+# MO-based / MO-based mass => MA-based; with Unitful promotion
+/(x::BasedAmt{𝗽,𝘅,MO}, y::mAmt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
+    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+end
+
+
 # Ma from velocity ratios (as this is just labeling dimensionless velocity ratios)
 /(x::VELOCYP{𝗽,𝘅}, y::VELOCYP{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
     Ma(/(promote(map(x -> amt(x), (x, y))...)...))
