@@ -128,9 +128,11 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         # Function interface
         function $FNAM end
         @doc $fnStr $FNAM
-        # Indirect construction from non-float plain
+        # Indirect construction from plain
+        $FNAM(x::plnF) = $TYPE(x)
         $FNAM(x::REAL) = $TYPE(float(x))
-        # Indirect construction from non-float quantity
+        # Indirect construction from quantity
+        $FNAM(x::UATY{𝗽}) where 𝗽<:PREC = $TYPE(x)
         $FNAM(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
         # Indirect construction from another AMOUNTS
         $FNAM(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
@@ -696,6 +698,15 @@ NTROPYA{𝗽,𝘅,𝗯} = Union{NTROPYP{𝗽,𝘅,𝗯},NTROPYI{𝗽,𝘅,𝗯}}
 Velocity property type union.
 """
 VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},𝕔Amt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
+
+
+# --- dimensionless
+"""
+`DIMLESS{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
+Dimensionless amount type union.
+"""
+DIMLESS{𝗽,𝘅} = Union{ZAmt{𝗽,𝘅},γAmt{𝗽,𝘅},kAmt{𝗽,𝘅},
+                     MaAmt{𝗽,𝘅},PrAmt{𝗽,𝘅},vrAmt{𝗽,𝘅},} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 #----------------------------------------------------------------------------------------------#
