@@ -341,6 +341,9 @@ mkWhlAmt(:xAmt , :WProperty, :x   , "x"  , ULESS()    , "–"       , "saturated
 mkWhlAmt(:PrAmt, :WProperty, :Pr  , "Pr" , ULESS()    , "–"       , "relative pressure"                 , false)
 mkWhlAmt(:vrAmt, :WProperty, :vr  , "vr" , ULESS()    , "–"       , "relative specific volume"          , false)
 
+# Generic dimensionless ratio
+mkWhlAmt(:øAmt , :WProperty, :ø   , "ø"  , ULESS()    , "–"       , "generic dimensionless ratio"       , false)
+
 
 #----------------------------------------------------------------------------------------------#
 #                                  Based Amount Type Factory                                   #
@@ -705,8 +708,8 @@ VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},𝕔Amt{𝗽,𝘅}} w
 `DIMLESS{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
 Dimensionless amount type union.
 """
-DIMLESS{𝗽,𝘅} = Union{ZAmt{𝗽,𝘅},γAmt{𝗽,𝘅},kAmt{𝗽,𝘅},
-                     MaAmt{𝗽,𝘅},PrAmt{𝗽,𝘅},vrAmt{𝗽,𝘅},} where {𝗽<:PREC,𝘅<:EXAC}
+DIMLESS{𝗽,𝘅} = Union{øAmt{𝗽,𝘅},ZAmt{𝗽,𝘅},γAmt{𝗽,𝘅},kAmt{𝗽,𝘅},
+                     MaAmt{𝗽,𝘅},PrAmt{𝗽,𝘅},vrAmt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 #----------------------------------------------------------------------------------------------#

@@ -11,7 +11,7 @@ argument. This function is extensively used in operations that result in a unit 
 function AMT(x::Number)
     X, D = float(real(x)), dimension(x)
     # --- GenerAmt default
-    if      D == dimension(1);              _Amt(X)     # gen.fallback (Z, γ, k, Ma, Pr, vr)
+    if      D == dimension(1);              øAmt(X)     # gen.fallback (Z, γ, k, Ma, Pr, vr, _a)
     # --- WholeAmt
     elseif  D == dimension(u"K");           sysT(X)
     elseif  D == dimension(u"kPa");         sysP(X)
@@ -374,7 +374,7 @@ cbrt(x::AMOUNTS) = AMT(cbrt(amt(x)))
 import Base: log, log2, log10, exp
 
 for FUN in (:log, :log2, :log10, :exp)
-    @eval $FUN(x::DIMLESS{𝗽,𝘅}) where {𝗽,𝘅} = _a($FUN(amt(x).val))
+    @eval $FUN(x::DIMLESS{𝗽,𝘅}) where {𝗽,𝘅} = ø($FUN(amt(x).val))
 end
 
 
