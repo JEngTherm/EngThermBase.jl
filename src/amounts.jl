@@ -336,6 +336,8 @@ mkWhlAmt(:MaAmt, :WProperty, :Ma  , "Ma" , ULESS()    , "–"       , "Mach numb
 mkWhlAmt(:μJAmt, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
 mkWhlAmt(:μSAmt, :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
 mkWhlAmt(:xAmt , :WProperty, :x   , "x"  , ULESS()    , "–"       , "saturated vapor mass fraction"     , false)
+mkWhlAmt(:PrAmt, :WProperty, :Pr  , "Pr" , ULESS()    , "–"       , "relative pressure"                 , false)
+mkWhlAmt(:vrAmt, :WProperty, :vr  , "vr" , ULESS()    , "–"       , "relative specific volume"          , false)
 
 
 #----------------------------------------------------------------------------------------------#

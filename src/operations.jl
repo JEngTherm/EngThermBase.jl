@@ -11,7 +11,7 @@ argument. This function is extensively used in operations that result in a unit 
 function AMT(x::Number)
     X, D = float(real(x)), dimension(x)
     # --- GenerAmt default
-    if      D == dimension(1);              _Amt(X)     # gen.fallback (Z, γ, k, Ma)
+    if      D == dimension(1);              _Amt(X)     # gen.fallback (Z, γ, k, Ma, Pr, vr)
     # --- WholeAmt
     elseif  D == dimension(u"K");           sysT(X)
     elseif  D == dimension(u"kPa");         sysP(X)
