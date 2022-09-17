@@ -38,10 +38,7 @@ uAmt{Float64, MM, MA}(500.00 ± 50. kJ/kg)
 julia> T1 = T()                # T() returns the standard temperature
 sysT{Float64, EX}(298.15 K)
 
-julia> a1 = u1 - T1 * s1       # An equation for a Helmholtz function, showing type promotions
-ΔeAmt{Float64, MM, MA}(-758.19 ± 50. kJ/kg)
-
-julia> a1 = a(a1)              # Re-tagging a generic energy amount (ΔeAmt) into a Helmholtz function
+julia> a1 = u1 - T1 * s1       # Helmholtz function definition: type promotions & auto labeling
 aAmt{Float64, MM, MA}(-758.19 ± 50. kJ/kg)
 
 julia> DEF[:pprint] = true;    # Now turning on the pretty-printing
@@ -71,11 +68,11 @@ thermodynamic constants that are not associated with any particular substance:
 ```julia
 julia> using EngThermBase
 
-julia> NA()								# Avogadro's number (generic amounts pretty-print "?")
-?₆₄: 6.0221e+23 mol^-1
+julia> NA()								# Avogadro's number (generic amounts pretty-print "_")
+_₆₄: 6.0221e+23 mol^-1
 
 julia> NA(MM)							# ... with uncertainty
-?₆₄: (6.0221e+23 ± 1.0e+17 mol^-1)
+_₆₄: (6.0221e+23 ± 1.0e+17 mol^-1)
 
 julia> mu(MM)							# The atomic mass constant, with uncertainty
 m₆₄: (1.6605e-27 ± 2.8e-34 kg)
@@ -84,13 +81,13 @@ julia> R(Float32, MM)					# The universal gas constant, with uncertainty
 R̄₃₂: (8.3145 ± 1.5e-05 kJ/K/kmol)
 
 julia> kB()								# Boltzmann's constant
-?₆₄: 1.3807e-23 J K^-1
+_₆₄: 1.3807e-23 J K^-1
 
 julia> s(kB(MM))						# Re-tagged kB with uncertainty
 S₆₄: (1.3807e-26 ± 2.4e-32 kJ/K)
 
 julia> T(), P(), grav()					# Standard T, P, and g
-(T₆₄: 298.15 K, P₆₄: 101.35 kPa, 𝗀₆₄: 9.8066 m/s²)
+(T₆₄: 298.15 K, P₆₄: 101.35 kPa, 𝒈₆₄: 9.8066 m/s²)
 ```
 
 ## Thermodynamic Concepts (Abstract Types)
@@ -177,8 +174,12 @@ BasedAmt
  │   ├─ ΔeAmt{𝗽, 𝘅, 𝗯} where ...
  │   └─ ΔsAmt{𝗽, 𝘅, 𝗯} where ...
  ├─ BProperty{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ PvAmt{𝗽, 𝘅, 𝗯} where ...
  │   ├─ RAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ RTAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ TsAmt{𝗽, 𝘅, 𝗯} where ...
  │   ├─ aAmt{𝗽, 𝘅, 𝗯} where ...
+ │   ├─ cAmt{𝗽, 𝘅, 𝗯} where ...
  │   ├─ cpAmt{𝗽, 𝘅, 𝗯} where ...
  │   ├─ cvAmt{𝗽, 𝘅, 𝗯} where ...
  │   ├─ eAmt{𝗽, 𝘅, 𝗯} where ...
@@ -251,83 +252,6 @@ MODELS
  └─ System{𝗽, 𝘅} where ...
      ├─ Closed{𝗽, 𝘅} where ...
      └─ Open{𝗽, 𝘅} where ...
-```
-
-# Examples
-
-## Amount instantiation, display, and basic operations:
-
-```julia
-julia> using EngThermBase
-
-julia> heat, work_rate, period = q(1250u"J"), w(-0.65u"kW"), TIME(2u"minute")
-(Q₆₄: 1.2500 kJ, Ẇ₆₄: -0.65000 kJ/s, 𝗍₆₄: 120.00 s)
-
-julia> work = work_rate * period
-W₆₄: -78.000 kJ
-
-julia> DEF[:pprint] = false # Disables pretty-printing of quantities
-false
-
-julia> heat, work
-(qAmt{Float64, EX, SY}(1.2500 kJ), wAmt{Float64, EX, SY}(-78.000 kJ))
-
-julia> heat + work
-ΔeAmt{Float64, EX, SY}(-76.750 kJ)
-```
-
-This example shows that:
-
-1. Thermodynamic quantities are stored and displayed with standard engineering units;
-2. Certain usual known-type operations are implemented, such as `work_rate * period` yielding a
-   `work` amount (correctly labeled as such);
-3. Package behavior can be changed, such as whether or not to "pretty-print" quantities;
-4. Same-unit quantities can be added (such as `heat + work`, as in an energy balance), resulting
-   in a correctly labeled energy variation quantity.
-
-## Amount inference:
-
-```julia
-julia> [ i isa Interact for i in (heat, work, work_rate, period) ]
-4-element Vector{Bool}:
- 1
- 1
- 1
- 0      # Whether these are interactions
-
-julia> [ i isa Property for i in (heat, work, work_rate, period) ]
-4-element Vector{Bool}:
- 0
- 0
- 0
- 0      # Whether these are properties (state functions)
-
-julia> [ i isa EngThermBase.ENERGYI for i in (heat, work, work_rate, period) ]
-4-element Vector{Bool}:
- 1
- 1
- 1
- 0      # Whether these are energy interactions
-
-julia> [ i isa EngThermBase.ENERGYP for i in (heat, work, work_rate, period) ]
-4-element Vector{Bool}:
- 0
- 0
- 0
- 0      # Whether these are energy properties (state functions)
-
-```
-
-Moreover:
-
-```julia
-julia> [ i isa BInteract{Float64, EX, DT} for i in (heat, work, work_rate, period) ]
-4-element Vector{Bool}:
- 0
- 0
- 1
- 0      # Whether these are `BInteract{Float64, EX, DT}`
-
 ```
 
 ## Author
