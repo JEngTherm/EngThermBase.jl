@@ -323,7 +323,7 @@ mkWhlAmt(:SPEE, :WProperty, :spee, "𝕧", u"m/s"     , "m/s"     , "speed"     
 
 # Regular unranked -- \sans#<TAB> function names
 mkWhlAmt(:TIME, :WUnranked, :t   , "𝗍", u"s"       , "s"       , "time"       , false)
-mkWhlAmt(:GRAV, :WUnranked, :grav, "𝗀", u"m/s^2"   , "m/s²"    , "gravity"    , false)
+mkWhlAmt(:GRAV, :WUnranked, :grav, "𝒈", u"m/s^2"   , "m/s²"    , "gravity"    , false)
 mkWhlAmt(:zAmt, :WUnranked, :z   , "𝗓", u"m"       , "m"       , "altitude"   , false)
 
 # Derived thermodynamic properties
