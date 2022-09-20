@@ -234,15 +234,18 @@ mk2ParAbs(    :PropTrio    , :STATES       , "propery trios"                    
 mk2ParAbs(    :PropQuad    , :STATES       , "propery quads"                               , 2)
 
 # MODEL branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :MODELS        , :AbstractTherm, "thermodynamic models"                        , 0)
-mk2ParAbs(    :Heat        , :MODELS       , "specific heat models"                        , 2)
-mk2ParAbs(      :ConstHeat , :Heat         , "constant specific heat models"               , 2)
-mk2ParAbs(      :UnvarHeat , :Heat         , "univariate specific heat models"             , 2)
-mk2ParAbs(      :BivarHeat , :Heat         , "bivariate specific heat models"              , 2)
-mk2ParAbs(    :Medium      , :MODELS       , "substance/medium models"                     , 2)
-mk2ParAbs(      :Substance , :Medium       , "substance model by Equation of State"        , 2)
-mk2ParAbs(    :System      , :MODELS       , "system models"                               , 2)
-mk2ParAbs(      :Closed    , :System       , "closed systems"                              , 2)
-mk2ParAbs(      :Open      , :System       , "open systems"                                , 2)
+mk2ParAbs(  :MODELS          , :AbstractTherm, "thermodynamic models"                      , 0)
+mk2ParAbs(    :Heat          , :MODELS       , "specific heat models"                      , 2)
+mk2ParAbs(      :ConstHeat   , :Heat         , "constant specific heat models"             , 2)
+mk2ParAbs(      :UnvarHeat   , :Heat         , "univariate specific heat models"           , 2)
+mk2ParAbs(      :BivarHeat   , :Heat         , "bivariate specific heat models"            , 2)
+mk2ParAbs(    :Medium        , :MODELS       , "substance/medium models"                   , 2)
+mk2ParAbs(      :Substance   , :Medium       , "substance model by Equation of State"      , 2)
+mk2ParAbs(    :System        , :MODELS       , "system models"                             , 2)
+mk2ParAbs(      :Scope       , :System       , "defined amounts of substance"              , 2)
+mk2ParAbs(        :PureSubs  , :Scope        , "a defined amount of a pure substance"      , 2)
+mk2ParAbs(        :Mixtures  , :Scope        , "a substance mixture"                       , 2)
+mk2ParAbs(          :Unreact , :Mixtures     , "an unreactive mixture"                     , 2)
+mk2ParAbs(          :Reactiv , :Mixtures     , "a reactive mixture"                        , 2)
 
 
