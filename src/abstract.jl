@@ -87,6 +87,8 @@ Concrete BASE type union for parametric abstract types.
 """
 const BASE = Union{MA,MO,SY,DT}
 
+export PREC, EXAC, BASE
+
 
 #----------------------------------------------------------------------------------------------#
 #                   {PREC[,EXAC[,BASE]]} Parametric Abstract Type Factories                    #
