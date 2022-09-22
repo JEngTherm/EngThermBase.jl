@@ -71,22 +71,12 @@ export AMT
     h(+(amt(x), amt(y)))
 end
 +(y::PvAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
-# u + RT --> h  with Unitful promotion
-+(x::uAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    h(+(amt(x), amt(y)))
-end
-+(y::RTAmt{𝘀,𝘆,𝗯}, x::uAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
 
 # h - Pv --> u  with Unitful promotion
 -(x::hAmt{𝗽,𝘅,𝗯}, y::PvAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     u(-(amt(x), amt(y)))
 end
 -(y::PvAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
-# h - RT --> u  with Unitful promotion
--(x::hAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    u(-(amt(x), amt(y)))
-end
--(y::RTAmt{𝘀,𝘆,𝗯}, x::hAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
 
 
 #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
@@ -132,22 +122,12 @@ end
     g(+(amt(x), amt(y)))
 end
 +(y::PvAmt{𝘀,𝘆,𝗯}, x::aAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
-# a + RT --> g  with Unitful promotion
-+(x::aAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    g(+(amt(x), amt(y)))
-end
-+(y::RTAmt{𝘀,𝘆,𝗯}, x::aAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x + y        # as to fallback
 
 # g - Pv --> a  with Unitful promotion
 -(x::gAmt{𝗽,𝘅,𝗯}, y::PvAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     a(-(amt(x), amt(y)))
 end
 -(y::PvAmt{𝘀,𝘆,𝗯}, x::gAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
-# g - RT --> a  with Unitful promotion
--(x::gAmt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    a(-(amt(x), amt(y)))
-end
--(y::RTAmt{𝘀,𝘆,𝗯}, x::gAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = -(x - y)     # as to fallback
 
 
 #----------------------------------------------------------------------------------------------#
