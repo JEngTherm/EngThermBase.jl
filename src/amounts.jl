@@ -611,8 +611,6 @@ mkBasAmt(:mAmt , :BProperty, :m , "m" , u"kg"  , "kg"  , "mass"               , 
 mkBasAmt(:nAmt , :BProperty, :N , "N" , u"kmol", "kmol", "chemical amount"    , false, bsym=(:N  , :Ṅ  , :n , :y ))
 # Gas constant / System constant anomalous
 mkBasAmt(:RAmt , :BProperty, :R , "mR", u"kJ/K", "kJ/K", "gas constant"       , false, bsym=(:mR , :ṁR , :R , :R̄ ))
-# Plank function anomalous
-mkBasAmt(:rAmt , :BProperty, :r , "mr", u"kJ/K", "kJ/K", "Planck function"    , false, bsym=(:mr , :ṁr , :r , :r̄ ))
 # Pv product anomalous
 mkBasAmt(:PvAmt, :BProperty, :Pv, "PV", u"kJ"  , "kJ"  , "flux work"          , false, bsym=(:PV , :PV̇ , :Pv, :Pv̄))
 # RT product anomalous
@@ -634,6 +632,7 @@ mkBasAmt(:cpAmt, :BProperty, :cp, "Cp", u"kJ/K", "kJ/K", "iso-P specific heat", 
 mkBasAmt(:cvAmt, :BProperty, :cv, "Cv", u"kJ/K", "kJ/K", "iso-v specific heat", false)
 mkBasAmt(:cAmt , :BProperty, :c , "C" , u"kJ/K", "kJ/K", "incompressible substance specific heat", false)
 mkBasAmt(:jAmt , :BProperty, :j , "J" , u"kJ/K", "kJ/K", "Massieu function"   , false)
+mkBasAmt(:yAmt , :BProperty, :y , "Y" , u"kJ/K", "kJ/K", "Planck function"    , false)
 
 # Regular interactions
 mkBasAmt(:qAmt , :BInteract, :q , "Q" , u"kJ"  , "kJ"  , "heat"               , false)
