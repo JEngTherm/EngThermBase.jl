@@ -17,12 +17,12 @@ function AMT(x::Number)
     elseif  D == dimension(u"kPa");         sysP(X)
     elseif  D == dimension(u"m/s");         VELO(X)     # 𝕍   fallback (𝕧, 𝕔)
     elseif  D == dimension(u"s");           TIME(X)
-    elseif  D == dimension(u"m/s^2");       grav(X)
-    elseif  D == dimension(u"m");           alti(X)
+    elseif  D == dimension(u"m/s^2");       GRAV(X)
+    elseif  D == dimension(u"m");           zAmt(X)
     # --- WholeAmt - Derived
-    elseif  D == dimension(inv(u"K"));      beta(X)
-    elseif  D == dimension(inv(u"kPa"));    kapT(X)     # κT  fallback (κS)
-    elseif  D == dimension(u"K/kPa");       muJT(X)     # μJT fallback (μS)
+    elseif  D == dimension(inv(u"K"));      βAmt(X)
+    elseif  D == dimension(inv(u"kPa"));    κTAmt(X)    # κT  fallback (κS)
+    elseif  D == dimension(u"K/kPa");       μJAmt(X)    # μJT fallback (μS)
     # --- BasedAmt
     elseif  D == dimension(u"kg");          mAmt(X)
     elseif  D == dimension(u"kg/s");        mAmt(X)
@@ -376,6 +376,27 @@ end
     Pv(*(amt(x), amt(y)))
 end
 *(y::RTAmt{𝘀,𝘆,𝗯}, x::ZAmt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
+
+    #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
+    #                       Massieu's j variants                       #
+    #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
+
+# j * T --> -a
+*(x::sysT{𝗽,𝘅}, y::jAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -a(*(amt(x), amt(y)))
+end
+*(y::jAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+
+# a / T --> -j
+/(x::aAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -j(/(amt(x), amt(y)))
+end
+
+# a / j --> -T
+/(x::aAmt{𝘀,𝘆,𝗯}, y::jAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -T(/(amt(x), amt(y)))
+end
 
 
 #----------------------------------------------------------------------------------------------#
