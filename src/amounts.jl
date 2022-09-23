@@ -677,7 +677,7 @@ ENERGYA{𝗽,𝘅,𝗯} = Union{ENERGYP{𝗽,𝘅,𝗯},ENERGYI{𝗽,𝘅,𝗯}}
 `NTROPYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Entropy property type union.
 """
-NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},rAmt{𝗽,𝘅,𝗯},sAmt{𝗽,𝘅,𝗯},
+NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},yAmt{𝗽,𝘅,𝗯},sAmt{𝗽,𝘅,𝗯},
                        jAmt{𝗽,𝘅,𝗯},cAmt{𝗽,𝘅,𝗯},
                        cpAmt{𝗽,𝘅,𝗯},cvAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
