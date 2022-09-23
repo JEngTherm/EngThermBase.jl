@@ -410,8 +410,8 @@ end
 *(y::yAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 # g / T --> -y
-/(x::gAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -y(/(amt(x), amt(y)))
+/(x::gAmt{𝘀,𝘆,𝗯}, z::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -y(/(amt(x), amt(z)))
 end
 
 # g / y --> -T
