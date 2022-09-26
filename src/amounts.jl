@@ -776,3 +776,52 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
 end
 
 
+#      TYPE  FUNC    SY         L5TYP  FINT    SY
+#     ------------------        ------------------
+#      _Amt    _a     _         __amt    _a     _
+#      sysT     T     T         T_amt    T_     T
+#      sysP     P     P         P_amt    P_     P
+#      VELO  velo     𝕍         veamt    ve     𝕍
+#      SPEE  spee     𝕧         spamt    sp     𝕧
+#      TIME     t     t         t_amt    t_     t
+#      GRAV  grav     𝒈         gvamt    gv     𝒈
+#      zAmt     z     z         z_amt    z_     z
+#      ZAmt     Z     Z         Z_amt    Z_     Z
+#      γAmt     γ     γ         gaamt    ga     γ
+#      βAmt     β     β         beamt    be     β
+#     κTAmt    κT    κT         kTamt    kT    κT
+#     κsAmt    κs    κs         ksamt    ks    κs
+#      kAmt     k     k         k_amt    k_     k
+#      𝕔Amt     𝕔     𝕔         csamt    cs    cs
+#     MaAmt    Ma    Ma         Maamt    Ma    Ma
+#     μJAmt   μJT   μJT         mJamt    mJ    μJ
+#     μSAmt    μS    μS         mSamt    mS    μS
+#      xAmt     x     x         x_amt    x_     x
+#     PrAmt    Pr    Pr         Pramt    Pr    Pr
+#     vrAmt    vr    vr         vramt    vr    vr
+#      øAmt     ø     ø         ø_amt    ø_     ø
+#      mAmt     m    **         m_amt    m_    **
+#      nAmt     N    **         N_amt    N_    **
+#      RAmt     R    **         R_amt    R_    **
+#     PvAmt    Pv    **         Pvamt    Pv    **
+#     RTAmt    RT    **         RTamt    RT    **
+#     TsAmt    Ts    **         Tsamt    Ts    **
+#      vAmt     v     v         v_amt    v_     v
+#      uAmt     u     u         u_amt    u_     u
+#      hAmt     h     h         h_amt    h_     h
+#      gAmt     g     g         g_amt    g_     g
+#      aAmt     a     a         a_amt    a_     a
+#      eAmt     e     e         e_amt    e_     e
+#     ekAmt    ek    ek         ekamt    ek    ek
+#     epAmt    ep    ep         epamt    ep    ep
+#      sAmt     s     s         s_amt    s_     s
+#     cpAmt    cp    cp         cpamt    cp    cp
+#     cvAmt    cv    cv         cvamt    cv    cv
+#      cAmt     c     c         c_amt    c_     c
+#      jAmt     j     j         j_amt    j_     j
+#      yAmt     y     y         y_amt    y_     y
+#      qAmt     q     q         q_amt    q_     q
+#      wAmt     w     w         w_amt    w_     w
+#     ΔeAmt    Δe    Δe         deamt    de    Δe
+#     ΔsAmt    Δs    Δs         dsamt    ds    Δs
+
