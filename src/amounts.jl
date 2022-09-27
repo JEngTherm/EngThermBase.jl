@@ -15,20 +15,20 @@ Interface to pretty-print units.
 function ppu end
 
 # An original 191113-212130 benchmark showed amt(x) is      faster than x.amt:
-# An  updated 220926-234852 benchmark showed amt(x) is stil faster than x.amt:
+# An  updated 220927-010045 benchmark showed amt(x) is stil faster than x.amt:
 #
 # ```julia-repl
 # julia> u1 = u_(1.0f0 ± 0.1f0, MO)
-# ū₃₂: (1 ± 0.1) kJ/kmol
+# ū₃₂: (1.0000 ± 0.10 kJ/kmol)
 #
 # julia> typeof(u1)
-# uAmt{Float32,MM,MO}
+# u_amt{Float32, MM, MO}
 #
 # julia> @benchmark u1.amt
-# ✂ ✂ ✂   median time:      26.918 ns (0.00% GC)   ✂ ✂ ✂
+# ✂ ✂ ✂   median time:      29.054 ns   ✂ ✂ ✂
 #
 # julia> @benchmark amt(u1)
-# ✂ ✂ ✂   median time:      16.710 ns (0.00% GC)   ✂ ✂ ✂
+# ✂ ✂ ✂   median time:      16.784 ns   ✂ ✂ ✂
 #
 # ```
 
