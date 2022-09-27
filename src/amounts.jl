@@ -134,7 +134,7 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         function $FNAM end
         @doc $fnStr $FNAM
         # Indirect construction from Numb
-        $FNAM(x::Numb) = $TYPE(x)
+        $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
         # Function export
         export $FNAM
         # Unexported Alias
@@ -275,7 +275,7 @@ Constructors determine all parameters from their arguments.\n
         function $FNAM end
         @doc $fnStr $FNAM
         # Indirect construction from Numb
-        $FNAM(x::Numb) = $TYPE(x)
+        $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
         # Function export
         export $FNAM
         # Unexported Alias
@@ -354,9 +354,10 @@ mkWhlAmt(:ø_Amt, :WProperty, :ø_, :ø , "ø" , ULESS()    , "–"       , "gen
 """
 Based Amount type factory.
 """
-function mkBasAmt(TYPE::Symbol,         # Type Name:            :uAmt
+function mkBasAmt(TYPE::Symbol,         # Type Name:            :u_Amt
                   SUPT::Symbol,         # Supertype:            :BProperty
-                  FNAM::Symbol,         # Function Name:        :u
+                  FNAM::Symbol,         # Function Name:        :u_             (exported)
+                  ALIA::Symbol,         # Function Alias:       :𝘂          (NOT exported)
                   SYMB::AbstractString, # Printing symbol:      "U"
                   UNIT::Unitful.Units,  # SY quantity units:    u"kJ"
                   USTR::AbstractString, # PrettyPrinting units: "K"
@@ -500,6 +501,14 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         end
         # Type documentation
         @doc $dcStr $TYPE
+        # External constructors for other DataTypes:
+        $TYPE(x::plnF) = $TYPE(x, DEF[:IB])
+        $TYPE(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        $TYPE(x::Union{uniR{𝗽,$𝑑SY},uniR{𝗽,$𝑑DT},
+                       uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
+            $TYPE(float(x.val) * unit(x))
+        end
+        $TYPE(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
         # Precision-changing external constructors
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(𝘀(amt(x).val), 𝗯)
@@ -545,24 +554,12 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         # Function interface
         function $FNAM end
         @doc $fnStr $FNAM
-        # Indirect construction from plain
-        $FNAM(x::plnF, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(x, b)
-        $FNAM(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
-        # Indirect construction from type
-        $FNAM(x::$TYPE{𝗽,𝘅,𝗯} where {𝗽,𝘅,𝗯}) = x
-        # Indirect construction from quantity
-        $FNAM(x::Union{UATY{𝗽,$𝑑SY},UATY{𝗽,$𝑑DT},
-                       UATY{𝗽,$𝑑MA},UATY{𝗽,$𝑑MO}}) where 𝗽<:PREC = begin
-            $TYPE(x)
-        end
-        $FNAM(x::Union{uniR{𝗽,$𝑑SY},uniR{𝗽,$𝑑DT},
-                       uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
-            $TYPE(float(x.val) * unit(x))
-        end
-        # Indirect construction from another AMOUNTS
-        $FNAM(x::AMOUNTS) = $FNAM(amt(x)) # AMOUNTS fallback
+        # Indirect construction from Numb
+        $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
         # Function export
         export $FNAM
+        # Unexported Alias
+        $ALIA = $FNAM
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
         convert(::Type{$TYPE{𝘀,𝘅,𝗯}},
@@ -607,17 +604,12 @@ end
 #                           Thermodynamic Amount Group Declarations                            #
 #----------------------------------------------------------------------------------------------#
 
-# Mass / Mass fraction anomalous
+# Anomalous primitives and products
 mkBasAmt(:mAmt , :BProperty, :m , "m" , u"kg"  , "kg"  , "mass"               , false, bsym=(:m  , :ṁ  , :mf, :M ))
-# Chemical amount / Molar fraction anomalous
 mkBasAmt(:nAmt , :BProperty, :N , "N" , u"kmol", "kmol", "chemical amount"    , false, bsym=(:N  , :Ṅ  , :n , :y ))
-# Gas constant / System constant anomalous
 mkBasAmt(:RAmt , :BProperty, :R , "mR", u"kJ/K", "kJ/K", "gas constant"       , false, bsym=(:mR , :ṁR , :R , :R̄ ))
-# Pv product anomalous
 mkBasAmt(:PvAmt, :BProperty, :Pv, "PV", u"kJ"  , "kJ"  , "flux work"          , false, bsym=(:PV , :PV̇ , :Pv, :Pv̄))
-# RT product anomalous
 mkBasAmt(:RTAmt, :BProperty, :RT, "RT", u"kJ"  , "kJ"  , "RT product"         , false, bsym=(:mRT, :ṁRT, :RT, :R̄T))
-# Ts product anomalous
 mkBasAmt(:TsAmt, :BProperty, :Ts, "Ts", u"kJ"  , "kJ"  , "Ts product"         , false, bsym=(:TS , :TṠ , :Ts, :Ts̄))
 
 # Regular properties
