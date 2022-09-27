@@ -27,9 +27,9 @@ function AMT(x::Number)
     elseif  D == dimension(u"kg");          m_amt(X)
     elseif  D == dimension(u"kg/s");        m_amt(X)
     elseif  D == dimension(u"kg/kmol");     m_amt(X)
-    elseif  D == dimension(u"kmol");        n_amt(X)
-    elseif  D == dimension(u"kmol/s");      n_amt(X)
-    elseif  D == dimension(u"kmol/kg");     n_amt(X)
+    elseif  D == dimension(u"kmol");        N_amt(X)
+    elseif  D == dimension(u"kmol/s");      N_amt(X)
+    elseif  D == dimension(u"kmol/kg");     N_amt(X)
     elseif  D == dimension(u"m^3");         v_amt(X)
     elseif  D == dimension(u"m^3/s");       v_amt(X)
     elseif  D == dimension(u"m^3/kg");      v_amt(X)
@@ -226,35 +226,35 @@ end
 *(y::m_amt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * mole => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MO}, y::n_amt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MO}, y::N_amt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::n_amt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::N_amt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * mole-DT => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MO}, y::n_amt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MO}, y::N_amt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::n_amt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::N_amt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # DT-based * TIME => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,DT}, y::TIME{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,DT}, y::t_amt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::TIME{𝘀,𝘆}, x::BasedAmt{𝗽,𝘅,DT}) where {𝗽,𝘀,𝘅,𝘆} = x * y        # as to fallback
+*(y::t_amt{𝘀,𝘆}, x::BasedAmt{𝗽,𝘅,DT}) where {𝗽,𝘀,𝘅,𝘆} = x * y        # as to fallback
 
 
 # SY-based / mass => MA-based; with Unitful promotion
 # SY-based / mole => MO-based; with Unitful promotion
 # SY-based / TIME => DT-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{m_amt{𝘀,𝘆,SY},n_amt{𝘀,𝘆,SY},TIME{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{m_amt{𝘀,𝘆,SY},N_amt{𝘀,𝘆,SY},t_amt{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
 
 # DT-based / mass-DT => MA-based; with Unitful promotion
 # DT-based / mole-DT => MO-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,DT}, y::Union{m_amt{𝘀,𝘆,DT},n_amt{𝘀,𝘆,DT}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,DT}, y::Union{m_amt{𝘀,𝘆,DT},N_amt{𝘀,𝘆,DT}}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
@@ -266,14 +266,14 @@ end
 *(y::m_amt{𝘀,𝘆,MO}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * MA-based mole => MA-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MO}, y::n_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MO}, y::N_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::n_amt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::N_amt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 
 # MA-based / MA-based mole => MO-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,MA}, y::n_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,MA}, y::N_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
@@ -367,15 +367,15 @@ end
 end
 
 # Pv / Z --> RT
-/(x::Pvamt{𝗽,𝘅,𝗯}, y::ZAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+/(x::Pvamt{𝗽,𝘅,𝗯}, y::Z_amt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     𝗥𝗧(/(amt(x), amt(y)))
 end
 
 # Z * RT --> Pv
-*(x::ZAmt{𝗽,𝘅}, y::RTamt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+*(x::Z_amt{𝗽,𝘅}, y::RTamt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
     𝗣𝘃(*(amt(x), amt(y)))
 end
-*(y::RTamt{𝘀,𝘆,𝗯}, x::ZAmt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::RTamt{𝘀,𝘆,𝗯}, x::Z_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
