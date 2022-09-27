@@ -14,10 +14,11 @@ Interface to pretty-print units.
 """
 function ppu end
 
-# A 191113-212130 benchmark showed amt(x) is faster than x.amt:
+# An original 191113-212130 benchmark showed amt(x) is      faster than x.amt:
+# An  updated 220926-234852 benchmark showed amt(x) is stil faster than x.amt:
 #
 # ```julia-repl
-# julia> u1 = u(1.0f0 ± 0.1f0, MO)
+# julia> u1 = u_(1.0f0 ± 0.1f0, MO)
 # ū₃₂: (1 ± 0.1) kJ/kmol
 #
 # julia> typeof(u1)
@@ -556,6 +557,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         @doc $fnStr $FNAM
         # Indirect construction from Numb
         $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
+        $FNAM(x::Numb, ::Type{𝗯}) where 𝗯<:BASE = $TYPE(x, 𝗯)
         # Function export
         export $FNAM
         # Unexported Alias
