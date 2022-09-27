@@ -51,6 +51,9 @@ plnF{𝗽} = Union{𝗽, Measurement{𝗽}} where 𝗽<:PREC
 # Unit-ed reals
 uniR{𝘁,𝗱,𝘂} = Union{Quantity{𝘁,𝗱,𝘂}, Quantity{Measurement{𝘁},𝗱,𝘂}} where {𝘁<:REAL,𝗱,𝘂}
 
+# Numb: a quasi-Number, i.e., Number except Complex and Unitful.LogScaled
+Numb = Union{Real,Unitful.AbstractQuantity}
+
 
 #----------------------------------------------------------------------------------------------#
 #                                   Raw Quantity Constructor                                   #

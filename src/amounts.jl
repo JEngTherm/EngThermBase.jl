@@ -53,7 +53,8 @@ Generic Amount type factory.
 """
 function mkGenAmt(TYPE::Symbol,         # Type name:            :_Amt
                   SUPT::Symbol,         # Supertype:            :GenerAmt
-                  FNAM::Symbol,         # Function Name:        :_
+                  FNAM::Symbol,         # Function Name:        :_a             (exported)
+                  ALIA::Symbol,         # Function Alias:       :𝗔          (NOT exported)
                   SYMB::AbstractString, # Printing symbol:      "_"
                   WHAT::AbstractString, # Description:          "generic amounts"
                   DELT::Bool=false,     # Whether a Δ quantity
@@ -95,6 +96,10 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         end
         # Type documentation
         @doc $dcStr $TYPE
+        # External constructors for other DataTypes:
+        $TYPE(x::REAL) = $TYPE(float(x))
+        $TYPE(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
+        $TYPE(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
         # Precision-changing external constructors
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX}) where {𝘀<:PREC,𝗽<:PREC} = begin
             $TYPE(𝘀(amt(x).val) * unit(amt(x)))
@@ -129,15 +134,11 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         function $FNAM end
         @doc $fnStr $FNAM
         # Indirect construction from plain
-        $FNAM(x::plnF) = $TYPE(x)
-        $FNAM(x::REAL) = $TYPE(float(x))
-        # Indirect construction from quantity
-        $FNAM(x::UATY{𝗽}) where 𝗽<:PREC = $TYPE(x)
-        $FNAM(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
-        # Indirect construction from another AMOUNTS
-        $FNAM(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
+        $FNAM(x::Numb) = $TYPE(x)
         # Function export
         export $FNAM
+        # Unexported Alias
+        $ALIA = $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -175,7 +176,7 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # The fallback generic amount
-mkGenAmt(:_Amt, :GenerAmt, :_a, "_", "generic", false)
+mkGenAmt(:_Amt, :GenerAmt, :_a, :𝗔, "_", "generic", false)
 
 
 #----------------------------------------------------------------------------------------------#
