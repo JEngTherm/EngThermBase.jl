@@ -646,18 +646,18 @@ mkBasAmt(:dsamt, :BInteract, :ds, :𝝙𝘀, "S" , u"kJ/K", "kJ/K", "entropy var
 `ENERGYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Energy property type union.
 """
-ENERGYP{𝗽,𝘅,𝗯} = Union{uAmt{𝗽,𝘅,𝗯},hAmt{𝗽,𝘅,𝗯},
-                       gAmt{𝗽,𝘅,𝗯},aAmt{𝗽,𝘅,𝗯},
-                       eAmt{𝗽,𝘅,𝗯},ekAmt{𝗽,𝘅,𝗯},
-                       epAmt{𝗽,𝘅,𝗯},PvAmt{𝗽,𝘅,𝗯},
-                       RTAmt{𝗽,𝘅,𝗯},TsAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+ENERGYP{𝗽,𝘅,𝗯} = Union{u_amt{𝗽,𝘅,𝗯},h_amt{𝗽,𝘅,𝗯},
+                       g_amt{𝗽,𝘅,𝗯},a_amt{𝗽,𝘅,𝗯},
+                       e_amt{𝗽,𝘅,𝗯},ekamt{𝗽,𝘅,𝗯},
+                       epamt{𝗽,𝘅,𝗯},Pvamt{𝗽,𝘅,𝗯},
+                       RTamt{𝗽,𝘅,𝗯},Tsamt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
 `ENERGYI{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Energy interaction type union.
 """
-ENERGYI{𝗽,𝘅,𝗯} = Union{qAmt{𝗽,𝘅,𝗯},wAmt{𝗽,𝘅,𝗯},
-                       ΔeAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+ENERGYI{𝗽,𝘅,𝗯} = Union{q_amt{𝗽,𝘅,𝗯},w_amt{𝗽,𝘅,𝗯},
+                       deamt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
 `ENERGYA{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
@@ -671,15 +671,15 @@ ENERGYA{𝗽,𝘅,𝗯} = Union{ENERGYP{𝗽,𝘅,𝗯},ENERGYI{𝗽,𝘅,𝗯}}
 `NTROPYP{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Entropy property type union.
 """
-NTROPYP{𝗽,𝘅,𝗯} = Union{RAmt{𝗽,𝘅,𝗯},yAmt{𝗽,𝘅,𝗯},sAmt{𝗽,𝘅,𝗯},
-                       jAmt{𝗽,𝘅,𝗯},cAmt{𝗽,𝘅,𝗯},
-                       cpAmt{𝗽,𝘅,𝗯},cvAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+NTROPYP{𝗽,𝘅,𝗯} = Union{R_amt{𝗽,𝘅,𝗯},y_amt{𝗽,𝘅,𝗯},s_amt{𝗽,𝘅,𝗯},
+                       j_amt{𝗽,𝘅,𝗯},c_amt{𝗽,𝘅,𝗯},
+                       cpamt{𝗽,𝘅,𝗯},cvamt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
 `NTROPYI{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
 Entropy interaction type union.
 """
-NTROPYI{𝗽,𝘅,𝗯} = Union{ΔsAmt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
+NTROPYI{𝗽,𝘅,𝗯} = Union{dsamt{𝗽,𝘅,𝗯}} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}
 
 """
 `NTROPYA{𝗽,𝘅,𝗯} where {𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE}`\n
@@ -693,7 +693,7 @@ NTROPYA{𝗽,𝘅,𝗯} = Union{NTROPYP{𝗽,𝘅,𝗯},NTROPYI{𝗽,𝘅,𝗯}}
 `VELOCYP{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
 Velocity property type union.
 """
-VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},𝕔Amt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
+VELOCYP{𝗽,𝘅} = Union{veamt{𝗽,𝘅},spamt{𝗽,𝘅},csamt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 # --- dimensionless
@@ -701,8 +701,8 @@ VELOCYP{𝗽,𝘅} = Union{VELO{𝗽,𝘅},SPEE{𝗽,𝘅},𝕔Amt{𝗽,𝘅}} w
 `DIMLESS{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
 Dimensionless amount type union.
 """
-DIMLESS{𝗽,𝘅} = Union{øAmt{𝗽,𝘅},ZAmt{𝗽,𝘅},γAmt{𝗽,𝘅},kAmt{𝗽,𝘅},
-                     MaAmt{𝗽,𝘅},PrAmt{𝗽,𝘅},vrAmt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
+DIMLESS{𝗽,𝘅} = Union{ø_amt{𝗽,𝘅},Z_amt{𝗽,𝘅},gaamt{𝗽,𝘅},k_amt{𝗽,𝘅},
+                     Maamt{𝗽,𝘅},Pramt{𝗽,𝘅},vramt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
 
 
 #----------------------------------------------------------------------------------------------#
@@ -770,52 +770,52 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
 end
 
 
-#      TYPE  FUNC    SY         L5TYP  FINT    SY
-#     ------------------        ------------------
-#      _Amt    _a     _         __amt    _a     _
-#      sysT     T     T         T_amt    T_     T
-#      sysP     P     P         P_amt    P_     P
-#      VELO  velo     𝕍         veamt    ve     𝕍
-#      SPEE  spee     𝕧         spamt    sp     𝕧
-#      TIME     t     t         t_amt    t_     t
-#      GRAV  grav     𝒈         gvamt    gv     𝒈
-#      zAmt     z     z         z_amt    z_     z
-#      ZAmt     Z     Z         Z_amt    Z_     Z
-#      γAmt     γ     γ         gaamt    ga     γ
-#      βAmt     β     β         beamt    be     β
-#     κTAmt    κT    κT         kTamt    kT    κT
-#     κsAmt    κs    κs         ksamt    ks    κs
-#      kAmt     k     k         k_amt    k_     k
-#      𝕔Amt     𝕔     𝕔         csamt    cs    cs
-#     MaAmt    Ma    Ma         Maamt    Ma    Ma
-#     μJAmt   μJT   μJT         mJamt    mJ    μJ
-#     μSAmt    μS    μS         mSamt    mS    μS
-#      xAmt     x     x         x_amt    x_     x
-#     PrAmt    Pr    Pr         Pramt    Pr    Pr
-#     vrAmt    vr    vr         vramt    vr    vr
-#      øAmt     ø     ø         ø_amt    ø_     ø
-#      mAmt     m    **         m_amt    m_    **
-#      nAmt     N    **         N_amt    N_    **
-#      RAmt     R    **         R_amt    R_    **
-#     PvAmt    Pv    **         Pvamt    Pv    **
-#     RTAmt    RT    **         RTamt    RT    **
-#     TsAmt    Ts    **         Tsamt    Ts    **
-#      vAmt     v     v         v_amt    v_     v
-#      uAmt     u     u         u_amt    u_     u
-#      hAmt     h     h         h_amt    h_     h
-#      gAmt     g     g         g_amt    g_     g
-#      aAmt     a     a         a_amt    a_     a
-#      eAmt     e     e         e_amt    e_     e
-#     ekAmt    ek    ek         ekamt    ek    ek
-#     epAmt    ep    ep         epamt    ep    ep
-#      sAmt     s     s         s_amt    s_     s
-#     cpAmt    cp    cp         cpamt    cp    cp
-#     cvAmt    cv    cv         cvamt    cv    cv
-#      cAmt     c     c         c_amt    c_     c
-#      jAmt     j     j         j_amt    j_     j
-#      yAmt     y     y         y_amt    y_     y
-#      qAmt     q     q         q_amt    q_     q
-#      wAmt     w     w         w_amt    w_     w
-#     ΔeAmt    Δe    Δe         deamt    de    Δe
-#     ΔsAmt    Δs    Δs         dsamt    ds    Δs
+#  L5TYP  FINT    SY
+#  ------------------
+#  __amt    _a     _
+#  T_amt    T_     T
+#  P_amt    P_     P
+#  veamt    ve     𝕍
+#  spamt    sp     𝕧
+#  t_amt    t_     t
+#  gvamt    gv     𝒈
+#  z_amt    z_     z
+#  Z_amt    Z_     Z
+#  gaamt    ga     γ
+#  beamt    be     β
+#  kTamt    kT    κT
+#  ksamt    ks    κs
+#  k_amt    k_     k
+#  csamt    cs    cs
+#  Maamt    Ma    Ma
+#  mJamt    mJ    μJ
+#  mSamt    mS    μS
+#  x_amt    x_     x
+#  Pramt    Pr    Pr
+#  vramt    vr    vr
+#  ø_amt    ø_     ø
+#  m_amt    m_    **
+#  N_amt    N_    **
+#  R_amt    R_    **
+#  Pvamt    Pv    **
+#  RTamt    RT    **
+#  Tsamt    Ts    **
+#  v_amt    v_     v
+#  u_amt    u_     u
+#  h_amt    h_     h
+#  g_amt    g_     g
+#  a_amt    a_     a
+#  e_amt    e_     e
+#  ekamt    ek    ek
+#  epamt    ep    ep
+#  s_amt    s_     s
+#  cpamt    cp    cp
+#  cvamt    cv    cv
+#  c_amt    c_     c
+#  j_amt    j_     j
+#  y_amt    y_     y
+#  q_amt    q_     q
+#  w_amt    w_     w
+#  deamt    de    Δe
+#  dsamt    ds    Δs
 
