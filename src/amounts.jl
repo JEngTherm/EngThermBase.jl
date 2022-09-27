@@ -51,7 +51,7 @@ import Base: +, -, *, /
 """
 Generic Amount type factory.
 """
-function mkGenAmt(TYPE::Symbol,         # Type name:            :_Amt
+function mkGenAmt(TYPE::Symbol,         # Type name:            :__amt
                   SUPT::Symbol,         # Supertype:            :GenerAmt
                   FNAM::Symbol,         # Function Name:        :_a             (exported)
                   ALIA::Symbol,         # Function Alias:       :𝗔          (NOT exported)
@@ -133,7 +133,7 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         # Function interface
         function $FNAM end
         @doc $fnStr $FNAM
-        # Indirect construction from plain
+        # Indirect construction from Numb
         $FNAM(x::Numb) = $TYPE(x)
         # Function export
         export $FNAM
@@ -176,7 +176,7 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # The fallback generic amount
-mkGenAmt(:_Amt, :GenerAmt, :_a, :𝗔, "_", "generic", false)
+mkGenAmt(:__amt, :GenerAmt, :_a, :𝗔, "_", "generic", false)
 
 
 #----------------------------------------------------------------------------------------------#
@@ -186,9 +186,10 @@ mkGenAmt(:_Amt, :GenerAmt, :_a, :𝗔, "_", "generic", false)
 """
 Whole Amount type factory.
 """
-function mkWhlAmt(TYPE::Symbol,         # Type name:            :sysT
+function mkWhlAmt(TYPE::Symbol,         # Type name:            :T_amt
                   SUPT::Symbol,         # Supertype:            :WProperty
-                  FNAM::Symbol,         # Function Name:        :T
+                  FNAM::Symbol,         # Function Name:        :T_             (exported)
+                  ALIA::Symbol,         # Function Alias:       :𝗧          (NOT exported)
                   SYMB::AbstractString, # Printing symbol:      "T"
                   UNIT::Unitful.Units,  # SY quantity units:    u"K"
                   USTR::AbstractString, # PrettyPrinting units: "K"
@@ -243,6 +244,10 @@ Constructors determine all parameters from their arguments.\n
         end
         # Type documentation
         @doc $dcStr $TYPE
+        # External constructors for other DataTypes:
+        $TYPE(x::REAL) = $TYPE(float(x))
+        $TYPE(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
+        $TYPE(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
         # Precision-changing external constructors
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX}
                           ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(𝘀(amt(x).val))
@@ -269,16 +274,12 @@ Constructors determine all parameters from their arguments.\n
         # Function interface
         function $FNAM end
         @doc $fnStr $FNAM
-        # Indirect construction from plain
-        $FNAM(x::plnF) = $TYPE(x)
-        $FNAM(x::REAL) = $TYPE(float(x))
-        # Indirect construction from quantity
-        $FNAM(x::UATY{𝗽,$𝑑SY}) where 𝗽<:PREC = $TYPE(x)
-        $FNAM(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
-        # Indirect construction from another AMOUNTS
-        $FNAM(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
+        # Indirect construction from Numb
+        $FNAM(x::Numb) = $TYPE(x)
         # Function export
         export $FNAM
+        # Unexported Alias
+        $ALIA = $FNAM
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -317,33 +318,33 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # Regular properties -- \bb#<TAB> velocity/speed function names
-mkWhlAmt(:sysT, :WProperty, :T   , "T", u"K"       , "K"       , "temperature", false)
-mkWhlAmt(:sysP, :WProperty, :P   , "P", u"kPa"     , "kPa"     , "pressure"   , false)
-mkWhlAmt(:VELO, :WProperty, :velo, "𝕍", u"√(kJ/kg)", "√(kJ/kg)", "velocity"   , false)
-mkWhlAmt(:SPEE, :WProperty, :spee, "𝕧", u"m/s"     , "m/s"     , "speed"      , false)
+mkWhlAmt(:T_amt, :WProperty, :T_, :𝗧 , "T" , u"K"       , "K"       , "temperature", false)
+mkWhlAmt(:P_amt, :WProperty, :P_, :𝗣 , "P" , u"kPa"     , "kPa"     , "pressure"   , false)
+mkWhlAmt(:veamt, :WProperty, :ve, :𝕍 , "𝕍" , u"√(kJ/kg)", "√(kJ/kg)", "velocity"   , false)
+mkWhlAmt(:spamt, :WProperty, :sp, :𝕧 , "𝕧" , u"m/s"     , "m/s"     , "speed"      , false)
 
 # Regular unranked -- \sans#<TAB> function names
-mkWhlAmt(:TIME, :WUnranked, :t   , "𝗍", u"s"       , "s"       , "time"       , false)
-mkWhlAmt(:GRAV, :WUnranked, :grav, "𝒈", u"m/s^2"   , "m/s²"    , "gravity"    , false)
-mkWhlAmt(:zAmt, :WUnranked, :z   , "𝗓", u"m"       , "m"       , "altitude"   , false)
+mkWhlAmt(:t_amt, :WUnranked, :t_, :𝘁 , "𝗍" , u"s"       , "s"       , "time"       , false)
+mkWhlAmt(:gvamt, :WUnranked, :gv, :𝒈 , "𝒈" , u"m/s^2"   , "m/s²"    , "gravity"    , false)
+mkWhlAmt(:z_amt, :WUnranked, :z_, :𝘇 , "𝗓" , u"m"       , "m"       , "altitude"   , false)
 
 # Derived thermodynamic properties
-mkWhlAmt(:ZAmt , :WProperty, :Z   , "Z"  , ULESS()    , "–"       , "generalized compressibility factor", false)
-mkWhlAmt(:γAmt , :WProperty, :γ   , "γ"  , ULESS()    , "–"       , "specific heat ratio"               , false)
-mkWhlAmt(:βAmt , :WProperty, :β   , "β"  , inv(u"K")  , "/K"      , "coefficient of volume expansion"   , false)
-mkWhlAmt(:κTAmt, :WProperty, :κT  , "κT" , inv(u"kPa"), "/kPa"    , "isothermal compressibility"        , false)
-mkWhlAmt(:κsAmt, :WProperty, :κs  , "κs" , inv(u"kPa"), "/kPa"    , "isentropic compressibility"        , false)
-mkWhlAmt(:kAmt , :WProperty, :k   , "k"  , ULESS()    , "–"       , "isentropic expansion exponent"     , false)
-mkWhlAmt(:𝕔Amt , :WProperty, :𝕔   , "𝕔"  , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"          , false)
-mkWhlAmt(:MaAmt, :WProperty, :Ma  , "Ma" , ULESS()    , "–"       , "Mach number"                       , false)
-mkWhlAmt(:μJAmt, :WProperty, :μJT , "μJT", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
-mkWhlAmt(:μSAmt, :WProperty, :μS  , "μS" , u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
-mkWhlAmt(:xAmt , :WProperty, :x   , "x"  , ULESS()    , "–"       , "saturated vapor mass fraction"     , false)
-mkWhlAmt(:PrAmt, :WProperty, :Pr  , "Pr" , ULESS()    , "–"       , "relative pressure"                 , false)
-mkWhlAmt(:vrAmt, :WProperty, :vr  , "vr" , ULESS()    , "–"       , "relative specific volume"          , false)
+mkWhlAmt(:Z_amt, :WProperty, :Z_, :𝗭 , "Z" , ULESS()    , "–"       , "generalized compressibility factor", false)
+mkWhlAmt(:gaamt, :WProperty, :ga, :𝝲 , "γ" , ULESS()    , "–"       , "specific heat ratio"               , false)
+mkWhlAmt(:beamt, :WProperty, :be, :𝝱 , "β" , inv(u"K")  , "/K"      , "coefficient of volume expansion"   , false)
+mkWhlAmt(:kTamt, :WProperty, :kT, :𝝹𝗧, "κT", inv(u"kPa"), "/kPa"    , "isothermal compressibility"        , false)
+mkWhlAmt(:ksamt, :WProperty, :ks, :𝝹𝘀, "κs", inv(u"kPa"), "/kPa"    , "isentropic compressibility"        , false)
+mkWhlAmt(:k_amt, :WProperty, :k_, :𝗸 , "k" , ULESS()    , "–"       , "isentropic expansion exponent"     , false)
+mkWhlAmt(:csamt, :WProperty, :cs, :𝕔 , "𝕔" , u"√(kJ/kg)", "√(kJ/kg)", "adiabatic speed of sound"          , false)
+mkWhlAmt(:Maamt, :WProperty, :Ma, :𝗠𝗮, "Ma", ULESS()    , "–"       , "Mach number"                       , false)
+mkWhlAmt(:mJamt, :WProperty, :mJ, :𝝻𝗝, "μJ", u"K/kPa"   , "K/kPa"   , "Joule-Thomson coefficient"         , false)
+mkWhlAmt(:mSamt, :WProperty, :mS, :𝝻𝗦, "μS", u"K/kPa"   , "K/kPa"   , "isentropic expansion coefficient"  , false)
+mkWhlAmt(:x_amt, :WProperty, :x_, :𝘅 , "x" , ULESS()    , "–"       , "saturated vapor mass fraction"     , false)
+mkWhlAmt(:Pramt, :WProperty, :Pr, :𝗣𝗿, "Pr", ULESS()    , "–"       , "relative pressure"                 , false)
+mkWhlAmt(:vramt, :WProperty, :vr, :𝘃𝗿, "vr", ULESS()    , "–"       , "relative specific volume"          , false)
 
 # Generic dimensionless ratio
-mkWhlAmt(:øAmt , :WProperty, :ø   , "ø"  , ULESS()    , "–"       , "generic dimensionless ratio"       , false)
+mkWhlAmt(:ø_Amt, :WProperty, :ø_, :ø , "ø" , ULESS()    , "–"       , "generic dimensionless ratio"       , false)
 
 
 #----------------------------------------------------------------------------------------------#
