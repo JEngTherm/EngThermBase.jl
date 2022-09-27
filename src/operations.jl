@@ -214,28 +214,28 @@ end
 #----------------------------------------------------------------------------------------------#
 
 # MA-based * mass => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MA}, y::mAmt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MA}, y::m_amt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::mAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::m_amt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MA-based * mass-DT => DT-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MA}, y::mAmt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MA}, y::m_amt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::mAmt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::m_amt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * mole => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MO}, y::n_amt{𝘀,𝘆,SY}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::nAmt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::n_amt{𝘀,𝘆,SY}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * mole-DT => SY-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MO}, y::n_amt{𝘀,𝘆,DT}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::nAmt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::n_amt{𝘀,𝘆,DT}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # DT-based * TIME => SY-based; with Unitful promotion
 *(x::BasedAmt{𝗽,𝘅,DT}, y::TIME{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆} = begin
@@ -247,38 +247,38 @@ end
 # SY-based / mass => MA-based; with Unitful promotion
 # SY-based / mole => MO-based; with Unitful promotion
 # SY-based / TIME => DT-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{mAmt{𝘀,𝘆,SY},nAmt{𝘀,𝘆,SY},TIME{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,SY}, y::Union{m_amt{𝘀,𝘆,SY},n_amt{𝘀,𝘆,SY},TIME{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
 
 # DT-based / mass-DT => MA-based; with Unitful promotion
 # DT-based / mole-DT => MO-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,DT}, y::Union{mAmt{𝘀,𝘆,DT},nAmt{𝘀,𝘆,DT}}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,DT}, y::Union{m_amt{𝘀,𝘆,DT},n_amt{𝘀,𝘆,DT}}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
 
 # MA-based * MO-based mass => MO-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MA}, y::mAmt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MA}, y::m_amt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::mAmt{𝘀,𝘆,MO}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::m_amt{𝘀,𝘆,MO}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * MA-based mole => MA-based; with Unitful promotion
-*(x::BasedAmt{𝗽,𝘅,MO}, y::nAmt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
+*(x::BasedAmt{𝗽,𝘅,MO}, y::n_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(*(amt(x), amt(y)))
 end
-*(y::nAmt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
+*(y::n_amt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 
 # MA-based / MA-based mole => MO-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,MA}, y::nAmt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,MA}, y::n_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
 # MO-based / MO-based mass => MA-based; with Unitful promotion
-/(x::BasedAmt{𝗽,𝘅,MO}, y::mAmt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
+/(x::BasedAmt{𝗽,𝘅,MO}, y::m_amt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
     (typeof(x).name.wrapper)(/(amt(x), amt(y)))
 end
 
@@ -299,19 +299,19 @@ end
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
 
 # P * v --> Pv
-*(x::sysP{𝗽,𝘅}, y::vAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    Pv(*(amt(x), amt(y)))
+*(x::P_amt{𝗽,𝘅}, y::v_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗣𝘃(*(amt(x), amt(y)))
 end
-*(y::vAmt{𝘀,𝘆,𝗯}, x::sysP{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::v_amt{𝘀,𝘆,𝗯}, x::P_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 # Pv / v --> P
-/(x::Pvamt{𝘀,𝘆,𝗯}, y::vAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    P(/(amt(x), amt(y)))
+/(x::Pvamt{𝘀,𝘆,𝗯}, y::v_amt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗣(/(amt(x), amt(y)))
 end
 
 # Pv / P --> v
-/(x::Pvamt{𝘀,𝘆,𝗯}, y::sysP{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    v(/(amt(x), amt(y)))
+/(x::Pvamt{𝘀,𝘆,𝗯}, y::P_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝘃(/(amt(x), amt(y)))
 end
 
 
@@ -320,19 +320,19 @@ end
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
 
 # R * T --> RT
-*(x::sysT{𝗽,𝘅}, y::RAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    RT(*(amt(x), amt(y)))
+*(x::T_amt{𝗽,𝘅}, y::R_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗥𝗧(*(amt(x), amt(y)))
 end
-*(y::RAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::R_amt{𝘀,𝘆,𝗯}, x::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 # RT / T --> R
-/(x::RTAmt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    R(/(amt(x), amt(y)))
+/(x::RTamt{𝘀,𝘆,𝗯}, y::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗥(/(amt(x), amt(y)))
 end
 
 # RT / R --> T
-/(x::RTAmt{𝘀,𝘆,𝗯}, y::RAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    T(/(amt(x), amt(y)))
+/(x::RTamt{𝘀,𝘆,𝗯}, y::R_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗧(/(amt(x), amt(y)))
 end
 
 
@@ -341,19 +341,19 @@ end
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
 
 # T * s --> Ts
-*(x::sysT{𝗽,𝘅}, y::s_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    Ts(*(amt(x), amt(y)))
+*(x::T_amt{𝗽,𝘅}, y::s_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗧𝘀(*(amt(x), amt(y)))
 end
-*(y::s_amt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::s_amt{𝘀,𝘆,𝗯}, x::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 # Ts / T --> s
-/(x::Tsamt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    s(/(amt(x), amt(y)))
+/(x::Tsamt{𝘀,𝘆,𝗯}, y::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝘀(/(amt(x), amt(y)))
 end
 
 # Ts / s --> T
 /(x::Tsamt{𝘀,𝘆,𝗯}, y::s_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    T(/(amt(x), amt(y)))
+    𝗧(/(amt(x), amt(y)))
 end
 
 
@@ -362,20 +362,20 @@ end
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
 
 # Pv / RT --> Z
-/(x::Pvamt{𝗽,𝘅,𝗯}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    Z(/(amt(x), amt(y)))
+/(x::Pvamt{𝗽,𝘅,𝗯}, y::RTamt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗭(/(amt(x), amt(y)))
 end
 
 # Pv / Z --> RT
 /(x::Pvamt{𝗽,𝘅,𝗯}, y::ZAmt{𝘀,𝘆}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    RT(/(amt(x), amt(y)))
+    𝗥𝗧(/(amt(x), amt(y)))
 end
 
 # Z * RT --> Pv
-*(x::ZAmt{𝗽,𝘅}, y::RTAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    Pv(*(amt(x), amt(y)))
+*(x::ZAmt{𝗽,𝘅}, y::RTamt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    𝗣𝘃(*(amt(x), amt(y)))
 end
-*(y::RTAmt{𝘀,𝘆,𝗯}, x::ZAmt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::RTamt{𝘀,𝘆,𝗯}, x::ZAmt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
@@ -383,19 +383,19 @@ end
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
 
 # j * T --> -a
-*(x::sysT{𝗽,𝘅}, y::jAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -a(*(amt(x), amt(y)))
+*(x::T_amt{𝗽,𝘅}, y::j_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -𝗮(*(amt(x), amt(y)))
 end
-*(y::jAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::j_amt{𝘀,𝘆,𝗯}, x::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 # a / T --> -j
-/(x::a_amt{𝘀,𝘆,𝗯}, y::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -j(/(amt(x), amt(y)))
+/(x::a_amt{𝘀,𝘆,𝗯}, y::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -𝗷(/(amt(x), amt(y)))
 end
 
 # a / j --> -T
-/(x::a_amt{𝘀,𝘆,𝗯}, y::jAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -T(/(amt(x), amt(y)))
+/(x::a_amt{𝘀,𝘆,𝗯}, y::j_amt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -𝗧(/(amt(x), amt(y)))
 end
 
 
@@ -404,19 +404,19 @@ end
     #⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅⋅#
 
 # y * T --> -g
-*(x::sysT{𝗽,𝘅}, y::yAmt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -g(*(amt(x), amt(y)))
+*(x::T_amt{𝗽,𝘅}, y::y_amt{𝘀,𝘆,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -𝗴(*(amt(x), amt(y)))
 end
-*(y::yAmt{𝘀,𝘆,𝗯}, x::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
+*(y::y_amt{𝘀,𝘆,𝗯}, x::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = x * y           # as to fallback
 
 # g / T --> -y
-/(x::g_amt{𝘀,𝘆,𝗯}, z::sysT{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -y(/(amt(x), amt(z)))
+/(x::g_amt{𝘀,𝘆,𝗯}, y::T_amt{𝗽,𝘅}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -𝘆(/(amt(x), amt(y)))
 end
 
 # g / y --> -T
-/(x::g_amt{𝘀,𝘆,𝗯}, y::yAmt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
-    -T(/(amt(x), amt(y)))
+/(x::g_amt{𝘀,𝘆,𝗯}, y::y_amt{𝗽,𝘅,𝗯}) where {𝗽,𝘀,𝘅,𝘆,𝗯} = begin
+    -𝗧(/(amt(x), amt(y)))
 end
 
 
@@ -458,7 +458,7 @@ cbrt(x::AMOUNTS) = AMT(cbrt(amt(x)))
 import Base: log, log2, log10, exp
 
 for FUN in (:log, :log2, :log10, :exp)
-    @eval $FUN(x::DIMLESS{𝗽,𝘅}) where {𝗽,𝘅} = ø($FUN(amt(x).val))
+    @eval $FUN(x::DIMLESS{𝗽,𝘅}) where {𝗽,𝘅} = ø_($FUN(amt(x).val))
 end
 
 
