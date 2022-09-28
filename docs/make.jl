@@ -7,10 +7,12 @@ makedocs(
         prettyurls = get(ENV, "CI", nothing) == true
     ),
     modules = [EngThermBase],
-    pages = [
+    pages = Any[
         "Introduction" => "index.md",
-##         "Examples" => "examples.md",
-        "Reference" => "_reference.md",
+        "Examples" => Any[
+            "Tagging" => "tagging.jl",
+        ],
+        "Reference" => "reference.md",
     ],
 )
 
