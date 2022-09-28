@@ -29,7 +29,7 @@ thermodynamic that provides:
   [`IdealGasLib.jl`](https://github.com/JEngTherm/IdealGasLib.jl).
 
 Thus, `EngThermBase.jl` can serve as basis for other (Engineering) Thermodynamics modules and
-packages in julia.
+packages in Julia.
 
 For additional information and examples, please refer to the package's documentation.
 
