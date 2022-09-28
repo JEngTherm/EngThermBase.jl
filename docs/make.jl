@@ -6,7 +6,12 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == true
     ),
-    modules = [EngThermBase]
+    modules = [EngThermBase],
+    pages = [
+        "Introduction" => "index.md",
+##         "Examples" => "examples.md",
+        "Reference" => "_reference.md",
+    ],
 )
 
 # Documenter can also automatically deploy documentation to gh-pages.
