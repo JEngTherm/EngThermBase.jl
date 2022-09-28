@@ -2,9 +2,6 @@
 
 Basic definitions for Engineering Thermodynamics in Julia.
 
-```@contents
-```
-
 # Description
 
 The `EngThermBase.jl` package aims at providing a common platform for engineering

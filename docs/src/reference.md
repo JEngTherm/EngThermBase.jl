@@ -2,9 +2,6 @@
 
 Reference documentation for EngThermBase.jl.
 
-```@contents
-```
-
 ## Constants
 
 ```@autodocs
