@@ -14,10 +14,10 @@ thermodynamics packages and case calculations by implementing:
 - Somewhat configurable thermodynamic amount **pretty-printing**, such as:
     - `P₆₄: 101.35 kPa`,
     - `v₆₄: 1.1800 m³/kg`,
-    - `R̄₆₄: 8.3145 kJ/K/kmol`,
+    - `R̄₆₄: (8.3145 ± 1.5e-05 kJ/K/kmol)`,
     - `Ma₆₄: 1.0333 –`,
     - `ṁ₆₄: 3.4560 kg/s`, etc...
-- Automatic **re-tagging**, such as:
+- Automatic **re-tagging**, through Julia's multiple dispatch system, such as:
     - `u + P * v --> h`,
     - `u - T * s --> a`,
     - `(P * v) / (R * T) --> Z`, and the like;
