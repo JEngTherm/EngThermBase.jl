@@ -1,6 +1,10 @@
 using Documenter
 using EngThermBase
 
+# Thanks to DrWatson's Documenter setup!
+using Literate
+Literate.markdown("src/tagging.jl", "src"; credit = false)
+
 makedocs(
     sitename = "EngThermBase",
     format = Documenter.HTML(
