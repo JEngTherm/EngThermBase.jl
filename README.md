@@ -11,10 +11,17 @@ thermodynamic that provides:
   etc...
 - Default (SI) **units** for tagged quantities—through
   [`Unitful.jl`](https://github.com/PainterQubits/Unitful.jl);
-- Automatic **re-tagging**, such as: `u + P * v --> h`, `u - T * s --> a`, `(P * v) / (R * T)
-  --> Z`, and the like;
-- Thermodynamic **bases**, such as `MA` (mass), `MO` (molar), etc... ones;
-- Automatic **re-basing**, such as: `u * m --> U`, `R̄ / M --> R`, `ṁ * q --> Q̇`, etc..., and
+- Automatic **re-tagging**, such as:
+    - `u + P * v --> h`,
+    - `u - T * s --> a`,
+    - `(P * v) / (R * T) --> Z`, and the like;
+- Thermodynamic **bases**, such as:
+    - `MA` (mass),
+    - `MO` (molar), etc... ones;
+- Automatic **re-basing**, such as:
+    - `u * m --> U`,
+    - `R̄ / M --> R`,
+    - `ṁ * q --> Q̇`, etc..., and
 - **Uncertainty propagation**—through
   [`Measurements.jl`](https://github.com/JuliaPhysics/Measurements.jl).
 - Exports an **abstract type hyerarchy** so as to provide **hooks** for thermodynamic models of
