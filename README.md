@@ -4,13 +4,19 @@ Basic definitions for Engineering Thermodynamics in Julia.
 
 # Description
 
-The `EngThermBase.jl` package is, as the name suggests, a base package for engineering        
-thermodynamic that provides:
+The `EngThermBase.jl` package aims at providing a common platform for engineering
+thermodynamics packages and case calculations by implementing:
 
 - Engineering thermodynamics quantities **tagging**, such as `P`, `T`, `v`, `u`, `h`, `s`,
   etc...
 - Default (SI) **units** for tagged quantities—through
-  [`Unitful.jl`](https://github.com/PainterQubits/Unitful.jl);
+  [Unitful.jl](https://github.com/PainterQubits/Unitful.jl);
+- Somewhat configurable thermodynamic amount **pretty-printing**, such as:
+    - `P₆₄: 101.35 kPa`,
+    - `v₆₄: 1.1800 m³/kg`,
+    - `R̄₆₄: 8.3145 kJ/K/kmol`,
+    - `Ma₆₄: 1.0333 –`,
+    - `ṁ₆₄: 3.4560 kg/s`, etc...
 - Automatic **re-tagging**, such as:
     - `u + P * v --> h`,
     - `u - T * s --> a`,
@@ -23,13 +29,10 @@ thermodynamic that provides:
     - `R̄ / M --> R`,
     - `ṁ * q --> Q̇`, etc..., and
 - **Uncertainty propagation**—through
-  [`Measurements.jl`](https://github.com/JuliaPhysics/Measurements.jl).
+  [Measurements.jl](https://github.com/JuliaPhysics/Measurements.jl).
 - Exports an **abstract type hyerarchy** so as to provide **hooks** for thermodynamic models of
-  heat capacity, pure substance (by equation of state, or EoS), mixtures, etc... such as
-  [`IdealGasLib.jl`](https://github.com/JEngTherm/IdealGasLib.jl).
-
-Thus, `EngThermBase.jl` can serve as basis for other (Engineering) Thermodynamics modules and
-packages in Julia.
+  heat capacity, pure substance (by equation of state, or EoS), mixtures, etc... such as the
+  [IdealGasLib.jl](https://github.com/JEngTherm/IdealGasLib.jl).
 
 For additional information and examples, please refer to the package's documentation.
 
