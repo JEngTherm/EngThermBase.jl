@@ -54,8 +54,8 @@ Generic Amount type factory.
 """
 function mkGenAmt(TYPE::Symbol,         # Type name:            :__amt
                   SUPT::Symbol,         # Supertype:            :GenerAmt
-                  FNAM::Symbol,         # Function Name:        :_a             (exported)
-                  ALIA::Symbol,         # Function Alias:       :𝗔          (NOT exported)
+                  FNAM::Symbol,         # Function Name:        :_a
+                  ALIA::Symbol,         # Function Alias:       :𝗔
                   SYMB::AbstractString, # Printing symbol:      "_"
                   WHAT::AbstractString, # Description:          "generic amounts"
                   DELT::Bool=false,     # Whether a Δ quantity
@@ -136,10 +136,9 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         @doc $fnStr $FNAM
         # Indirect construction from Numb
         $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
-        # Function export
-        export $FNAM
-        # Unexported Alias
+        # Function aliasing and export
         $ALIA = $FNAM
+        export $FNAM, $ALIA
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -189,8 +188,8 @@ Whole Amount type factory.
 """
 function mkWhlAmt(TYPE::Symbol,         # Type name:            :T_amt
                   SUPT::Symbol,         # Supertype:            :WProperty
-                  FNAM::Symbol,         # Function Name:        :T_             (exported)
-                  ALIA::Symbol,         # Function Alias:       :𝗧          (NOT exported)
+                  FNAM::Symbol,         # Function Name:        :T_
+                  ALIA::Symbol,         # Function Alias:       :𝗧
                   SYMB::AbstractString, # Printing symbol:      "T"
                   UNIT::Unitful.Units,  # SY quantity units:    u"K"
                   USTR::AbstractString, # PrettyPrinting units: "K"
@@ -277,10 +276,9 @@ Constructors determine all parameters from their arguments.\n
         @doc $fnStr $FNAM
         # Indirect construction from Numb
         $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
-        # Function export
-        export $FNAM
-        # Unexported Alias
+        # Function aliasing and export
         $ALIA = $FNAM
+        export $FNAM, $ALIA
         # Conversions
         convert(::Type{$TYPE{𝘀,𝘅}},
                 y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
@@ -357,8 +355,8 @@ Based Amount type factory.
 """
 function mkBasAmt(TYPE::Symbol,         # Type Name:            :u_Amt
                   SUPT::Symbol,         # Supertype:            :BProperty
-                  FNAM::Symbol,         # Function Name:        :u_             (exported)
-                  ALIA::Symbol,         # Function Alias:       :𝘂          (NOT exported)
+                  FNAM::Symbol,         # Function Name:        :u_
+                  ALIA::Symbol,         # Function Alias:       :𝘂
                   SYMB::AbstractString, # Printing symbol:      "U"
                   UNIT::Unitful.Units,  # SY quantity units:    u"kJ"
                   USTR::AbstractString, # PrettyPrinting units: "K"
@@ -558,10 +556,9 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         # Indirect construction from Numb
         $FNAM(x::Union{Numb,AMOUNTS}) = $TYPE(x)
         $FNAM(x::Numb, ::Type{𝗯}) where 𝗯<:BASE = $TYPE(x, 𝗯)
-        # Function export
-        export $FNAM
-        # Unexported Alias
+        # Function aliasing and export
         $ALIA = $FNAM
+        export $FNAM, $ALIA
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
         convert(::Type{$TYPE{𝘀,𝘅,𝗯}},
