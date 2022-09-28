@@ -1,6 +1,6 @@
 # EngThermBase.jl
 
-Basic definitions for Engineering Thermodynamics in julia.
+Basic definitions for Engineering Thermodynamics in Julia.
 
 # Description
 
@@ -54,7 +54,7 @@ How to cite this project:
 ```bibtex
 @Misc{2022-NaaktgeborenC-EngThermBase,
   author       = {C. Naaktgeboren},
-  title        = {{EngThermBase.jl} -- Basic types and functionality for Engineering Thermodynamics in Julia},
+  title        = {{EngThermBase.jl} -- Basic definitions for Engineering Thermodynamics in Julia},
   howpublished = {Online},
   year         = {2022},
   journal      = {GitHub repository},
