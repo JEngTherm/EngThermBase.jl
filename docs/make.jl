@@ -10,7 +10,7 @@ makedocs(
     pages = Any[
         "Introduction" => "index.md",
         "Examples" => Any[
-            "Tagging" => "tagging.jl",
+            "Tagging" => "tagging.md",
         ],
         "Reference" => "reference.md",
     ],
