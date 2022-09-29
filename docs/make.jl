@@ -48,6 +48,7 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == true
     ),
+    logo = "assets/logo.svg",
     modules = [EngThermBase],
     pages = Any[
         "Introduction" => "index.md",
