@@ -259,7 +259,7 @@ search: ø_ ø_amt
   Function to return generic dimensionless ratio amounts in (–).
 ```
 
-## Property Whole Amounts
+### Property Whole Amounts
 
 Property whole amounts include the following:
 
