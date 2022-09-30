@@ -55,6 +55,9 @@ makedocs(
         "Examples" => Any[
             "Tagging" => "tagging.md",
         ],
+        "TutoriTests" => Any[
+            "Amounts" => "tt-amounts.md",
+        ],
         "Reference" => "reference.md",
     ],
 )
