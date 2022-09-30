@@ -42,6 +42,8 @@ Themes.compile(
 using Literate
 Literate.markdown("src/tagging.jl", "src"; credit = false)
 
+DocMeta.setdocmeta!(EngThermBase, :DocTestSetup, :(using EngThermBase); recursive=true)
+
 # EngThermBase docs:
 makedocs(
     sitename = "EngThermBase",

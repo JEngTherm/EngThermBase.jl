@@ -1,3 +1,7 @@
+```@meta
+DocTestFilters = r"[0-9\.]+ seconds \(.*\)"
+```
+
 # Amounts Tutori-Test
 
 This "tutori-test"—i.e., a tutorial/test—goes through `AMOUNTS` instantiation, or quantity
@@ -53,39 +57,45 @@ Input values can be any `Real` plain old data or unit'ed types.
 Plain old data (POD) examples:
 
 ```jldoctest
-julia> [ __amt(1), __amt(1//1), __amt(0x1) ]	# Type constructors
+julia> @time [ __amt(1), __amt(1//1), __amt(0x1) ]	# Type constructors
+  0.000014 seconds (22 allocations: 992 bytes)
 3-element Vector{__amt{Float64, EX}}:
  _₆₄: 1.0000
  _₆₄: 1.0000
  _₆₄: 1.0000
 
-julia> [ __amt(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat) ]
+julia> @time [ __amt(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat) ]
+  0.060191 seconds (78.61 k allocations: 4.146 MiB, 91.92% compilation time)
 4-element Vector{__amt{𝗽, EX} where 𝗽}:
  _₁₆: 3.1406
  _₃₂: 3.1416
  _₆₄: 3.1416
  _₂₅₆: 3.1416
 
-julia> [ _a(1), _a(1//1), _a(0x1) ]				# Exported function
+julia> @time [ _a(1), _a(1//1), _a(0x1) ]				# Exported function
+  0.000015 seconds (22 allocations: 992 bytes)
 3-element Vector{__amt{Float64, EX}}:
  _₆₄: 1.0000
  _₆₄: 1.0000
  _₆₄: 1.0000
 
-julia> [ _a(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat) ]
+julia> @time [ _a(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat) ]
+  0.053903 seconds (76.23 k allocations: 3.989 MiB, 99.46% compilation time)
 4-element Vector{__amt{𝗽, EX} where 𝗽}:
  _₁₆: 3.1406
  _₃₂: 3.1416
  _₆₄: 3.1416
  _₂₅₆: 3.1416
 
-julia> [ 𝗔(1), 𝗔(1//1), 𝗔(0x1) ]				# Exoprted function alias
+julia> @time [ 𝗔(1), 𝗔(1//1), 𝗔(0x1) ]				# Exoprted function alias
+  0.000021 seconds (28 allocations: 1.062 KiB)
 3-element Vector{__amt{Float64, EX}}:
  _₆₄: 1.0000
  _₆₄: 1.0000
  _₆₄: 1.0000
 
-julia> [ 𝗔(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat) ]
+julia> @time [ 𝗔(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat) ]
+  0.060330 seconds (76.00 k allocations: 3.980 MiB, 99.45% compilation time)
 4-element Vector{__amt{𝗽, EX} where 𝗽}:
  _₁₆: 3.1406
  _₃₂: 3.1416
