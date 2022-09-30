@@ -163,7 +163,6 @@ i.e., not being of per system mass or per system chemical amount, and of fixed u
 ```jldoctest tt_amounts_whole
 julia> using EngThermBase
 
-julia> using TypeTree
 ```
 
 ```julia
@@ -183,6 +182,8 @@ search: WholeAmt
 `EngThermBase` whole amounts are concrete subtypes of `WholeAmt`, therefore:
 
 ```jldoctest tt_amounts_whole
+julia> using TypeTree
+
 julia> print(tt(WholeAmt, concrete=true)...)
 WholeAmt
  ├─ WInteract
