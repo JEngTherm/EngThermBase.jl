@@ -343,7 +343,7 @@ mkWhlAmt(:Pramt, :WProperty, :Pr, :𝗣𝗿, "Pr", ULESS()    , "–"       , "r
 mkWhlAmt(:vramt, :WProperty, :vr, :𝘃𝗿, "vr", ULESS()    , "–"       , "relative specific volume"          , false)
 
 # Generic dimensionless ratio
-mkWhlAmt(:ø_amt, :WProperty, :ø_, :ø , "ø" , ULESS()    , "–"       , "generic dimensionless ratio"       , false)
+mkWhlAmt(:ø_amt, :WUnranked, :ø_, :ø , "ø" , ULESS()    , "–"       , "generic dimensionless ratio"       , false)
 
 
 #----------------------------------------------------------------------------------------------#
