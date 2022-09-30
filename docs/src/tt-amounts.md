@@ -14,7 +14,9 @@ represent any real quantity of any units, including dimensionless ones.
 
 Their type is:
 
-```jldoctest
+```jldoctest tt_amounts
+julia> using EngThermBase
+
 julia> __amt === __amt{𝗽,𝘅} where {𝗽,𝘅}
 true
 
@@ -22,7 +24,7 @@ true
 
 more precisely:
 
-```jldoctest
+```jldoctest tt_amounts
 julia> __amt === __amt{𝗽,𝘅} where {𝗽,𝘅}
 true
 
@@ -31,7 +33,7 @@ true
 Parameter `𝗽<:Union{Float16, Float32, Float64, BigFloat}` is the precision and `𝘅<:Union{EX,MM}`
 is the exactness. Illegal instances include:
 
-```jldoctest
+```jldoctest tt_amounts
 julia> __amt{AbstractFloat}
 ERROR: TypeError: in AMOUNTS, in 𝗽, expected 𝗽<:Union{Float16, Float32, Float64, BigFloat}, got Type{AbstractFloat}
 [...]
@@ -56,7 +58,7 @@ Input values can be any `Real` plain old data or unit'ed types.
 
 Plain old data (POD) examples:
 
-```jldoctest
+```jldoctest tt_amounts
 julia> @time [ __amt(1), __amt(1//1), __amt(0x1) ]	# Type constructors
   0.000014 seconds (22 allocations: 992 bytes)
 3-element Vector{__amt{Float64, EX}}:
