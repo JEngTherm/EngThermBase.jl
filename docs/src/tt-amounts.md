@@ -275,8 +275,52 @@ Property whole amounts include the following:
 - `x_amt` for saturated vapor mass fraction (quality) in (–);
 
 ```jldoctest tt_amounts_whole
+julia> @time [ TY(0.125) for TY in (Maamt, P_amt, Pramt, T_amt, Z_amt, beamt, csamt, gaamt, kTamt, k_amt, ksamt, mJamt, mSamt, spamt, veamt, vramt, x_amt) ]
+  0.050951 seconds (91.74 k allocations: 5.068 MiB, 96.66% compilation time)
+17-element Vector{WProperty{Float64, EX}}:
+ Ma₆₄: 0.12500 –
+ P₆₄: 0.12500 kPa
+ Pr₆₄: 0.12500 –
+ T₆₄: 0.12500 K
+ Z₆₄: 0.12500 –
+ β₆₄: 0.12500 /K
+ 𝕔₆₄: 0.12500 √(kJ/kg)
+ γ₆₄: 0.12500 –
+ κT₆₄: 0.12500 /kPa
+ k₆₄: 0.12500 –
+ κs₆₄: 0.12500 /kPa
+ μJ₆₄: 0.12500 K/kPa
+ μS₆₄: 0.12500 K/kPa
+ 𝕧₆₄: 0.12500 m/s
+ 𝕍₆₄: 0.12500 √(kJ/kg)
+ vr₆₄: 0.12500 –
+ x₆₄: 0.12500 –
 ```
 
+Sample unit conversions:
+
 ```jldoctest tt_amounts_whole
+julia> 𝑣 = 120u"km/hr"
+120 km hr^-1
+
+julia> sp(𝑣)
+𝕧₆₄: 33.333 m/s
+
+julia> ve(𝑣)
+𝕍₆₄: 1.0541 √(kJ/kg)
+
+julia> sp(ve(1))
+𝕧₆₄: 31.623 m/s
+
+julia> uconvert(u"km/hr", amt(sp(ve(1))))
+113.84199576606166 km hr^-1
+```
+
+On the above example, the `amt()` function is used as to extract the amount from any concrete
+type `<:AMOUNTS`.
+
+```@info
+Function `amt()` is faster than accessing `amount.amt` because it is written in a type-stable
+manner.
 ```
 
