@@ -265,14 +265,14 @@ Property whole amounts include the following:
 - `csamt` for adiabatic speeds of sound in (√(kJ/kg));
 - `gaamt` for specific heat ratios in (–);
 - `kTamt` for isothermal compressibility in (1/kPa);
-- `k_amt` for 
-- `ksamt` for 
-- `mJamt` for 
-- `mSamt` for 
-- `spamt` for 
-- `veamt` for 
-- `vramt` for 
-- `x_amt` for 
+- `k_amt` for isentropic expansion exponents in (–);
+- `ksamt` for isentropic compressibility in (1/kPa);
+- `mJamt` for Joule-Thomson coefficient in (K/kPa);
+- `mSamt` for isentropic expansion coefficient in (K/kPa);
+- `spamt` for speed amounts in (m/s);
+- `veamt` for velocity amounts in (√(kJ/kg));
+- `vramt` for relative specific volume in (–);
+- `x_amt` for saturated vapor mass fraction (quality) in (–);
 
 ```jldoctest tt_amounts_whole
 ```
