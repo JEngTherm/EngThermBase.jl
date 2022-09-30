@@ -163,6 +163,10 @@ i.e., not being of per system mass or per system chemical amount, and of fixed u
 ```jldoctest tt_amounts_whole
 julia> using EngThermBase
 
+julia> using TypeTree
+```
+
+```julia
 help?> WholeAmt
 search: WholeAmt
 
@@ -243,7 +247,7 @@ argument type).
 Further, all concrete types `<:AMOUNTS` are expressed as strings of 5 ASCII characters
 (including `ø_amt` that starts with `'ø': Unicode U+00F8 (category Ll: Letter, lowercase)`):
 
-```jldoctest tt_amounts_whole
+```julia
 help?> ø_
 "ø_" can be typed by \o<tab>_
 
@@ -319,8 +323,7 @@ julia> uconvert(u"km/hr", amt(sp(ve(1))))
 On the above example, the `amt()` function is used as to extract the amount from any concrete
 type `<:AMOUNTS`.
 
-```@info
-Function `amt()` is faster than accessing `amount.amt` because it is written in a type-stable
-manner.
-```
+!!! note
+	Function `amt()` is faster than accessing `amount.amt` because it is written in a
+	type-stable manner.
 
