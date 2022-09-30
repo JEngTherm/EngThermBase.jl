@@ -12,7 +12,7 @@ This "tutori-test"—i.e., a tutorial/test—goes through `AMOUNTS` instantiatio
 `EngThermBase` generic amounts are generic and bears no assumptions on units, and thus, can
 represent any real quantity of any units, including dimensionless ones.
 
-```jldoctest tt_amounts_generic
+```julia
 julia> using EngThermBase
 
 help?> GenerAmt
@@ -31,6 +31,8 @@ search: GenerAmt @generated
 Their concrete type is:
 
 ```jldoctest tt_amounts_generic
+julia> using EngThermBase
+
 julia> __amt === __amt{𝗽,𝘅} where {𝗽,𝘅}
 true
 ```
