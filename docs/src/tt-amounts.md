@@ -542,14 +542,34 @@ julia> [ R_(0.5, __b) for __b in (SY, DT, MA, MO) ]
  ṁR₆₄: 0.50000 kJ/K/s
  R₆₄: 0.50000 kJ/K/kg
  R̄₆₄: 0.50000 kJ/K/kmol
+```
 
+The gas constant in the `(SY, DT, MA, MO)` bases represent, respectively (i) an `mR` product,
+(ii) an `ṁR` product, (iii) a gas constant, and (iv) a molar gas constant, or universal gas
+constant tag—`R_()` with no paramaters actually returns the universal gas constant:
+
+```jldoctest tt_amounts_based
+julia> R_()
+R̄₆₄: 8.3145 kJ/K/kmol
+```
+
+The mass in the `(SY, DT, MA, MO)` bases represent, respectively (i) a system's mass, (ii) a
+mass rate, (iii) a mass fraction, and (iv) a molar mass, or molecular mass (weight):
+
+```jldoctest tt_amounts_based
 julia> [ m_(0.5, __b) for __b in (SY, DT, MA, MO) ]
 4-element Vector{m_amt{Float64, EX}}:
  m₆₄: 0.50000 kg
  ṁ₆₄: 0.50000 kg/s
  mf₆₄: 0.50000 kg/kg
  M₆₄: 0.50000 kg/kmol
+```
 
+The chemical amount in the `(SY, DT, MA, MO)` bases represent, respectively (i) a system's
+chemical amount, (ii) a chemical amount rate, (iii) a specific chemical amount, and (iv) a molar
+fraction:
+
+```jldoctest tt_amounts_based
 julia> [ N_(0.5, __b) for __b in (SY, DT, MA, MO) ]
 4-element Vector{N_amt{Float64, EX}}:
  N₆₄: 0.50000 kmol
@@ -557,8 +577,6 @@ julia> [ N_(0.5, __b) for __b in (SY, DT, MA, MO) ]
  n₆₄: 0.50000 kmol/kg
  y₆₄: 0.50000 kmol/kmol
 ```
-
-
 
 ```jldoctest tt_amounts_based
 ```
