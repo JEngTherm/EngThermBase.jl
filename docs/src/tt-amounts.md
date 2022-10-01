@@ -604,7 +604,7 @@ julia> mRT = [ m_(2, SY) * R_(2) * T_(300) ]
  mRT₆₄: 1200.0 kJ
 ```
 
-"Canonical", or defining ratios, such as ``Pv / RT`` or ``PV / mRT`` (``\eqdef Z``), return the
+"Canonical", or defining ratios, such as ``Pv / RT`` or ``PV / mRT`` (≝ ``Z``), return the
 amount defined by them:
 
 ```jldoctest tt_amounts_based
