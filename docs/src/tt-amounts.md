@@ -330,6 +330,20 @@ type `<:AMOUNTS`.
 	Function `amt()` is faster than accessing `amount.amt` because it is written in a
 	type-stable manner.
 
+The standard temperature and pressure are returned from corresponding functions with no numeric
+arguments. For standard values, precision and exactness arguments are allowed:
+
+```jldoctest tt_amounts_whole
+julia> [ T_(), P_() ]
+2-element Vector{WProperty{Float64, EX}}:
+ T₆₄: 298.15 K
+ P₆₄: 101.35 kPa
+
+julia> [ T_(Float32, MM), P_(Float32, MM) ]
+2-element Vector{WProperty{Float32, MM}}:
+ T₃₂: (298.15 ± 5.7e-14 K)
+ P₃₂: (101.35 ± 1.4e-14 kPa)
+```
 
 ## Based Amounts
 
@@ -578,7 +592,37 @@ julia> [ N_(0.5, __b) for __b in (SY, DT, MA, MO) ]
  y₆₄: 0.50000 kmol/kmol
 ```
 
+Product quantities can be build directly or from their defining products:
+
 ```jldoctest tt_amounts_based
+julia> PV = [ P_() * v_(12, SY) ]
+1-element Vector{Pvamt{Float64, EX, SY}}:
+ PV₆₄: 1216.2 kJ
+
+julia> mRT = [ m_(2, SY) * R_(2) * T_(300) ]
+1-element Vector{RTamt{Float64, EX, SY}}:
+ mRT₆₄: 1200.0 kJ
+```
+
+"Canonical", or defining ratios, such as ``Pv / RT`` or ``PV / mRT`` (``\eqdef Z``), return the
+amount defined by them:
+
+```jldoctest tt_amounts_based
+julia> PV ./ mRT
+1-element Vector{Z_amt{Float64, EX}}:
+ Z₆₄: 1.0135 –
+
+julia> ( P_() * v_(12, MA) ) / ( R_(2, MA) * T_(300) )
+Z₆₄: 2.0270 –
+
+julia> ( P_() * v_(12, MO) ) / ( R_(2, MO) * T_(300) )
+Z₆₄: 2.0270 –
+
+julia> ( P_() * v_(12, SY) ) / ( R_(2, SY) * T_(300) )
+Z₆₄: 2.0270 –
+
+julia> ( P_() * v_(12, DT) ) / ( R_(2, DT) * T_(300) )
+Z₆₄: 2.0270 –
 ```
 
 ```jldoctest tt_amounts_based
