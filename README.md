@@ -1,4 +1,4 @@
-![EngThermBase](https://github.com/JEngTherm/EngThermBase.jl/blob/master/docs/src/assets/logo-036.svg?raw=true)
+![EngThermBase](https://github.com/JEngTherm/EngThermBase.jl/blob/master/docs/src/assets/logo-036.png?raw=true)
 
 # EngThermBase.jl
 
