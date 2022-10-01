@@ -330,3 +330,194 @@ type `<:AMOUNTS`.
 	Function `amt()` is faster than accessing `amount.amt` because it is written in a
 	type-stable manner.
 
+
+## Based Amounts
+
+`EngThermBase` based amounts have a third parameter—the base `𝗯<:BASE=Union{DT, MA, MO, SY}`—on
+top of everything that whole amounts have, such as precision- and exactness- parameters and
+fixed units (for the System, `SY` base, and different and derivable units for the other, `{DT,
+MA, MO}`, bases).
+
+```jldoctest tt_amounts_based
+julia> using EngThermBase
+
+```
+
+```julia
+help?> BasedAmt
+search: BasedAmt
+
+  abstract type BasedAmt{𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} <: AMOUNTS{𝗽,𝘅} end
+
+  Abstract supertype for based amount groups of fixed units.
+
+  Hierarchy
+  ===========
+
+  BasedAmt <: AMOUNTS <: AbstractTherm <: Any
+```
+
+`EngThermBase` based amounts are concrete subtypes of `BasedAmt`, which itself subdivides into
+
+- Interactions, `BInteract`,
+- Properties, `BProperty`, and
+- Unranked, `BUnranked`.
+
+The distinctions between properties (`BProperty`) and interactions (`BInteract`) follow the
+corresponding concepts in Engineering Thermodynamics. The unkanked (`BUnranked`) category exists
+currently as an extension, for based physical amounts that do not fit the property/interaction
+classification, and is currently devoid of concrete subtypes.
+
+```jldoctest tt_amounts_based
+julia> using TypeTree
+
+julia> print(tt(BasedAmt, concrete=false)...)
+BasedAmt
+ ├─ BInteract{𝗽, 𝘅, 𝗯} where {𝗽, 𝘅, 𝗯<:BASE}
+ ├─ BProperty{𝗽, 𝘅, 𝗯} where {𝗽, 𝘅, 𝗯<:BASE}
+ └─ BUnranked{𝗽, 𝘅, 𝗯} where {𝗽, 𝘅, 𝗯<:BASE}
+```
+
+If a `BasedAmt` concrete subtype has (fixed) units of `kJ` for the System, `SY`, base; then it
+will have units of `kJ/s` for the Rate, `DT`, base; units of `kJ/kg` for the mass, `MA`, base;
+and units of `kJ/kmol` for the molar, `MO`, base. Therefore, the base parameter `𝗯` can be
+inferred from:
+
+- The fixed unit for the `SY` base, and
+- The unit of a suitable input parameter (a `Number` with units).
+
+
+## Based Interactions
+
+Based interactions are concrete subtypes of `BInteract`, and include:
+
+```jldoctest tt_amounts_based
+julia> print(tt(BInteract, concrete=true)...)
+BInteract
+ ├─ deamt
+ ├─ dsamt
+ ├─ q_amt
+ └─ w_amt
+```
+
+That is:
+
+- Heat, in various bases:
+	- total heat in `kJ`;
+	- heat rate in `kJ/s`;
+    - heat per system mass in `kJ/kg`;
+    - heat per system chemical amount in `kJ/kmol`;
+- Work, in various bases:
+	- total work in `kJ`;
+	- work rate in `kJ/s`;
+    - work per system mass in `kJ/kg`;
+    - work per system chemical amount in `kJ/kmol`;
+- Energy variation (as of energy balance terms), in various bases; and
+- Entropy variation (as of entropy balance terms), in various bases.
+
+In the following examples, the base is inferred from the argument units:
+
+```jldoctest tt_amounts_based
+julia> [ q_(3.15 * i) for i in (u"kJ", u"kJ/s", u"kJ/kg", u"kJ/kmol") ]
+4-element Vector{q_amt{Float64, EX}}:
+ Q₆₄: 3.1500 kJ
+ Q̇₆₄: 3.1500 kJ/s
+ q₆₄: 3.1500 kJ/kg
+ q̄₆₄: 3.1500 kJ/kmol
+
+julia> [ w_(3.15 * i) for i in (u"kJ", u"kJ/s", u"kJ/kg", u"kJ/kmol") ]
+4-element Vector{w_amt{Float64, EX}}:
+ W₆₄: 3.1500 kJ
+ Ẇ₆₄: 3.1500 kJ/s
+ w₆₄: 3.1500 kJ/kg
+ w̄₆₄: 3.1500 kJ/kmol
+```
+
+Note how based quantities in different bases display differently and according to mainstream
+Engineering Thermodynamics textbooks, i.e., with lowercase letters for intensive quantities,
+with the molar base indicated by an overbar, and rate indicated by an overdot.
+
+In the following example, unitless amounts are passed to the constructors, which apply the
+default intensive base, `DEF[:IB]`:
+
+```jldoctest tt_amounts_based
+julia> DEF[:IB]
+MA
+
+julia> [ F(300.0) for F in (q_, w_, de, ds) ]
+4-element Vector{BInteract{Float64, EX, MA}}:
+ q₆₄: 300.00 kJ/kg
+ w₆₄: 300.00 kJ/kg
+ Δe₆₄: 300.00 kJ/kg
+ Δs₆₄: 300.00 kJ/K/kg
+```
+
+This exists as a shortcut, so that the user doesn't have to input units as to conveniently build
+quantities, nor enter them as floating points if they aren't, as in the following energy balance
+LHS example:
+
+```jldoctest tt_amounts_based
+julia> ENERGY_BALANCE_LHS = q_(200) - w_(150)
+Δe₆₄: 50.000 kJ/kg
+
+julia> [ q_(200), w_(150) ]
+2-element Vector{BInteract{Float64, EX, MA}}:
+ q₆₄: 200.00 kJ/kg
+ w₆₄: 150.00 kJ/kg
+```
+
+Note that the primitives `q_(200)` and `w_(150)` build `q_amt` and `w_amt`, both `<:
+BInteract{Float64, EX, MA}`. However, their sum (in the example energy balance) was
+automatically re-labeled as a `deamt{Float64, EX, MA}`. The automatic re-labeling is one
+proeminent feature of `EngThermBase`, and is explained in greater detail in the "Operations"
+part of the documentation.
+
+
+## Based Properties
+
+Based properties are concrete subtypes of `BProperty`, and include:
+
+```jldoctest tt_amounts_based
+julia> print(tt(BProperty, concrete=true)...)
+BProperty
+ ├─ N_amt
+ ├─ Pvamt
+ ├─ RTamt
+ ├─ R_amt
+ ├─ Tsamt
+ ├─ a_amt
+ ├─ c_amt
+ ├─ cpamt
+ ├─ cvamt
+ ├─ e_amt
+ ├─ ekamt
+ ├─ epamt
+ ├─ g_amt
+ ├─ h_amt
+ ├─ j_amt
+ ├─ m_amt
+ ├─ s_amt
+ ├─ u_amt
+ ├─ v_amt
+ └─ y_amt
+```
+
+Their naming follow mainstream Engineering Thermodynamics textbooks, such as `P_`, `T_`, `v_`,
+`R_`, `m_amt`, and `N_amt`, respectively for pressure, temperature, volume, gas constant, mass,
+and chemical amount; `u_`, `h_`, `s_`, `a_`, and `g_`, respectively for internal energy,
+enthalpy, entropy, and Helmholtz and Gibbs energy functions; `cp`, `cv`, `c_`, `ek`, `ep`,
+respectively for specific heat at constant pressure, volume, incompressible substance specific
+heat, and kinetic and potential energies; as well as `j_` and `r_` for the Massieu and Planck
+functions, as well as the `Pv`, `RT`, and `Ts` products.
+
+```jldoctest tt_amounts_based
+```
+
+```jldoctest tt_amounts_based
+```
+
+```jldoctest tt_amounts_based
+```
+
+
+
