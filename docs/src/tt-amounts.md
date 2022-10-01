@@ -625,8 +625,4 @@ julia> ( P_() * v_(12, DT) ) / ( R_(2, DT) * T_(300) )
 Z₆₄: 2.0270 –
 ```
 
-```jldoctest tt_amounts_based
-```
-
-
 
