@@ -502,16 +502,63 @@ BProperty
  └─ y_amt
 ```
 
-Their naming follow mainstream Engineering Thermodynamics textbooks, such as `P_`, `T_`, `v_`,
-`R_`, `m_amt`, and `N_amt`, respectively for pressure, temperature, volume, gas constant, mass,
-and chemical amount; `u_`, `h_`, `s_`, `a_`, and `g_`, respectively for internal energy,
-enthalpy, entropy, and Helmholtz and Gibbs energy functions; `cp`, `cv`, `c_`, `ek`, `ep`,
-respectively for specific heat at constant pressure, volume, incompressible substance specific
-heat, and kinetic and potential energies; as well as `j_` and `r_` for the Massieu and Planck
-functions, as well as the `Pv`, `RT`, and `Ts` products.
+Their naming follow mainstream Engineering Thermodynamics textbooks, such as `v_`, `R_`,
+`m_amt`, and `N_amt`, respectively for volume, gas constant, mass, and chemical amount; `u_`,
+`h_`, `s_`, `a_`, and `g_`, respectively for internal energy, enthalpy, entropy, and Helmholtz
+and Gibbs energy functions; `cp`, `cv`, `c_`, `ek`, `ep`, respectively for specific heat at
+constant pressure, volume, incompressible substance specific heat, and kinetic and potential
+energies; as well as `j_` and `r_` for the Massieu and Planck functions, as well as the `Pv`,
+`RT`, and `Ts` products.
+
+Beyond base inferring (from input dimensions) and default base application, the base can be
+explicitly specified:
 
 ```jldoctest tt_amounts_based
+julia> [ u_(200, __b) for __b in (SY, DT, MA, MO) ]
+4-element Vector{u_amt{Float64, EX}}:
+ U₆₄: 200.00 kJ
+ U̇₆₄: 200.00 kJ/s
+ u₆₄: 200.00 kJ/kg
+ ū₆₄: 200.00 kJ/kmol
 ```
+
+Moreover, unit conversions are performed, if needed:
+
+```jldoctest tt_amounts_based
+julia> u_(1u"btu")
+U₆₄: 1.0551 kJ
+
+julia> u_(1u"btu/lb")
+u₆₄: 2.3260 kJ/kg
+```
+
+The gas constant, `R_`; mass, `m_`; and chemical amount, `N_`; have interesting representations
+and values in different bases:
+
+```jldoctest tt_amounts_based
+julia> [ R_(0.5, __b) for __b in (SY, DT, MA, MO) ]
+4-element Vector{R_amt{Float64, EX}}:
+ mR₆₄: 0.50000 kJ/K
+ ṁR₆₄: 0.50000 kJ/K/s
+ R₆₄: 0.50000 kJ/K/kg
+ R̄₆₄: 0.50000 kJ/K/kmol
+
+julia> [ m_(0.5, __b) for __b in (SY, DT, MA, MO) ]
+4-element Vector{m_amt{Float64, EX}}:
+ m₆₄: 0.50000 kg
+ ṁ₆₄: 0.50000 kg/s
+ mf₆₄: 0.50000 kg/kg
+ M₆₄: 0.50000 kg/kmol
+
+julia> [ N_(0.5, __b) for __b in (SY, DT, MA, MO) ]
+4-element Vector{N_amt{Float64, EX}}:
+ N₆₄: 0.50000 kmol
+ Ṅ₆₄: 0.50000 kmol/s
+ n₆₄: 0.50000 kmol/kg
+ y₆₄: 0.50000 kmol/kmol
+```
+
+
 
 ```jldoctest tt_amounts_based
 ```
