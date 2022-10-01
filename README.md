@@ -1,3 +1,5 @@
+![EngThermBase](https://github.com/JEngTherm/EngThermBase.jl/blob/master/docs/src/assets/logo.svg?raw=true)
+
 # EngThermBase.jl
 
 Basic definitions for Engineering Thermodynamics in Julia.
