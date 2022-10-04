@@ -410,6 +410,7 @@ julia> print(tt(BInteract, concrete=true)...)
 BInteract
  ├─ deamt
  ├─ dsamt
+ ├─ i_amt
  ├─ q_amt
  └─ w_amt
 ```
@@ -503,6 +504,8 @@ BProperty
  ├─ c_amt
  ├─ cpamt
  ├─ cvamt
+ ├─ dpamt
+ ├─ dxamt
  ├─ e_amt
  ├─ ekamt
  ├─ epamt
@@ -510,9 +513,11 @@ BProperty
  ├─ h_amt
  ├─ j_amt
  ├─ m_amt
+ ├─ psamt
  ├─ s_amt
  ├─ u_amt
  ├─ v_amt
+ ├─ xiamt
  └─ y_amt
 ```
 
