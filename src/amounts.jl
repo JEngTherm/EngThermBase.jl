@@ -38,6 +38,13 @@ Interface to get an `AMOUNTS`' `:amt` field in a type-stable manner.
 """
 function amt end
 
+"""
+`function bare end`\n
+Interface to get an `AMOUNTS`' `:amt` field as a bare `<: AbstractFloat` in a type-stable
+manner.
+"""
+function bare end
+
 export deco, ppu, amt
 
 
