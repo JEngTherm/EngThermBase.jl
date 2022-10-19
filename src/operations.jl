@@ -472,6 +472,8 @@ inv(x::AMOUNTS) = AMT(inv(amt(x)))
 import Base: ^, sqrt, cbrt
 
 ^(x::AMOUNTS, y::Real) = AMT(^(amt(x), y))
+^(x::AMOUNTS, y::DIMLESS) = AMT(^(amt(x), bare(y)))
+^(x::Real, y::DIMLESS) = AMT(^(x, bare(y)))
 sqrt(x::AMOUNTS) = AMT(sqrt(amt(x)))
 cbrt(x::AMOUNTS) = AMT(cbrt(amt(x)))
 
