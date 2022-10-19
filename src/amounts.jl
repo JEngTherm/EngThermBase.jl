@@ -40,12 +40,17 @@ function amt end
 
 """
 `function bare end`\n
-Interface to get an `AMOUNTS`' `:amt` field as a bare `<: AbstractFloat` in a type-stable
-manner.
+Interface to get an `AMOUNTS`' bare (without units) value in a type-stable manner.
 """
 function bare end
 
-export deco, ppu, amt
+"""
+`function pod end`\n
+Interface to get an `AMOUNTS`' POD (plain old data) value in a type-stable manner.
+"""
+function pod end
+
+export deco, ppu, amt, bare, pod
 
 
 #----------------------------------------------------------------------------------------------#
@@ -135,6 +140,12 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         # Type-stabler wrapped amount obtaining function
         amt(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽}
         amt(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽}}
+        # Type-stabler bare amount obtaining function
+        bare(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt.val::𝗽
+        bare(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt.val::Measurement{𝗽}
+        # Type-stabler pod amount obtaining function
+        pod(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt.val::𝗽
+        pod(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt.val.val::𝗽
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = string(unit(amt(x)))
@@ -275,6 +286,12 @@ Constructors determine all parameters from their arguments.\n
         # Type-stable wrapped amount obtaining function
         amt(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑SY,$𝑢SY}
         amt(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑SY,$𝑢SY}
+        # Type-stable bare amount obtaining function
+        bare(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt.val::𝗽
+        bare(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt.val::Measurement{𝗽}
+        # Type-stable pod amount obtaining function
+        pod(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt.val::𝗽
+        pod(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt.val.val::𝗽
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = Symbol($𝑠SY)
         ppu(x::$TYPE{𝗽,𝘅} where {𝗽,𝘅}) = $USTR
@@ -548,6 +565,12 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         amt(x::$TYPE{𝗽,MM,DT}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑DT,$𝑢DT}
         amt(x::$TYPE{𝗽,MM,MA}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑MA,$𝑢MA}
         amt(x::$TYPE{𝗽,MM,MO}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑MO,$𝑢MO}
+        # Type-stable bare amount obtaining function
+        bare(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt.val::𝗽
+        bare(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt.val::Measurement{𝗽}
+        # Type-stable pod amount obtaining function
+        pod(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt.val::𝗽
+        pod(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt.val.val::𝗽
         # Type-specific functions
         deco(x::$TYPE{𝗽,𝘅,SY} where {𝗽,𝘅}) = Symbol($𝑠SY)
         deco(x::$TYPE{𝗽,𝘅,DT} where {𝗽,𝘅}) = Symbol($𝑠DT)
