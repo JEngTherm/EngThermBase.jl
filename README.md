@@ -2,15 +2,25 @@
 
 # EngThermBase.jl
 
-Basic definitions for Engineering Thermodynamics in Julia.
+Engineering Thermodynamics understructure in Julia.
+
 
 # Description
 
-The `EngThermBase.jl` package aims at providing a common platform for engineering
-thermodynamics packages and case calculations by implementing:
+The `EngThermBase.jl` package provides a common platform for engineering thermodynamics packages
+and case calculations by implementing:
 
-- Engineering thermodynamics quantities **tagging**, such as `P`, `T`, `v`, `u`, `h`, `s`,
-  etc...
+- Engineering thermodynamics quantity (such as `P`, `T`, `v`, `u`, `h`, `s`, etc.) **tagging**
+  and **untagging** facilities;
+    - Sample tagging:
+        - `T1, P1 = T_(25u"°C"), P_(1u"atm")` yields `(T₆₄: 298.15 K, P₆₄: 101.33 kPa)`;
+        - `TPPair(T1, P1)` yields `TPPair{Float64, EX}(T₆₄: 298.15 K, P₆₄: 101.33 kPa)`;
+        - `v_(0.2332f0, MO), s_(Float16(6.623))` yields `(v̄₃₂: 0.23320 m³/kmol, s₁₆: 6.6211 kJ/K/kg)`.
+    - Sample untagging:
+        - `T1()` yields `298.15 K`;
+        - `T1(u"°C")` yields `25.0 °C`.
+- Floating point precision-, exactness-, and thermodynamic base- parameterized tags:
+    - `TvPair(T1, v1)` yields `TvPair{Float64, EX, MA}(T₆₄: 298.15 K, v₆₄: 0.23320 m³/kg)`.
 - Default (SI) **units** for tagged quantities—through
   [Unitful.jl](https://github.com/PainterQubits/Unitful.jl);
 - **Uncertainty propagation**—through
@@ -27,10 +37,13 @@ thermodynamics packages and case calculations by implementing:
     - `(P * v) / (R * T) --> Z`, and the like;
 - Thermodynamic **bases**, such as:
     - `MA` (mass),
-    - `MO` (molar), etc... ones;
+    - `MO` (molar),
+    - `SY` (system, or extensive), and
+    - `DT` (rate);
 - Automatic **re-basing**, such as:
-    - `u * m --> U`,
-    - `R̄ / M --> R`,
+    - `u * m --> U`, (mass-base intensive into extensive by multiplication by mass)
+    - `R̄ / M --> R`, (molar-base intensive into mass-base intensive by division by molecular
+      mass)
     - `ṁ * q --> Q̇`, etc..., and
 - Exports an **abstract type hyerarchy** so as to provide **hooks** for thermodynamic models of
   heat capacity, pure substance (by equation of state, or EoS), mixtures, etc... such as the
@@ -57,14 +70,16 @@ under the MIT license.
 How to cite this project:
 
 ```bibtex
-@Misc{2022-NaaktgeborenC-EngThermBase,
+@Misc{2023-NaaktgeborenC-EngThermBase,
   author       = {C. Naaktgeboren},
-  title        = {{EngThermBase.jl} -- Basic definitions for Engineering Thermodynamics in Julia},
+  title        = {{EngThermBase.jl} -- Engineering Thermodynamics understructure in Julia},
   howpublished = {Online},
-  year         = {2022},
+  month        = {August},
+  year         = {2023},
   journal      = {GitHub repository},
   publisher    = {GitHub},
   url          = {https://github.com/JEngTherm/EngThermBase.jl},
+  note         = {release 0.3.3 of 23-08-22},
 }
 ```
 
