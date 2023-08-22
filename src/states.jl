@@ -135,3 +135,60 @@ end
 export PvPair
 
 
+#----------------------------------------------------------------------------------------------#
+#                                     Property Trio States                                     #
+#----------------------------------------------------------------------------------------------#
+
+#······························································································#
+#                                         TPxTrio{𝕡,𝕩}                                         #
+#······························································································#
+
+struct TPxTrio{𝕡,𝕩} <: PropTrio{𝕡,𝕩}
+    T::T_amt{𝕡,𝕩}
+    P::P_amt{𝕡,𝕩}
+    x::x_amt{𝕡,𝕩}
+    # Inner, non-converting constructor
+    TPxTrio(_T::T_amt{𝕡,𝕩}, _P::P_amt{𝕡,𝕩}, _x::x_amt{𝕡,𝕩}) where {𝕡<:PREC, 𝕩<:EXAC} = begin
+        @assert pod(_T) > zero(𝕡)
+        @assert pod(_P) > zero(𝕡)
+        @assert pod(_x) >= zero(𝕡)
+        @assert pod(_x) <= one(𝕡)
+        new{𝕡,𝕩}(_T, _P, _x)
+    end
+    # Fallback constructors -- all 6 argument permutations
+    TPxTrio(_x::x_amt{𝕡,𝕩}, _T::T_amt{𝕡,𝕩}, _P::P_amt{𝕡,𝕩}) where {𝕡<:PREC, 𝕩<:EXAC} = begin
+        TPxTrio(_T, _P, _x)
+    end
+    TPxTrio(_P::P_amt{𝕡,𝕩}, _x::x_amt{𝕡,𝕩}, _T::T_amt{𝕡,𝕩}) where {𝕡<:PREC, 𝕩<:EXAC} = begin
+        TPxTrio(_T, _P, _x)
+    end
+    TPxTrio(_P::P_amt{𝕡,𝕩}, _T::T_amt{𝕡,𝕩}, _x::x_amt{𝕡,𝕩}) where {𝕡<:PREC, 𝕩<:EXAC} = begin
+        TPxTrio(_T, _P, _x)
+    end
+    TPxTrio(_x::x_amt{𝕡,𝕩}, _P::P_amt{𝕡,𝕩}, _T::T_amt{𝕡,𝕩}) where {𝕡<:PREC, 𝕩<:EXAC} = begin
+        TPxTrio(_T, _P, _x)
+    end
+    TPxTrio(_T::T_amt{𝕡,𝕩}, _x::x_amt{𝕡,𝕩}, _P::P_amt{𝕡,𝕩}) where {𝕡<:PREC, 𝕩<:EXAC} = begin
+        TPxTrio(_T, _P, _x)
+    end
+    # Fallback Tuple constructor
+    TPxTrio(_y::NTuple{3,Union{T_amt, P_amt, x_amt}}) = TPxTrio(_y...)
+end
+# External, converting constructors
+(::TPxTrio{𝕡,𝕩})(y::TPxTrio{𝕤,𝕪}) where {𝕡<:PREC,𝕤<:PREC,𝕩<:EXAC,𝕪<:EXAC} = begin
+    TPxTrio(T_amt{𝕡,𝕩}(y.T), P_amt{𝕡,𝕩}(y.P), x_amt{𝕡,𝕩}(y.x))
+end
+# Promotion rules
+promote_rule(::Type{TPxTrio{𝕤,𝕪}},
+             ::Type{TPxTrio{𝕡,𝕩}}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
+    TPxTrio{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}
+end
+# Conversions
+convert(::Type{TPxTrio{𝕤,𝕪}},
+        y::TPxTrio{𝕡,𝕩}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
+    TPxTrio{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}(y)
+end
+# Exporting
+export TPxTrio
+
+
