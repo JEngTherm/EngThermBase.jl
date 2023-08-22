@@ -109,6 +109,9 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         end
         # Type documentation
         @doc $dcStr $TYPE
+        # Make type callable (functor), for data extraction and unit conversion
+        (x::$TYPE)() = amt(x)
+        (x::$TYPE)(𝑢::Unitful.FreeUnits) = uconvert(𝑢, amt(x)) # checks left to Unitful
         # External constructors for other DataTypes:
         $TYPE(x::REAL) = $TYPE(float(x))
         $TYPE(x::uniR{𝗽}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
@@ -262,6 +265,9 @@ Constructors determine all parameters from their arguments.\n
         end
         # Type documentation
         @doc $dcStr $TYPE
+        # Make type callable (functor), for data extraction and unit conversion
+        (x::$TYPE)() = amt(x)
+        (x::$TYPE)(𝑢::Unitful.FreeUnits{𝘂,$𝑑SY} where 𝘂) = uconvert(𝑢, amt(x))
         # External constructors for other DataTypes:
         $TYPE(x::REAL) = $TYPE(float(x))
         $TYPE(x::uniR{𝗽,$𝑑SY}) where 𝗽<:REAL = $TYPE(float(x.val) * unit(x))
@@ -524,6 +530,20 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         end
         # Type documentation
         @doc $dcStr $TYPE
+        # Make type callable (functor), for data extraction and unit conversion
+        (x::$TYPE)() = amt(x)
+        (x::$TYPE{𝗽,𝘅,SY})(𝑢::Unitful.FreeUnits{𝘂,$𝑑SY} where 𝘂) where {𝗽,𝘅} = begin
+            uconvert(𝑢, amt(x))
+        end
+        (x::$TYPE{𝗽,𝘅,DT})(𝑢::Unitful.FreeUnits{𝘂,$𝑑DT} where 𝘂) where {𝗽,𝘅} = begin
+            uconvert(𝑢, amt(x))
+        end
+        (x::$TYPE{𝗽,𝘅,MA})(𝑢::Unitful.FreeUnits{𝘂,$𝑑MA} where 𝘂) where {𝗽,𝘅} = begin
+            uconvert(𝑢, amt(x))
+        end
+        (x::$TYPE{𝗽,𝘅,MO})(𝑢::Unitful.FreeUnits{𝘂,$𝑑MO} where 𝘂) where {𝗽,𝘅} = begin
+            uconvert(𝑢, amt(x))
+        end
         # External constructors for other DataTypes:
         $TYPE(x::plnF) = $TYPE(x, DEF[:IB])
         $TYPE(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
