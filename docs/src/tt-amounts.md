@@ -259,6 +259,40 @@ concrete subtype, which can be a `Measurement` type. Finally, the `pod()` functi
 returns a "plain-old data", i.e., a value stripped off of units and uncertainty information:
 
 ```jldoctest tt_untagging
+julia> other = _a(0.75 ± 0.05)
+_₆₄: (0.75000 ± 0.050
+
+julia> amt(other)
+0.75 ± 0.05
+
+julia> bare(other)
+0.75 ± 0.05
+
+julia> pod(other)
+0.75
+
+julia> typeof.([ F(other) for F in (amt, bare, pod) ])
+3-element Vector{DataType}:
+ Quantity{Measurement{Float64}, NoDims, Unitful.FreeUnits{(), NoDims, nothing}}
+ Measurement{Float64}
+ Float64
+```
+
+A corrollary is that, for exact `AMOUNTS`, both `bare()` and `pod()` functions return the same
+thing:
+
+```jldoctest tt_untagging
+julia> exact = _a(0.75)
+_₆₄: 0.75000
+
+julia> typeof.([ F(exact) for F in (amt, bare, pod) ])
+3-element Vector{DataType}:
+ Quantity{Float64, NoDims, Unitful.FreeUnits{(), NoDims, nothing}}
+ Float64
+ Float64
+
+julia> bare(exact) === pod(exact)
+true
 ```
 
 
