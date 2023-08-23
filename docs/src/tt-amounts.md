@@ -295,6 +295,32 @@ julia> bare(exact) === pod(exact)
 true
 ```
 
+### Untagging by using `AMOUNTS` as `functors`
+
+Sometimes the added syntax `.amt`, or `amt()`, or `bare()`, or `pod()` gets in the user's way by
+making an expression longer and less readable than their untagging counterparts. Starting on
+`v0.3.3`, all `AMOUNTS` are now callable, i.e., objects that can be used as functions, or,
+`functors`.
+
+The advantage of using `functors` includes the minimal added syntax — a mere `()` after the
+identifier, which is more readable than the previously presented options. Moreover, the
+`functor` usage allows for parameters to be passed, which is a very convenient way of not only
+untagging the quantity, but also performing unit conversion.
+
+```jldoctest tt_untagging
+julia> ratio()
+0.75
+
+julia> ratio() === amt(ratio) === ratio.amt
+true
+
+julia> ratio(u"percent")
+75.0 %
+```
+
+Hopefully this last example gives a hint of how useful the `functor` functionality has become
+for Engineering Thermodynamic `AMOUNTS`.
+
 
 ## Whole Amounts
 
