@@ -217,6 +217,8 @@ All instances of an `AMOUNT`'s concrete subtype stores the value as a unit-ed `Q
 for dimensionless `AMOUNTS`:
 
 ```jldoctest tt_untagging
+julia> using EngThermBase
+
 julia> ratio = _a(0.75)
 _₆₄: 0.75000
 
