@@ -19,7 +19,7 @@ include("exactness.jl")
 include("amounts.jl")
 include("operations.jl")
 include("constants.jl")
-include("states.jl")
+include("combos.jl")
 
 # Module
 end
