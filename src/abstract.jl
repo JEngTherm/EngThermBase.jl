@@ -230,10 +230,10 @@ Unranked{𝗽,𝘅} = Union{WUnranked{𝗽,𝘅},BUnranked{𝗽,𝘅,𝗯} where
 export Property, Interact, Unranked
 
 # STATE branch — Pars are (i) precision, and (ii) exactness
-mk2ParAbs(  :STATES        , :AbstractTherm, "thermodynamic states"                        , 0)
-mk2ParAbs(    :PropPair    , :STATES       , "propery pairs"                               , 2)
-mk2ParAbs(    :PropTrio    , :STATES       , "propery trios"                               , 2)
-mk2ParAbs(    :PropQuad    , :STATES       , "propery quads"                               , 2)
+mk2ParAbs(  :COMBOS        , :AbstractTherm, "thermodynamic states"                        , 0)
+mk2ParAbs(    :PropPair    , :COMBOS       , "propery pairs"                               , 2)
+mk2ParAbs(    :PropTrio    , :COMBOS       , "propery trios"                               , 2)
+mk2ParAbs(    :PropQuad    , :COMBOS       , "propery quads"                               , 2)
 
 # MODEL branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :MODELS          , :AbstractTherm, "thermodynamic models"                      , 0)
