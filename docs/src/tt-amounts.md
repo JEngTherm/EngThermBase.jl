@@ -5,12 +5,15 @@ DocTestFilters = r"[0-9\.]+ seconds \(.*\)"
 # Amounts Tutori-Test
 
 This "tutori-test"—i.e., a tutorial/test—goes through `AMOUNTS` instantiation, or quantity
-(plain `Number`) tagging with `EngThermBase`:
+(plain `Number`) tagging with `EngThermBase`, as well as through untagging ways:
 
 ## Generic Amounts
 
 `EngThermBase` generic amounts are generic and bears no assumptions on units, and thus, can
-represent any real quantity of any units, including dimensionless ones.
+represent any real quantity of any units, including dimensionless ones. Although they are
+capable of, they aren't meant to tag common thermodynamic quantities such as temperature,
+pressure, and various forms of energy; rather, it works as a fallback, "one-type-fits-all" type.
+For the common thermodynamic quantities, there are the specific amounts, illustrated below.
 
 ```julia
 julia> using EngThermBase
@@ -38,7 +41,8 @@ true
 ```
 
 Parameter `𝗽<:Union{Float16, Float32, Float64, BigFloat}` is the precision and `𝘅<:Union{EX,MM}`
-is the exactness. Illegal instances include:
+is the exactness. Illegal instances include those of inespecific (abstract) precision and
+exactness parameters:
 
 ```jldoctest tt_amounts_generic
 julia> __amt{AbstractFloat}
@@ -82,7 +86,17 @@ julia> @time [ __amt(𝗶(π)) for 𝗶 in (Float16, Float32, Float64, BigFloat)
  _₂₅₆: 3.1416
 ```
 
-Instantiating with exported function `_a` and POD types:
+Notice the pretty-printing in action for tagged quantities. The pretty-printing is meant to
+provide a visual indication to the interacting user of what the tagging process has
+accomplished, meaning: it has "labeled" the quantity as a generic one (indicated by the
+underscore `_` - other quantity types (shown below) have far more meaningful and interesting
+labels); moreover, the underlying floating point precision is made explicit by the numeric
+subscripts; moreover, the value is obviously printed (with a globally adjustable number of
+significant digits).
+
+Instantiating with exported function `_a` and POD types (this is not to be confused with the
+exported function for the various forms (intensive, extensive, etc.) of the Helmholtz energy,
+`a_`):
 
 ```jldoctest tt_amounts_generic
 julia> @time [ _a(1), _a(1//1), _a(0x1) ]
@@ -156,6 +170,97 @@ julia> @time [ F(i*u"°C") for F in (_a, 𝗔) for i in Real[3, (TY(π) for TY i
  _₆₄: 3.1416 °C
  _₂₅₆: 3.1416 °C
 ```
+
+Instantiating with non-Engineerign Thermodynamic quantities with the exported function `AMT`,
+which attempts guessing what the "most adequate" label should be. Only non-Engineering
+Thermodynamic quantities fallback to the `__amt` conbstructor:
+
+```jldoctest tt_amounts_generic
+julia> AMT(1u"m^4")
+_₆₄: 1.0000 m^4
+
+julia> AMT(3u"kV")
+_₆₄: 3.0000 kV
+```
+
+!!! warning
+    Spoiler alert - the following example jumps way ahead.
+
+For the sake of counter example, if, for instance, known Engineering Thermodynamics quantities
+are passed, then, diferent amount types will be built, using different constructors that accepts
+the input units. `EngThermBase` `AMOUNTS` Constructors for united amounts store quantities in
+pre-defined units.
+
+```jldoctest tt_amounts_generic
+julia> [ AMT(i) for i in (-40u"°F", 1.6u"L", 1u"btu/lb", 114u"km/hr") ]
+4-element Vector{AMOUNTS{Float64, EX}}:
+ T₆₄: 233.15 K
+ V₆₄: 0.0016000 m³
+ Δe₆₄: 2.3260 kJ/kg
+ 𝕍₆₄: 1.0014 √(kJ/kg)
+
+```
+
+!!! tip
+    And we're back to the spoiler-free, normal pace.
+
+## Untagging amounts
+
+Despite `EngThermBase` defining operations on it's types, most `julia` packages aren't written
+to deal with `EngThermBase` quantities. This is the need for unpacking (untagging) quantities,
+so that the underlying values are passed and processed outside of `EngThermBase`, and (possibly)
+re-tagged in their way back.
+
+Therefore, untagging must be simple and easy, and must stand out of one's way as much as
+possible. `EngThermBase` provide various mechanisms for untagging, giving the user full control.
+All instances of an `AMOUNT`'s concrete subtype stores the value as a unit-ed `Quantity`, even
+for dimensionless `AMOUNTS`:
+
+```jldoctest tt_untagging
+julia> ratio = _a(0.75)
+_₆₄: 0.75000
+
+julia> dump(ratio)
+__amt{Float64, EX}
+  amt: Quantity{Float64, NoDims, Unitful.FreeUnits{(), NoDims, nothing}}
+      val: Float64 0.75
+```
+
+Therefore, there are several ways to untag or recover the underlying value: (i) by direct access
+(discouraged), (ii) by type-stable `EngThermBase` functions, and (iii) using amounts as
+`functors`.
+
+### Untagging by direct access (discouraged)
+
+One can simply access the `amt` field of every `AMOUNT` subtype instance:
+
+```jldoctest tt_untagging
+julia> ratio.amt
+0.75
+
+julia> typeof(ratio.amt)
+Quantity{Float64, NoDims, Unitful.FreeUnits{(), NoDims, nothing}}
+
+julia> ratio.amt.val
+0.75
+
+julia> typeof(ratio.amt.val)
+Float64
+```
+
+Unfortunately, this is not type-stable, so the preferred way is described next:
+
+### Untagging by type-stable `EngThermBase` functions
+
+These are the `amt`, `bare`, and `pod` functions. In simple terms, the `amt()` function returns,
+in a type-stable fashion, it's arguments' `amt` field (usually a `Quantity`). The `bare()`
+function strips-off any units from the passed argument, thus returning an `AbstractFloat`
+concrete subtype, which can be a `Measurement` type. Finally, the `pod()` function always
+returns a "plain-old data", i.e., a value stripped off of units and uncertainty information:
+
+```jldoctest tt_untagging
+```
+
 
 ## Whole Amounts
 
