@@ -1,16 +1,16 @@
 #==============================================================================================#
-#                                     Concrete State Types                                     #
+#                                Concrete Property Combo Types                                 #
 #==============================================================================================#
 
 #----------------------------------------------------------------------------------------------#
-#                                     Property Pair States                                     #
+#                                       EoS Pair Combos                                        #
 #----------------------------------------------------------------------------------------------#
 
 #······························································································#
 #                                         TPPair{𝕡,𝕩}                                          #
 #······························································································#
 
-struct TPPair{𝕡,𝕩} <: PropPair{𝕡,𝕩}
+struct TPPair{𝕡,𝕩} <: EoSPair{𝕡,𝕩}
     T::T_amt{𝕡,𝕩}
     P::P_amt{𝕡,𝕩}
     # Inner, non-converting constructor
@@ -29,20 +29,24 @@ struct TPPair{𝕡,𝕩} <: PropPair{𝕡,𝕩}
     TPPair(P::Type{𝕡}=Float64, X::Type{𝕩}=DEF[:XB]) where {𝕡<:PREC,𝕩<:EXAC} =
         TPPair(T_(𝕡,𝕩), P_(𝕡,𝕩))
 end
+
 # External, converting constructors
 (::TPPair{𝕡,𝕩})(x::TPPair{𝕤,𝕪}) where {𝕡<:PREC,𝕤<:PREC,𝕩<:EXAC,𝕪<:EXAC} = begin
     TPPair(T_amt{𝕡,𝕩}(x.T), P_amt{𝕡,𝕩}(x.P))
 end
+
 # Promotion rules
 promote_rule(::Type{TPPair{𝕤,𝕪}},
              ::Type{TPPair{𝕡,𝕩}}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     TPPair{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}
 end
+
 # Conversions
 convert(::Type{TPPair{𝕤,𝕪}},
         y::TPPair{𝕡,𝕩}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     TPPair{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}(y)
 end
+
 # Exporting
 export TPPair
 
@@ -51,7 +55,7 @@ export TPPair
 #                                         TvPair{𝕡,𝕩}                                          #
 #······························································································#
 
-struct TvPair{𝕡,𝕩,𝕓} <: PropPair{𝕡,𝕩} where 𝕓
+struct TvPair{𝕡,𝕩,𝕓} <: EoSPair{𝕡,𝕩} where 𝕓
     T::T_amt{𝕡,𝕩}
     v::v_amt{𝕡,𝕩,𝕓}
     # Inner, non-converting constructor
@@ -73,20 +77,24 @@ struct TvPair{𝕡,𝕩,𝕓} <: PropPair{𝕡,𝕩} where 𝕓
     # Missing argument constructors
     TvPair(_v::v_amt{𝕡,𝕩,𝕓}) where {𝕡<:PREC, 𝕩<:EXAC, 𝕓<:IntBase} = TvPair(T_(𝕡,𝕩), _v)
 end
+
 # External, converting constructors
 (::TvPair{𝕡,𝕩,𝕓})(x::TvPair{𝕤,𝕪,𝕓}) where {𝕡<:PREC,𝕤<:PREC,𝕩<:EXAC,𝕪<:EXAC,𝕓<:IntBase} = begin
     TvPair(T_amt{𝕡,𝕩}(x.T), v_amt{𝕡,𝕩,𝕓}(x.v))
 end
+
 # Promotion rules
 promote_rule(::Type{TvPair{𝕤,𝕪}},
              ::Type{TvPair{𝕡,𝕩}}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     TvPair{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}
 end
+
 # Conversions
 convert(::Type{TvPair{𝕤,𝕪}},
         y::TvPair{𝕡,𝕩}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     TvPair{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}(y)
 end
+
 # Exporting
 export TvPair
 
@@ -95,7 +103,7 @@ export TvPair
 #                                         PvPair{𝕡,𝕩}                                          #
 #······························································································#
 
-struct PvPair{𝕡,𝕩,𝕓} <: PropPair{𝕡,𝕩} where 𝕓
+struct PvPair{𝕡,𝕩,𝕓} <: EoSPair{𝕡,𝕩} where 𝕓
     P::P_amt{𝕡,𝕩}
     v::v_amt{𝕡,𝕩,𝕓}
     # Inner, non-converting constructor
@@ -117,26 +125,30 @@ struct PvPair{𝕡,𝕩,𝕓} <: PropPair{𝕡,𝕩} where 𝕓
     # Missing argument constructors
     PvPair(_v::v_amt{𝕡,𝕩,𝕓}) where {𝕡<:PREC, 𝕩<:EXAC, 𝕓<:IntBase} = PvPair(P_(𝕡,𝕩), _v)
 end
+
 # External, converting constructors
 (::PvPair{𝕡,𝕩,𝕓})(x::PvPair{𝕤,𝕪,𝕓}) where {𝕡<:PREC,𝕤<:PREC,𝕩<:EXAC,𝕪<:EXAC,𝕓<:IntBase} = begin
     PvPair(P_amt{𝕡,𝕩}(x.P), v_amt{𝕡,𝕩,𝕓}(x.v))
 end
+
 # Promotion rules
 promote_rule(::Type{PvPair{𝕤,𝕪}},
              ::Type{PvPair{𝕡,𝕩}}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     PvPair{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}
 end
+
 # Conversions
 convert(::Type{PvPair{𝕤,𝕪}},
         y::PvPair{𝕡,𝕩}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     PvPair{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}(y)
 end
+
 # Exporting
 export PvPair
 
 
 #----------------------------------------------------------------------------------------------#
-#                                     Property Trio States                                     #
+#                                     Property Trio Combos                                     #
 #----------------------------------------------------------------------------------------------#
 
 #······························································································#
@@ -174,20 +186,24 @@ struct TPxTrio{𝕡,𝕩} <: PropTrio{𝕡,𝕩}
     # Fallback Tuple constructor
     TPxTrio(_y::NTuple{3,Union{T_amt, P_amt, x_amt}}) = TPxTrio(_y...)
 end
+
 # External, converting constructors
 (::TPxTrio{𝕡,𝕩})(y::TPxTrio{𝕤,𝕪}) where {𝕡<:PREC,𝕤<:PREC,𝕩<:EXAC,𝕪<:EXAC} = begin
     TPxTrio(T_amt{𝕡,𝕩}(y.T), P_amt{𝕡,𝕩}(y.P), x_amt{𝕡,𝕩}(y.x))
 end
+
 # Promotion rules
 promote_rule(::Type{TPxTrio{𝕤,𝕪}},
              ::Type{TPxTrio{𝕡,𝕩}}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     TPxTrio{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}
 end
+
 # Conversions
 convert(::Type{TPxTrio{𝕤,𝕪}},
         y::TPxTrio{𝕡,𝕩}) where {𝕤<:PREC,𝕡<:PREC,𝕪<:EXAC,𝕩<:EXAC} = begin
     TPxTrio{promote_type(𝕤,𝕡),promote_type(𝕪,𝕩)}(y)
 end
+
 # Exporting
 export TPxTrio
 
