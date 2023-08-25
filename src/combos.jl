@@ -148,6 +148,23 @@ export PvPair
 
 
 #----------------------------------------------------------------------------------------------#
+#                                EoS Property Combo Type Unions                                #
+#----------------------------------------------------------------------------------------------#
+
+# Pairs having temperature
+hasTPair{𝕡,𝕩} = Union{TPPair{𝕡,𝕩},TvPair{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# Pairs having pressure
+hasPPair{𝕡,𝕩} = Union{TPPair{𝕡,𝕩},PvPair{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# Pairs having specific volume
+hasvPair{𝕡,𝕩} = Union{TvPair{𝕡,𝕩},PvPair{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# Export
+export hasTPair, hasPPair, hasvPair
+
+
+#----------------------------------------------------------------------------------------------#
 #                                     Property Trio Combos                                     #
 #----------------------------------------------------------------------------------------------#
 
