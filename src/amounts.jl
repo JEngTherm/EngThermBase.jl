@@ -106,6 +106,14 @@ A `$TYPE` can be natively constructed from the following argument types:\n
             (::Type{$TYPE{𝗽,EX}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x.val))
             (::Type{$TYPE{𝗽,MM}})(x::𝗽) where 𝗽<:PREC = new{𝗽,MM}(_qty(measurement(x)))
             (::Type{$TYPE{𝗽,MM}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
+            # Inner, unit-converting, fully-specified constructors
+            # ----------------------------------------------------
+            (::Type{$TYPE{𝗽,EX}})(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = begin
+                new{𝗽,EX}(_qty(x))
+            end
+            (::Type{$TYPE{𝗽,MM}})(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = begin
+                new{𝗽,MM}(_qty(x))
+            end
         end
         # Type documentation
         @doc $dcStr $TYPE
@@ -262,6 +270,14 @@ Constructors determine all parameters from their arguments.\n
             (::Type{$TYPE{𝗽,EX}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,EX}(_qty(x.val * $uSY))
             (::Type{$TYPE{𝗽,MM}})(x::𝗽) where 𝗽<:PREC = new{𝗽,MM}(_qty(measurement(x) * $uSY))
             (::Type{$TYPE{𝗽,MM}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x * $uSY))
+            # Inner, unit-converting, fully-specified constructors
+            # ----------------------------------------------------
+            (::Type{$TYPE{𝗽,EX}})(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = begin
+                new{𝗽,EX}(_qty(uconvert($uSY, x)))
+            end
+            (::Type{$TYPE{𝗽,MM}})(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = begin
+                new{𝗽,MM}(_qty(uconvert($uSY, x)))
+            end
         end
         # Type documentation
         @doc $dcStr $TYPE
@@ -526,6 +542,36 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             end
             (::Type{$TYPE{𝗽,MM,MO}})(x::PMTY{𝗽}) where 𝗽<:PREC = begin
                 new{𝗽,MM,MO}(_qty(             x * $uMO))
+            end
+            # Inner, unit converting, fully-specified constructors
+            # ----------------------------------------------------
+            # SY-based constructors
+            (::Type{$TYPE{𝗽,EX,SY}})(x::UETY{𝗽,$𝑑SY}) where 𝗽<:PREC = begin
+                new{𝗽,EX,SY}(_qty(uconvert($uSY, x)))
+            end
+            (::Type{$TYPE{𝗽,MM,SY}})(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = begin
+                new{𝗽,EX,SY}(_qty(uconvert($uSY, x)))
+            end
+            # DT-based constructors
+            (::Type{$TYPE{𝗽,EX,DT}})(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = begin
+                new{𝗽,EX,DT}(_qty(uconvert($uDT, x)))
+            end
+            (::Type{$TYPE{𝗽,MM,DT}})(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = begin
+                new{𝗽,EX,DT}(_qty(uconvert($uDT, x)))
+            end
+            # MA-based constructors
+            (::Type{$TYPE{𝗽,EX,MA}})(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = begin
+                new{𝗽,EX,MA}(_qty(uconvert($uMA, x)))
+            end
+            (::Type{$TYPE{𝗽,MM,MA}})(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = begin
+                new{𝗽,EX,MA}(_qty(uconvert($uMA, x)))
+            end
+            # MO-based constructors
+            (::Type{$TYPE{𝗽,EX,MO}})(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = begin
+                new{𝗽,EX,MO}(_qty(uconvert($uMO, x)))
+            end
+            (::Type{$TYPE{𝗽,MM,MO}})(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = begin
+                new{𝗽,EX,MO}(_qty(uconvert($uMO, x)))
             end
         end
         # Type documentation
