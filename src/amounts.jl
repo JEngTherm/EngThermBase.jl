@@ -176,10 +176,10 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         end
         # same-type sum,sub with Unitful promotion
         +(x::$TYPE{𝘀,𝘆}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-            $TYPE(+(amt(x), amt(y)))
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(+(amt(x), amt(y)))
         end
         -(x::$TYPE{𝘀,𝘆}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-            $TYPE(-(amt(x), amt(y)))
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(-(amt(x), amt(y)))
         end
         # scalar mul,div with Unitful promotion
         *(y::plnF{𝘀}, x::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
@@ -325,10 +325,10 @@ Constructors determine all parameters from their arguments.\n
         end
         # same-type sum,sub with Unitful promotion
         +(x::$TYPE{𝘀,𝘆}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-            $TYPE(+(amt(x), amt(y)))
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(+(amt(x), amt(y)))
         end
         -(x::$TYPE{𝘀,𝘆}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-            $TYPE(-(amt(x), amt(y)))
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(-(amt(x), amt(y)))
         end
         # scalar mul,div with Unitful promotion
         *(y::plnF{𝘀}, x::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
@@ -630,12 +630,12 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         +(x::$TYPE{𝘀,𝘆,𝗯}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,
                                                    𝘆<:EXAC,𝘅<:EXAC,
                                                    𝗯<:BASE} = begin
-            $TYPE(+(amt(x), amt(y)))
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅),𝗯}(+(amt(x), amt(y)))
         end
         -(x::$TYPE{𝘀,𝘆,𝗯}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,
                                                    𝘆<:EXAC,𝘅<:EXAC,
                                                    𝗯<:BASE} = begin
-            $TYPE(-(amt(x), amt(y)))
+            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅),𝗯}(-(amt(x), amt(y)))
         end
         # scalar mul,div with Unitful promotion
         *(y::plnF{𝘀}, x::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(*(amt(x), y))
