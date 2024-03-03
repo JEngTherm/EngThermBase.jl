@@ -31,7 +31,7 @@ interaction.
 Once tagged, the quantity is stored and shown in **default units** for each  quantity  type,
 meaning in the `T_(500u"°C")` constructor call, there was a unit conversion from 500 °C into
 773.15 K, in the `P_(1u"MPa")` constructor call, there was a unit conversion from 1 MPa into
-1000 kPa, and no unit conversion in the `q_(800u"kJ/kg")` constructor call
+1000 kPa, and no unit conversion in the `q_(800u"kJ/kg")` constructor call.
 
 Moreover, the quantities also pretty-print with a pre-settable amount of significant digits,
 and optional floating point precision, as in the `T₆₄: 773.15 K` output, the  `T`  indicates
@@ -56,17 +56,14 @@ as "asking" whether or not quantities are (i) properties or (ii) interactions,  
 their base:
 
 ```julia
-julia> [ p isa Property for p in pars ]
-3-element Vector{Bool}:
- 1
- 1
- 0
+julia> property_pars = [ p for p in pars if p isa Property ]
+2-element Vector{WProperty{Float64, EX}}:
+ T₆₄: 773.15 K
+ P₆₄: 1000.0 kPa
 
-julia> [ p isa Interact for p in pars ]
-3-element Vector{Bool}:
- 0
- 0
- 1
+julia> interaction_pars = [ p for p in pars if p isa Interact ]
+1-element Vector{q_amt{Float64, EX, MA}}:
+ q₆₄: 800.00 kJ/kg
 
 julia> precof(pars[3]), exacof(pars[3]), baseof(pars[3])
 (Float64, EX, MA)
