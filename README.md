@@ -157,26 +157,75 @@ of 1.25 is obtained by dividing the velocity of 1500 km/h by the sound speed of 
 and the classic ratio `cp / cv --> γ`.
 
 
-- Somewhat configurable thermodynamic amount **pretty-printing**, such as:
-    - `P₆₄: 101.35 kPa`,
-    - `v₆₄: 1.1800 m³/kg`,
-    - `R̄₆₄: (8.3145 ± 1.5e-05 kJ/K/kmol)`,
-    - `Ma₆₄: 1.0333 –`,
-    - `ṁ₆₄: 3.4560 kg/s`, etc...
-- Automatic **re-tagging**, through Julia's multiple dispatch system, such as:
-    - `u + P * v --> h`,
-    - `u - T * s --> a`,
-    - `(P * v) / (R * T) --> Z`, and the like;
-- Thermodynamic **bases**, such as:
+## Automatic re-basing
+
+`EngThermBase.jl` encodes the following
+
+- Thermodynamic **bases**
     - `MA` (mass),
     - `MO` (molar),
     - `SY` (system, or extensive), and
     - `DT` (rate);
-- Automatic **re-basing**, such as:
-    - `u * m --> U`, (mass-base intensive into extensive by multiplication by mass)
-    - `R̄ / M --> R`, (molar-base intensive into mass-base intensive by division by molecular
-      mass)
-    - `ṁ * q --> Q̇`, etc..., and
+
+According to theory, the first two  are  intensive,  while  the  others,  extensive.  Here's
+examples of what can be done computationally:
+
+```julia
+julia> sp_int_energy = u_(300)
+u₆₄: 300.00 kJ/kg
+
+julia> syst_mass = m_(3.0u"kg")
+m₆₄: 3.0000 kg
+
+julia> syst_energy = sp_int_energy * syst_mass
+U₆₄: 900.00 kJ
+
+julia> pars = [ syst_mass, sp_int_energy, syst_energy ]
+3-element Vector{BProperty{Float64, EX}}:
+ m₆₄: 3.0000 kg
+ u₆₄: 300.00 kJ/kg
+ U₆₄: 900.00 kJ
+
+julia> intensive_pars = [ p for p in pars if baseof(p) <: IntBase ]
+1-element Vector{u_amt{Float64, EX, MA}}:
+ u₆₄: 300.00 kJ/kg
+
+julia> extensive_pars = [ p for p in pars if baseof(p) <: ExtBase ]
+2-element Vector{BProperty{Float64, EX, SY}}:
+ m₆₄: 3.0000 kg
+ U₆₄: 900.00 kJ
+```
+
+It is worth noting that an automatic change of base took place in the product  that  defined
+the `syst_energy`, when a specific internal energy amount was multiplied by  a  system  mass
+amount, `EngThermBase.jl` returned a system (based) internal energy amount, in `kJ`:
+
+```julia
+julia> typeof(syst_energy)
+u_amt{Float64, EX, SY}
+
+```
+
+## Abstract Type Hierarchy
+
+`EngThermBase.jl` conceptual abstract types have 4 (four) branches placed under the top-most
+type `AbstractTherm`:
+
+```julia
+julia> using TypeTree
+
+julia> subtypes(AbstractTherm)
+4-element Vector{Any}:
+ AMOUNTS
+ BASES
+ COMBOS
+ MODELS
+```
+
+The `AMOUNTS` are the tagged quantities and are already introduced above. The other branches
+expand like the following:
+
+
 - Exports an **abstract type hyerarchy** so as to provide **hooks** for thermodynamic models of
   heat capacity, pure substance (by equation of state, or EoS), mixtures, etc... such as the
   [IdealGasLib.jl](https://github.com/JEngTherm/IdealGasLib.jl).
