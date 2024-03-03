@@ -21,18 +21,30 @@ julia> pars = [ T_(500u"°C"), P_(1u"MPa"), q_(800u"kJ/kg") ]
  T₆₄: 773.15 K
  P₆₄: 1000.0 kPa
  q₆₄: 800.00 kJ/kg
+```
 
+In the above example, by respectivly using the  `T_`,  `P_`,  and  `q_`  constructors  (from
+`EngThermBase.jl`),  the  respective  argument  quantities  of  `500u"°C"`,  `1u"MPa"`,  and
+`800u"kJ/kg"` were **tagged** (or  labeled)  as  a  temperature,  a  pressure,  and  a  heat
+interaction.
+
+Once tagged, the quantity is stored and shown in **default units** for each  quantity  type,
+meaning in the `T_(500u"°C")` constructor call, there was a unit conversion from 500 °C into
+773.15 K, in the `P_(1u"MPa")` constructor call, there was a unit conversion from 1 MPa into
+1000 kPa, and no unit conversion in the `q_(800u"kJ/kg")` constructor call
+
+Moreover, the quantities also pretty-print with a pre-settable amount of significant digits,
+and optional floating point precision, as in the `T₆₄: 773.15 K` output, the  `T`  indicates
+the quantity type---a temperature; the `₆₄` the underlying floating point precision  (of  64
+bits), while `773.15 K` is the amount, powered by `Unitful.jl`.
+
+```julia
 julia> typeof(pars[1])
 T_amt{Float64, EX}
 
 julia> typeof(pars[3])
 q_amt{Float64, EX, MA}
 ```
-
-In the above example, by respectivly using the  `T_`,  `P_`,  and  `q_`  constructors  (from
-`EngThermBase.jl`),  the  respective  argument  quantities  of  `500u"°C"`,  `1u"MPa"`,  and
-`800u"kJ/kg"` were **tagged** (or labeled) as a temperature (`T_amt` type), a pressure,  and
-a heat interaction (`q_amt` type).
 
 It is worth noting that amounts are parameterized. Amounts such as temperature and  pressure
 are (1) floating-point precision-,  and  (2)  exactness-  parameterized,  for  instance,  in
