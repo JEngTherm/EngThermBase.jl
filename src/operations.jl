@@ -586,22 +586,18 @@ end
 #----------------------------------------------------------------------------------------------#
 
 
-import Base: ==, >, <, isequal, isless, isapprox
+import Base: ==, isapprox, >, <
 
-==(x::𝗧, y::𝗧) where 𝗧<:AMOUNTS = begin
-    # We don't care about the 3 least significant bits of the wider type
-    RTOL = (1<<3) * Base.rtoldefault(amt(x), amt(y), 0)
-    isapprox(amt(x), amt(y), rtol=RTOL)
-end
+==(x::AMOUNTS, y::AMOUNTS) = ==(promote(x(), y())...)
 
-for FUN in (:>, :<, :isequal, :isless)
-    @eval ($FUN)(x::𝗧, y::𝗧) where 𝗧<:AMOUNTS = ($FUN)(amt(x),amt(y))
-end
+==(x::ENERGYA, y::ENERGYA) = ==(promote(x(), y())...) && typeof(x) == typeof(y)
 
-function isapprox(x::𝗧, y::𝗧; atol::Real=0,
-                  rtol::Real = Base.rtoldefault(amt(x), amt(y), atol),
-                  nans::Bool=false) where 𝗧<:AMOUNTS
-    isapprox(amt(x), amt(y), atol=atol, rtol=rtol, nans=nans)
+==(x::NTROPYA, y::NTROPYA) = ==(promote(x(), y())...) && typeof(x) == typeof(y)
+
+isapprox(x::AMOUNTS, y::AMOUNTS; kwargs...) = isapprox(promote(x(), y())...; kwargs...)
+
+for FUN in (:>, :<)
+    @eval ($FUN)(x::𝗧, y::𝗧) where 𝗧<:AMOUNTS = ($FUN)(promote(x(), y())...)
 end
 
 
