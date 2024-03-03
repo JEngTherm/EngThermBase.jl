@@ -847,16 +847,16 @@ function _s_digits(x::AbstractFloat, sigdig::Unsigned)
     return @sprintf("%.*f", decimals, x)
 end
 
-function valFmt(x::𝗽, sigD::Integer = DEF[:showSigD]) where 𝗽<:PREC
+function valFmt(x::𝗽, sigD::Integer = DEF[:sigD]) where 𝗽<:PREC
     sigD = sigD < 0 ? abs(sigD) : sigD == 0 ? 1 : sigD
     return _s_digits(x, Unsigned(sigD))
 end
 
 # Precision decoration
-pDeco(::Type{Float16})  = DEF[:showPrec] ? subscript(16) : ""
-pDeco(::Type{Float32})  = DEF[:showPrec] ? subscript(32) : ""
-pDeco(::Type{Float64})  = DEF[:showPrec] ? subscript(64) : ""
-pDeco(::Type{BigFloat}) = DEF[:showPrec] ? subscript(precision(BigFloat)) : ""
+pDeco(::Type{Float16})  = DEF[:prec] ? subscript(16) : ""
+pDeco(::Type{Float32})  = DEF[:prec] ? subscript(32) : ""
+pDeco(::Type{Float64})  = DEF[:prec] ? subscript(64) : ""
+pDeco(::Type{BigFloat}) = DEF[:prec] ? subscript(precision(BigFloat)) : ""
 
 # Custom printing
 Base.show(io::IO, x::AMOUNTS{𝗽,EX}) where 𝗽<:PREC = begin

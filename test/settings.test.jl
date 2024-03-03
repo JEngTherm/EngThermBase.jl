@@ -7,7 +7,7 @@
     @test DEF[:EB] <: ExtBase
     @test DEF[:XB] <: ExactBase
     @test DEF[:pprint] isa Bool
-    @test DEF[:showPrec] isa Bool
-    @test DEF[:showSigD] isa Integer
+    @test DEF[:prec] isa Bool
+    @test DEF[:sigD] isa Integer
 end
 
