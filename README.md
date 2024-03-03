@@ -77,22 +77,86 @@ with the `precof`, `exacof`, and `baseof` functions.
 
 ## Quantity untagging (and optional unit conversion):
 
+In `EngThermBase.jl`, amounts are `functors`, meaning they can be called as a function.  The
+default behavior is to untag itself, returning unaltered it's `val` member. If,  however,  a
+unit is passed as an argument to the functor, a unit conversion will be attempted. All  unit
+operations on `EngThermBase.jl` are powered by `Unitful.jl`.
 
-- Engineering thermodynamics quantity (such as `P`, `T`, `v`, `u`, `h`, `s`, etc.) **tagging**
-  and **untagging** facilities;
-    - Sample tagging:
-        - `T1, P1 = T_(25u"°C"), P_(1u"atm")` yields `(T₆₄: 298.15 K, P₆₄: 101.33 kPa)`;
-        - `TPPair(T1, P1)` yields `TPPair{Float64, EX}(T₆₄: 298.15 K, P₆₄: 101.33 kPa)`;
-        - `v_(0.2332f0, MO), s_(Float16(6.623))` yields `(v̄₃₂: 0.23320 m³/kmol, s₁₆: 6.6211 kJ/K/kg)`.
-    - Sample untagging:
-        - `T1()` yields `298.15 K`;
-        - `T1(u"°C")` yields `25.0 °C`.
-- Floating point precision-, exactness-, and thermodynamic base- parameterized tags:
-    - `TvPair(T1, v1)` yields `TvPair{Float64, EX, MA}(T₆₄: 298.15 K, v₆₄: 0.23320 m³/kg)`.
-- Default (SI) **units** for tagged quantities—through
-  [Unitful.jl](https://github.com/PainterQubits/Unitful.jl);
-- **Uncertainty propagation**—through
-  [Measurements.jl](https://github.com/JuliaPhysics/Measurements.jl).
+```julia
+julia> x, y = T_(512), P_(1024)
+(T₆₄: 512.00 K, P₆₄: 1024.0 kPa)
+
+julia> x(), y()
+(512.0 K, 1024.0 kPa)
+
+julia> x(u"°C")
+238.85000000000002 °C
+```
+
+The example illustrates that constructors apply default units to unitless arguments, so that
+the default temperature unit, `K`, was applied by `T_` in the `T_(512)` call.  An  analogous
+behavior is illusrtated with the `P_(1024)` call.
+
+Untagging happens when the `x` and `y` objects are called (as  functors),  with  `x()`,  and
+`y()`, in which case we see the plain underlying  values  of  `512.0  K`  and  `1024.0  kPa`
+returned as a 2-tuple. Nota that there's no mor pretty-printing because the values  are  not
+`EngThermBase.jl` amounts.
+
+In the last example, a unit conversion is performed when a unit is  passed  to  the  functor
+call `x(u"°C")`, that returns 238.85 °C. Note again, the lack of pretty-printing.
+
+Other untagging functions are: `amt`, `bare`, and `pod`; which, respectively return the  (i)
+underlying amount (with units, just like the  functor),  (ii)  the  "bare"  numerical  value
+without units, and (iii) a "plain-old data", which also strips from  bare  numerical  values
+any possible uncertainty.
+
+```julia
+julia> x = T_(300 ± 0.1)
+T₆₄: (300.00 ± 0.10 K)
+
+julia> [ F(x) for F in (amt, bare, pod) ]
+3-element Vector{Number}:
+ 300.0 ± 0.1 K
+       300.0 ± 0.1
+           300.0
+```
+
+In this case,  `typeof(x)`  returns  `T_amt{Float64,  MM}`.  The  `MM`  exactness  parameter
+indicates a measurement, powered by `Measurements.jl`.
+
+Note that by applying the `amt()`, `bare()`, and `pod()`  functions  on  `x`,  returned  the
+illustrated values, with all operations untagging `x`, returning a (i) united measurement, a
+(ii) unitless measurement, and a (iii) simple numeric value, or a plain-old data.
+
+
+## Automatic re-tagging
+
+Certain "known" operations with tagged operands yield quantities of  other,  however  known,
+tags:
+
+```julia
+julia> u_(300) + P_(100) * v_(0.1)
+h₆₄: 310.00 kJ/kg
+
+julia> u_(400) - T_(300) * s_(1.0)
+a₆₄: 100.00 kJ/kg
+
+julia> (P_(100) * v_(0.1)) / (R_(0.2) * T_(500))
+Z₆₄: 0.10000 –
+
+julia> ve(1500u"km/hr") / cs(1200u"km/hr")
+Ma₆₄: 1.2500 –
+
+julia> cp(5) / cv(4)
+γ₆₄: 1.2500 –
+```
+
+In this example, the operation `u + P * v`  resulted  in  an  enthalpy,  `h`.  Moreover,  by
+definition, `u - T * s --> a`, and `(P * v) / (R * T) --> Z`. Moreover, a Mach  number  `Ma`
+of 1.25 is obtained by dividing the velocity of 1500 km/h by the sound speed of  1200  km/h,
+and the classic ratio `cp / cv --> γ`.
+
+
 - Somewhat configurable thermodynamic amount **pretty-printing**, such as:
     - `P₆₄: 101.35 kPa`,
     - `v₆₄: 1.1800 m³/kg`,
