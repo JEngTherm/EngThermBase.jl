@@ -2,13 +2,72 @@
 
 # EngThermBase.jl
 
-Engineering Thermodynamics understructure in Julia.
+Engineering Thermodynamics infrastructure in Julia.
 
 
 # Description
 
-The `EngThermBase.jl` package provides a common platform for engineering thermodynamics packages
-and case calculations by implementing:
+The `EngThermBase.jl` package provides a common platform for:
+- Engineering thermodynamics packages, and
+- Case calculations.
+
+## Engineering thermodynamics quantity tagging:
+
+```julia
+julia> using EngThermBase
+
+julia> pars = [ T_(500u"°C"), P_(1u"MPa"), q_(800u"kJ/kg") ]
+3-element Vector{AMOUNTS{Float64, EX}}:
+ T₆₄: 773.15 K
+ P₆₄: 1000.0 kPa
+ q₆₄: 800.00 kJ/kg
+
+julia> typeof(pars[1])
+T_amt{Float64, EX}
+
+julia> typeof(pars[3])
+q_amt{Float64, EX, MA}
+```
+
+In the above example, by respectivly using the  `T_`,  `P_`,  and  `q_`  constructors  (from
+`EngThermBase.jl`),  the  respective  argument  quantities  of  `500u"°C"`,  `1u"MPa"`,  and
+`800u"kJ/kg"` were **tagged** (or labeled) as a temperature (`T_amt` type), a pressure,  and
+a heat interaction (`q_amt` type).
+
+It is worth noting that amounts are parameterized. Amounts such as temperature and  pressure
+are (1) floating-point precision-,  and  (2)  exactness-  parameterized,  for  instance,  in
+`T_amt{Float64, EX}`, the precision  is  `Float64`,  and  the  exactness  is  `EX`,  meaning
+"exact".
+
+Due to `EngThermBase.jl` tagging and type tree, we can then make some theory  queries,  such
+as "asking" whether or not quantities are (i) properties or (ii) interactions,  as  well  as
+their base:
+
+```julia
+julia> [ p isa Property for p in pars ]
+3-element Vector{Bool}:
+ 1
+ 1
+ 0
+
+julia> [ p isa Interact for p in pars ]
+3-element Vector{Bool}:
+ 0
+ 0
+ 1
+
+julia> precof(pars[3]), exacof(pars[3]), baseof(pars[3])
+(Float64, EX, MA)
+```
+
+Therefore, `pars[1]` and `pars[2]`, respectively tagged as a temperature and a pressure, are
+listed as properties, while `pars[3]`, tagged as a specific heat transfer, is listed  as  an
+interaction. Moreover, its precision, exactness, and base are recovered in the last example,
+with the `precof`, `exacof`, and `baseof` functions.
+
+
+## Quantity untagging (and optional unit conversion):
+
 
 - Engineering thermodynamics quantity (such as `P`, `T`, `v`, `u`, `h`, `s`, etc.) **tagging**
   and **untagging** facilities;
