@@ -225,10 +225,53 @@ julia> subtypes(AbstractTherm)
 The `AMOUNTS` are the tagged quantities and are already introduced above. The other branches
 expand like the following:
 
+```julia
+julia> print.(TypeTree.tt(BASES));
+BASES
+ ├─ ExactBase
+ │   ├─ EX
+ │   └─ MM
+ └─ ThermBase
+     ├─ ExtBase
+     │   ├─ DT
+     │   └─ SY
+     └─ IntBase
+         ├─ MA
+         └─ MO
 
-- Exports an **abstract type hyerarchy** so as to provide **hooks** for thermodynamic models of
-  heat capacity, pure substance (by equation of state, or EoS), mixtures, etc... such as the
-  [IdealGasLib.jl](https://github.com/JEngTherm/IdealGasLib.jl).
+julia> print.(TypeTree.tt(COMBOS));
+COMBOS
+ ├─ PropPair{𝗽, 𝘅} where [...]
+ │   ├─ ChFPair{𝗽, 𝘅}
+ │   └─ EoSPair{𝗽, 𝘅}
+ │       ├─ PvPair{𝕡, 𝕩}
+ │       ├─ TPPair{𝕡, 𝕩}
+ │       └─ TvPair{𝕡, 𝕩}
+ ├─ PropQuad{𝗽, 𝘅}
+ └─ PropTrio{𝗽, 𝘅}
+     └─ TPxTrio{𝕡, 𝕩}
+
+julia> print.(TypeTree.tt(MODELS));
+MODELS
+ ├─ Heat{𝗽, 𝘅} where [...]
+ │   ├─ BivarHeat{𝗽, 𝘅, 𝗯}
+ │   ├─ ConstHeat{𝗽, 𝘅, 𝗯}
+ │   ├─ GenerHeat{𝗽, 𝘅, 𝗯}
+ │   └─ UnvarHeat{𝗽, 𝘅, 𝗯}
+ ├─ Medium{𝗽, 𝘅}
+ │   └─ Substance{𝗽, 𝘅}
+ └─ System{𝗽, 𝘅}
+     └─ Scope{𝗽, 𝘅}
+         ├─ Mixtures{𝗽, 𝘅}
+         │   ├─ Reactiv{𝗽, 𝘅}
+         │   └─ Unreact{𝗽, 𝘅}
+         └─ PureSubs{𝗽, 𝘅}
+
+```
+
+The **abstract  type  hyerarchy**  provides  **hooks**  for  thermodynamic  models  of  heat
+capacity, pure substance (by equation of state,  or  EoS),  mixtures,  etc...  such  as  the
+[IdealGasLib.jl](https://github.com/JEngTherm/IdealGasLib.jl).
 
 For additional information and examples, please refer to the package's documentation.
 
