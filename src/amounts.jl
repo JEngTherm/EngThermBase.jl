@@ -803,7 +803,7 @@ Dimensionless amount type union.
 """
 DIMLESS{𝗽,𝘅} = Union{ø_amt{𝗽,𝘅}, Z_amt{𝗽,𝘅},    gaamt{𝗽,𝘅},
                      k_amt{𝗽,𝘅}, Maamt{𝗽,𝘅},    Pramt{𝗽,𝘅},
-                     x_amx{𝗽,𝘅}, vramt{𝗽,𝘅}, m_amt{𝗽,𝘅,MA},
+                     x_amt{𝗽,𝘅}, vramt{𝗽,𝘅}, m_amt{𝗽,𝘅,MA},
                      N_amt{𝗽,𝘅,MO}} where {𝗽<:PREC,𝘅<:EXAC}
 
 # export
