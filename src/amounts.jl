@@ -371,7 +371,7 @@ mkWhlAmt(:spamt, :WProperty, :sp, :𝕧 , "𝕧" , u"m/s"     , "m/s"     , "spe
 # Regular unranked -- \sans#<TAB> function names
 mkWhlAmt(:t_amt, :WUnranked, :t_, :𝘁 , "𝗍" , u"s"       , "s"       , "time"       , false)
 mkWhlAmt(:gvamt, :WUnranked, :gv, :𝒈 , "𝒈" , u"m/s^2"   , "m/s²"    , "gravity"    , false)
-mkWhlAmt(:z_amt, :WUnranked, :z_, :𝘇 , "𝗓" , u"m"       , "m"       , "altitude"   , false)
+mkWhlAmt(:z_amt, :WUnranked, :z_, :𝘇 , "𝗓" , u"km"      , "km"      , "altitude"   , false)
 
 # Derived thermodynamic properties
 mkWhlAmt(:Z_amt, :WProperty, :Z_, :𝗭 , "Z" , ULESS()    , "–"       , "generalized compressibility factor", false)
@@ -801,8 +801,16 @@ VELOCYP{𝗽,𝘅} = Union{veamt{𝗽,𝘅},spamt{𝗽,𝘅},csamt{𝗽,𝘅}} w
 `DIMLESS{𝗽,𝘅} where {𝗽<:PREC,𝘅<:EXAC}`\n
 Dimensionless amount type union.
 """
-DIMLESS{𝗽,𝘅} = Union{ø_amt{𝗽,𝘅},Z_amt{𝗽,𝘅},gaamt{𝗽,𝘅},k_amt{𝗽,𝘅},
-                     Maamt{𝗽,𝘅},Pramt{𝗽,𝘅},vramt{𝗽,𝘅}} where {𝗽<:PREC,𝘅<:EXAC}
+DIMLESS{𝗽,𝘅} = Union{ø_amt{𝗽,𝘅}, Z_amt{𝗽,𝘅},    gaamt{𝗽,𝘅},
+                     k_amt{𝗽,𝘅}, Maamt{𝗽,𝘅},    Pramt{𝗽,𝘅},
+                     x_amx{𝗽,𝘅}, vramt{𝗽,𝘅}, m_amt{𝗽,𝘅,MA},
+                     N_amt{𝗽,𝘅,MO}} where {𝗽<:PREC,𝘅<:EXAC}
+
+# export
+export ENERGYP, ENERGYI, ENERGYA
+export NTROPYP, NTROPYI, NTROPYA
+export VELOCYP
+export DIMLESS
 
 
 #----------------------------------------------------------------------------------------------#
@@ -817,13 +825,31 @@ function subscript(x::Int)
     map(asSub, "$(x)")
 end
 
-function valFmt(x::𝗽, sigD = DEF[:showSigD]) where 𝗽<:PREC
-    y = Float64(x)
-    buffr = repeat([0x0, ], 1024+14)
-    bytes = ccall(
-        :sprintf, Int32, (Ptr{UInt8}, Cstring, Int64, Float64),
-        buffr, "%#.*g", sigD, y)
-    return bytes < length(buffr) ? unsafe_string(pointer(buffr)) : "#VALUE!"
+using Printf
+
+# Adapted from discourse.julialang.org/t/[...]
+#    [...]/printf-significant-digits-in-floating-point-representation/29978/10,
+# by @rafael.guerra
+function _s_digits(x::AbstractFloat, sigdig::Unsigned)
+    # Trivial cases
+    (sigdig == 0x0) && (return "")
+    (x == 0) && (return "0." * "0" ^ (sigdig - 1))
+    # Normal processing
+    x, sigdig = BigFloat(x), Int(sigdig)
+    x = round(x, sigdigits=sigdig)
+    n = length(@sprintf("%d", abs(x)))          # length of the integer part
+    if (x ≤ -1 || x ≥ 1)
+        decimals = max(sigdig - n, 0)           # 'sig - n' decimals needed 
+    else
+        Nzeros = ceil(Int, -log10(abs(x))) - 1  # No. zeros after dec point bef first number
+        decimals = sigdig + Nzeros
+    end
+    return @sprintf("%.*f", decimals, x)
+end
+
+function valFmt(x::𝗽, sigD::Integer = DEF[:showSigD]) where 𝗽<:PREC
+    sigD = sigD < 0 ? abs(sigD) : sigD == 0 ? 1 : sigD
+    return _s_digits(x, Unsigned(sigD))
 end
 
 # Precision decoration
@@ -897,9 +923,9 @@ end
 #  m_amt    m_    **
 #  N_amt    N_    **
 #  R_amt    R_    **
-#  Pvamt    Pv    **
+#  Pvamt    Pv    Pv
 #  RTamt    RT    **
-#  Tsamt    Ts    **
+#  Tsamt    Ts    Ts
 #  v_amt    v_     v
 #  u_amt    u_     u
 #  h_amt    h_     h
