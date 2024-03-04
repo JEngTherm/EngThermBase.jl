@@ -550,28 +550,28 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
                 new{𝗽,EX,SY}(_qty(uconvert($uSY, x)))
             end
             (::Type{$TYPE{𝗽,MM,SY}})(x::UMTY{𝗽,$𝑑SY}) where 𝗽<:PREC = begin
-                new{𝗽,EX,SY}(_qty(uconvert($uSY, x)))
+                new{𝗽,MM,SY}(_qty(uconvert($uSY, x)))
             end
             # DT-based constructors
             (::Type{$TYPE{𝗽,EX,DT}})(x::UETY{𝗽,$𝑑DT}) where 𝗽<:PREC = begin
                 new{𝗽,EX,DT}(_qty(uconvert($uDT, x)))
             end
             (::Type{$TYPE{𝗽,MM,DT}})(x::UMTY{𝗽,$𝑑DT}) where 𝗽<:PREC = begin
-                new{𝗽,EX,DT}(_qty(uconvert($uDT, x)))
+                new{𝗽,MM,DT}(_qty(uconvert($uDT, x)))
             end
             # MA-based constructors
             (::Type{$TYPE{𝗽,EX,MA}})(x::UETY{𝗽,$𝑑MA}) where 𝗽<:PREC = begin
                 new{𝗽,EX,MA}(_qty(uconvert($uMA, x)))
             end
             (::Type{$TYPE{𝗽,MM,MA}})(x::UMTY{𝗽,$𝑑MA}) where 𝗽<:PREC = begin
-                new{𝗽,EX,MA}(_qty(uconvert($uMA, x)))
+                new{𝗽,MM,MA}(_qty(uconvert($uMA, x)))
             end
             # MO-based constructors
             (::Type{$TYPE{𝗽,EX,MO}})(x::UETY{𝗽,$𝑑MO}) where 𝗽<:PREC = begin
                 new{𝗽,EX,MO}(_qty(uconvert($uMO, x)))
             end
             (::Type{$TYPE{𝗽,MM,MO}})(x::UMTY{𝗽,$𝑑MO}) where 𝗽<:PREC = begin
-                new{𝗽,EX,MO}(_qty(uconvert($uMO, x)))
+                new{𝗽,MM,MO}(_qty(uconvert($uMO, x)))
             end
         end
         # Type documentation
