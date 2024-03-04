@@ -232,8 +232,8 @@ export Property, Interact, Unranked
 # COMBOS branch — Pars are (i) precision, and (ii) exactness
 mk2ParAbs(  :COMBOS        , :AbstractTherm, "thermodynamic property combinations"         , 0)
 mk2ParAbs(    :PropPair    , :COMBOS       , "propery pairs"                               , 2)
-mk2ParAbs(      :EoSPair   , :PropPair     , "Equation of State property pairs"            , 2)
 mk2ParAbs(      :ChFPair   , :PropPair     , "Characteristic Function property pairs"      , 2)
+mk2ParAbs(      :EoSPair   , :PropPair     , "Equation of State property pairs"            , 2)
 mk2ParAbs(    :PropTrio    , :COMBOS       , "propery trios"                               , 2)
 mk2ParAbs(    :PropQuad    , :COMBOS       , "propery quads"                               , 2)
 
