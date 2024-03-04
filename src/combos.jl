@@ -152,7 +152,7 @@ export PvPair
 
 
 #----------------------------------------------------------------------------------------------#
-#                                EoS Property Combo Type Unions                                #
+#                             PropPair Property Combo Type Unions                              #
 #----------------------------------------------------------------------------------------------#
 
 # Pairs having temperature
@@ -162,7 +162,7 @@ hasTPair{𝕡,𝕩} = Union{TPPair{𝕡,𝕩},TvPair{𝕡,𝕩}} where {𝕡<:PR
 hasPPair{𝕡,𝕩} = Union{TPPair{𝕡,𝕩},PvPair{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
 
 # Pairs having specific volume
-hasvPair{𝕡,𝕩} = Union{TvPair{𝕡,𝕩},PvPair{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+hasvPair{𝕡,𝕩,𝕓} = Union{TvPair{𝕡,𝕩,𝕓},PvPair{𝕡,𝕩,𝕓}} where {𝕡<:PREC,𝕩<:EXAC,𝕓<:IntBase}
 
 # Export
 export hasTPair, hasPPair, hasvPair
@@ -227,5 +227,39 @@ end
 
 # Exporting
 export TPxTrio
+
+
+#----------------------------------------------------------------------------------------------#
+#                             PropTrio Property Combo Type Unions                              #
+#----------------------------------------------------------------------------------------------#
+
+# Trios having temperature
+hasTTrio{𝕡,𝕩} = Union{TPxTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# Trios having pressure
+hasPTrio{𝕡,𝕩} = Union{TPxTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# Trios having title / quality
+hasxTrio{𝕡,𝕩} = Union{TPxTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# Export
+export hasTTrio, hasPTrio, hasxTrio
+
+
+#----------------------------------------------------------------------------------------------#
+#                              Generic Property Combo Type Unions                              #
+#----------------------------------------------------------------------------------------------#
+
+# Combos having [___] (names are self-explanatory):
+# 2-parameter ones:
+hasT{𝕡,𝕩} = Union{T_amt{𝕡,𝕩}, hasTPair{𝕡,𝕩}, hasTTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+hasP{𝕡,𝕩} = Union{P_amt{𝕡,𝕩}, hasPPair{𝕡,𝕩}, hasPTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+hasx{𝕡,𝕩} = Union{x_amt{𝕡,𝕩}, hasxTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+
+# 3-parameter ones:
+hasv{𝕡,𝕩,𝕓} = Union{   v_amt{𝕡,𝕩,𝕓},
+                    hasvPair{𝕡,𝕩,𝕓}} where {𝕡<:PREC,𝕩<:EXAC,𝕓<:IntBase}
+
+export hasT, hasP, hasx, hasv
 
 
