@@ -881,16 +881,16 @@ Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
             "$(string(deco(x)))$(pDeco(𝗽)): (",
             valFmt(amt(x).val.val),
             " ± ",
-            valFmt(amt(x).val.err, 2),
-            ppu(x) == "" ? "" : " $(ppu(x)))"
+            valFmt(amt(x).val.err),
+            ppu(x) == "" ? "" : ") $(ppu(x))"
         )
     else
         print(io,
             "$(typeof(x))(",
             valFmt(amt(x).val.val),
             " ± ",
-            valFmt(amt(x).val.err, 2),
-            ppu(x) == "" ? ")" : " $(ppu(x)))"
+            valFmt(amt(x).val.err),
+            ppu(x) == "" ? ")" : ") $(ppu(x))"
         )
     end
 end
