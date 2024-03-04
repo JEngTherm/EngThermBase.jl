@@ -1,7 +1,7 @@
 name = "EngThermBase"
 uuid = "dffbff30-506a-45ba-b474-e78cc8ad254e"
 authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
-version = "0.4.0"
+version = "0.4.1"
 
 [deps]
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
