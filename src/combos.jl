@@ -252,13 +252,12 @@ export hasTTrio, hasPTrio, hasxTrio
 
 # Combos having [___] (names are self-explanatory):
 # 2-parameter ones:
-hasT{𝕡,𝕩} = Union{T_amt{𝕡,𝕩}, hasTPair{𝕡,𝕩}, hasTTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
-hasP{𝕡,𝕩} = Union{P_amt{𝕡,𝕩}, hasPPair{𝕡,𝕩}, hasPTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
-hasx{𝕡,𝕩} = Union{x_amt{𝕡,𝕩}, hasxTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+hasT{𝕡,𝕩} = Union{hasTPair{𝕡,𝕩}, hasTTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+hasP{𝕡,𝕩} = Union{hasPPair{𝕡,𝕩}, hasPTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
+hasx{𝕡,𝕩} = Union{hasxTrio{𝕡,𝕩}} where {𝕡<:PREC,𝕩<:EXAC}
 
 # 3-parameter ones:
-hasv{𝕡,𝕩,𝕓} = Union{   v_amt{𝕡,𝕩,𝕓},
-                    hasvPair{𝕡,𝕩,𝕓}} where {𝕡<:PREC,𝕩<:EXAC,𝕓<:IntBase}
+hasv{𝕡,𝕩,𝕓} = Union{hasvPair{𝕡,𝕩,𝕓}} where {𝕡<:PREC,𝕩<:EXAC,𝕓<:IntBase}
 
 export hasT, hasP, hasx, hasv
 
