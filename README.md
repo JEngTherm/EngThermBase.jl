@@ -303,7 +303,7 @@ How to cite this project:
   journal      = {GitHub repository},
   publisher    = {GitHub},
   url          = {https://github.com/JEngTherm/EngThermBase.jl},
-  note         = {release 0.3.6 of 23-09-05},
+  note         = {release 0.4.0 of 24-03-04},
 }
 ```
 
