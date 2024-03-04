@@ -1,7 +1,7 @@
 # # Tagging (and Re-tagging)
 # 
 # This example illustrates the fundamental building block of `EngThermBase.jl`, which is
-# engineerign thermodynamics quantities—herein denoted as `AMOUNTS` as not to confuse with
+# engineerign thermodynamics quantities—herein denoted as `AMOUNTS` as to avoid confusing with
 # [Unitful.jl](https://github.com/PainterQubits/Unitful.jl)'s `Quantity` unit'ed type.
 # 
 # First one loads the package:
