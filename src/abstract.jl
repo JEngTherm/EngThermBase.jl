@@ -237,13 +237,13 @@ mk2ParAbs(      :EoSPair   , :PropPair     , "Equation of State property pairs" 
 mk2ParAbs(    :PropTrio    , :COMBOS       , "propery trios"                               , 2)
 mk2ParAbs(    :PropQuad    , :COMBOS       , "propery quads"                               , 2)
 
-# MODEL branch — Pars are (i) precision, (ii) exactness, and (iii) base
+# MODEL branch — Pars are (i) precision and (ii) exactness
 mk2ParAbs(  :MODELS          , :AbstractTherm, "thermodynamic models"                      , 0)
 mk3ParAbs(    :Heat          , :MODELS       , "specific heat models"                      , 2)
-mk3ParAbs(      :ConstHeat   , :Heat         , "constant specific heat models"             , 3)
-mk3ParAbs(      :UnvarHeat   , :Heat         , "univariate specific heat models"           , 3)
-mk3ParAbs(      :BivarHeat   , :Heat         , "bivariate specific heat models"            , 3)
-mk3ParAbs(      :GenerHeat   , :Heat         , "generic specific heat models"              , 3)
+mk3ParAbs(      :ConstHeat   , :Heat         , "constant specific heat models"             , 2)
+mk3ParAbs(      :UnvarHeat   , :Heat         , "univariate specific heat models"           , 2)
+mk3ParAbs(      :BivarHeat   , :Heat         , "bivariate specific heat models"            , 2)
+mk3ParAbs(      :GenerHeat   , :Heat         , "generic specific heat models"              , 2)
 mk2ParAbs(    :Medium        , :MODELS       , "substance/medium models"                   , 2)
 mk2ParAbs(      :Substance   , :Medium       , "substance model by Equation of State"      , 2)
 mk2ParAbs(    :System        , :MODELS       , "system models"                             , 2)
