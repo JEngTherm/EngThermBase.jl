@@ -296,7 +296,7 @@ How to cite this project:
 ```bibtex
 @Misc{2023-NaaktgeborenC-EngThermBase,
   author       = {C. Naaktgeboren},
-  title        = {{EngThermBase.jl} -- Engineering Thermodynamics understructure in Julia},
+  title        = {{EngThermBase.jl} -- Engineering Thermodynamics infrastructure in Julia},
   howpublished = {Online},
   month        = {August},
   year         = {2023},
