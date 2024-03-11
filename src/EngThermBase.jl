@@ -21,5 +21,8 @@ include("operations.jl")
 include("constants.jl")
 include("combos.jl")
 
+# Includes - data libraries
+include("lib/atoM.jl")          # Selected Elements' atomic masses
+
 # Module
 end
