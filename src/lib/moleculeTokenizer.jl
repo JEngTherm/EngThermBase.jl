@@ -266,3 +266,20 @@ end
 export molParse
 
 
+#----------------------------------------------------------------------------------------------#
+#                                   Molecule Molecular Mass                                    #
+#----------------------------------------------------------------------------------------------#
+
+"""
+`m_(𝑀::Molecule, 𝑚::NamedTuple = atoM)::m_amt{𝕡,𝕩,MO} where {𝕡,𝕩}`\n
+"""
+m_(𝑀::Molecule, 𝑚::NamedTuple = atoM)::m_amt{𝕡,𝕩,MO} where {𝕡,𝕩} = begin
+    rndKey = keys(𝑚)[1]
+    𝕡 = precof(𝑚[rndKey])
+    𝕩 = exacof(𝑚[rndKey])
+    return 𝕩 == MM ?
+        sum([ Measurement{𝕡}(𝑀.data[k]) * 𝑚[k] for k in keys(𝑀.data) ]) :
+        sum([              𝕡(𝑀.data[k]) * 𝑚[k] for k in keys(𝑀.data) ])
+end
+
+
