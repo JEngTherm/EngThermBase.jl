@@ -4,7 +4,6 @@ authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
 version = "0.4.3"
 
 [deps]
-BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
@@ -17,7 +16,7 @@ Printf = "^1"
 Reexport = "^1"
 Unicode = "^1"
 Unitful = "^1"
-julia = "^1.6"
+julia = "^1.9"
 
 [extras]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
