@@ -1,9 +1,10 @@
 name = "EngThermBase"
 uuid = "dffbff30-506a-45ba-b474-e78cc8ad254e"
 authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
-version = "0.4.2"
+version = "0.4.3"
 
 [deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 Measurements = "eff96d63-e80a-5855-80a2-b1b0885c5ab7"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
