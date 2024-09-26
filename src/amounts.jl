@@ -29,8 +29,26 @@ function ppu end
 #
 # julia> @benchmark amt(u1)
 # ✂ ✂ ✂   median time:      16.784 ns   ✂ ✂ ✂
-#
 # ```
+#
+# An  updated 240926-192104 benchmark showed amt(x) is no longer faster than x.amt:
+#
+# ```julia-repl
+# julia> u1 = u_(1.0f0 ± 0.1f0, MO)
+# ū₃₂∴ (1.0000 ± 0.10000) kJ/kmol
+# 
+# julia> typeof(u1)
+# u_amt{Float32, MM, MO}
+# 
+# julia> @benchmark u1.amt
+#  ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂
+#  Time  (median):     13.243 ns              ┊ GC (median):    0.00%
+# 
+# julia> @benchmark amt(u1)
+#  ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂ ✂
+#  Time  (median):     19.095 ns              ┊ GC (median):    0.00%
+# ```
+#
 
 """
 `function amt end`\n
