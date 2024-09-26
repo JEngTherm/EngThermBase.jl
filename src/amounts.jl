@@ -878,7 +878,7 @@ end
 Base.show(io::IO, x::AMOUNTS{𝗽,MM}) where 𝗽<:PREC = begin
     if DEF[:pprint]
         print(io,
-            "$(string(deco(x)))$(pDeco(𝗽)): (",
+            "$(string(deco(x)))$(pDeco(𝗽))∴ (",
             valFmt(amt(x).val.val),
             " ± ",
             valFmt(amt(x).val.err),
