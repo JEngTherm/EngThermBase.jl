@@ -47,10 +47,7 @@ end
         (      :MM          , :ExactBase    ),
         # AUX branch
         (  :AUX             , :AbstractTherm),
-        (    :AuxNonPFunc   , :AUX          ),
-        (    :Aux1ParFunc   , :AUX          ),
-        (    :Aux2ParFunc   , :AUX          ),
-        (    :Aux3ParFunc   , :AUX          ),
+        (    :AuxFunc       , :AUX          ),
         # AMOUNTS branch
         (  :AMOUNTS         , :AbstractTherm),
         (    :WholeAmt      , :AMOUNTS      ),

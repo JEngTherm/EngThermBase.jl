@@ -60,6 +60,10 @@ mkNonPAbs(    :ExactBase   , :BASES        , "type-exactness bases"             
 mkNonPAbs(      :EX        , :ExactBase    , "the EXact base"                                 )
 mkNonPAbs(      :MM        , :ExactBase    , "the MeasureMent base"                           )
 
+# AUX branch
+mkNonPAbs(  :AUX           , :AbstractTherm, "ancillary EngTherm types"                       )
+mkNonPAbs(    :AuxFunc     , :AUX          , "ancillary functions of whatever parameters"     )
+
 
 #----------------------------------------------------------------------------------------------#
 #                Concrete type unions for allowed abstract supertype parameters                #
@@ -206,13 +210,6 @@ end
 #----------------------------------------------------------------------------------------------#
 #                      EngTherm Parametric Abstract Supertype Definitions                      #
 #----------------------------------------------------------------------------------------------#
-
-# AUX branch
-mkNonPAbs(  :AUX           , :AbstractTherm, "ancillary EngTherm types"                       )
-mkNonPAbs(    :AuxNonPFunc , :AUX          , "ancillary functions of whatever parameters"     )
-mk1ParAbs(    :Aux1ParFunc , :AUX          , "ancillary functions of 1 parameter"          , 0)
-mk2ParAbs(    :Aux2ParFunc , :AUX          , "ancillary functions of 2 parameters"         , 0)
-mk3ParAbs(    :Aux3ParFunc , :AUX          , "ancillary functions of 3 parameters"         , 0)
 
 # AMOUNTS branch — Pars are (i) precision, (ii) exactness, and (iii) base
 mk2ParAbs(  :AMOUNTS       , :AbstractTherm, "thermodynamic amounts"                       , 0)
