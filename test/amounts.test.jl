@@ -207,6 +207,7 @@ end
 
 
 @testset "amounts.test.jl: Based Amount constructor tests                         " begin
+    _qty = EngThermBase._qty
     for 𝕋 in (:m_amt, :N_amt, :R_amt, :Pvamt, :RTamt, :Tsamt, :v_amt,
               :u_amt, :h_amt, :g_amt, :a_amt, :e_amt, :ekamt, :epamt,
               :s_amt, :cpamt, :cvamt, :c_amt, :j_amt, :y_amt, :xiamt,
@@ -290,7 +291,7 @@ end
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
                 @test amnt isa eval(𝕋){Float64,EX,𝔹}
-                amnt = eval(𝕋)(𝕍 * 𝕌)                           # unit-ed arg
+                amnt = eval(𝕋)(𝕍 * 𝕌, 𝔹)                        # unit-ed arg
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
@@ -300,11 +301,11 @@ end
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
                 @test amnt isa eval(𝕋){Float64,EX,𝔹}
-                amnt = eval(𝕋){Float64}(𝕍 * 𝕌)                  # non-conv, fully spec'd
+                amnt = eval(𝕋){Float64}(𝕍 * 𝕌, 𝔹)               # non-conv, fully spec'd
                 @test amnt isa eval(𝕋){Float64,EX,𝔹}
-                amnt = eval(𝕋){Float64,EX}(𝕍 * 𝕌)               # non-conv, fully spec'd
+                amnt = eval(𝕋){Float64,EX}(𝕍 * 𝕌, 𝔹)            # non-conv, fully spec'd
                 @test amnt isa eval(𝕋){Float64,EX,𝔹}
-                amnt = eval(𝕋){Float64,EX,𝔹}(𝕍 * 𝕌)             # non-conv, fully spec'd
+                amnt = eval(𝕋){Float64,EX,𝔹}(𝕍 * 𝕌, 𝔹)          # non-conv, fully spec'd
                 @test amnt isa eval(𝕋){Float64,EX,𝔹}
                 #--------------------------------------------------------------------------#
                 #                         Measurements Constructor                         #
@@ -314,7 +315,7 @@ end
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
-                amnt = eval(𝕋)((𝕍 ± 𝕍) * 𝕌)                     # unit-ed arg
+                amnt = eval(𝕋)((𝕍 ± 𝕍) * 𝕌, 𝔹)                  # unit-ed arg
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
@@ -324,11 +325,11 @@ end
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
-                amnt = eval(𝕋){Float64}((𝕍 ± 𝕍) * 𝕌)            # non-conv, fully spec'd
+                amnt = eval(𝕋){Float64}((𝕍 ± 𝕍) * 𝕌, 𝔹)         # non-conv, fully spec'd
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
-                amnt = eval(𝕋){Float64,MM}((𝕍 ± 𝕍) * 𝕌)         # non-conv, fully spec'd
+                amnt = eval(𝕋){Float64,MM}((𝕍 ± 𝕍) * 𝕌, 𝔹)      # non-conv, fully spec'd
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
-                amnt = eval(𝕋){Float64,MM,𝔹}((𝕍 ± 𝕍) * 𝕌)       # non-conv, fully spec'd
+                amnt = eval(𝕋){Float64,MM,𝔹}((𝕍 ± 𝕍) * 𝕌, 𝔹)    # non-conv, fully spec'd
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
             end
         end
