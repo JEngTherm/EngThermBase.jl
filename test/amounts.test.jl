@@ -2,7 +2,7 @@
 #                                       amounts.test.jl                                        #
 #----------------------------------------------------------------------------------------------#
 
-@testset "amounts.test.jl: Generic Amount tests                                   " begin
+@testset "amounts.test.jl: Generic Amount constructor tests                       " begin
     for 𝕋 in (:__amt, )
         for ℙ in (Float16, Float32, Float64, BigFloat)
             for 𝕌 in (
@@ -24,6 +24,10 @@
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){ℙ}
                 @test amnt isa eval(𝕋){ℙ,EX}
+                amnt = eval(𝕋){ℙ,EX}(one(ℙ))                    # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){ℙ,EX}
+                amnt = eval(𝕋){ℙ,EX}(one(ℙ) * 𝕌)                # non-conv, fully spec'd, unit
+                @test amnt isa eval(𝕋){ℙ,EX}
                 #--------------------------------------------------------------------------#
                 #                         Measurements Constructor                         #
                 #--------------------------------------------------------------------------#
@@ -38,6 +42,10 @@
                 amnt = eval(𝕋)(amnt)                            # copy constructor
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){ℙ}
+                @test amnt isa eval(𝕋){ℙ,MM}
+                amnt = eval(𝕋){ℙ,MM}(one(ℙ) ± one(ℙ))           # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){ℙ,MM}
+                amnt = eval(𝕋){ℙ,MM}((one(ℙ) ± one(ℙ)) * 𝕌)     # non-conv, fully spec'd, unit
                 @test amnt isa eval(𝕋){ℙ,MM}
             end
         end
