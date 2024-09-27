@@ -675,9 +675,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         (::Type{$TYPE{𝘀,𝘅,𝗯}})(x::$TYPE{𝗽,𝘆,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝘆<:EXAC,𝗯<:BASE} = begin
             $TYPE{𝘀,𝘅}(x)           # Fallback call to base-implicit constructors
         end
-        (::Type{$TYPE{𝘀,𝘅,𝗯}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
+        (::Type{$TYPE{𝘀,𝘅,𝗯}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS},
+                               b::Type{𝗯}=𝗯
                               ) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝘁<:REAL,𝗯<:BASE} = begin
-            $TYPE{𝘀,𝘅}($TYPE(x, 𝗯))    # Fallback call
+            $TYPE{𝘀,𝘅}($TYPE(x, b))    # Fallback call
         end
         # Quantity external constructors with explicit base specification
         # United Exact (UETY) constructors
