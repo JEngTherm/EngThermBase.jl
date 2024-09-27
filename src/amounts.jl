@@ -633,6 +633,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
                        uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
             $TYPE(float(x.val) * unit(x))
         end
+        $TYPE(x::uniR{𝘁,$𝑑SY}, ::Type{SY}) where 𝘁<:REAL = $TYPE(x) # Fallback call
+        $TYPE(x::uniR{𝘁,$𝑑DT}, ::Type{DT}) where 𝘁<:REAL = $TYPE(x) # Fallback call
+        $TYPE(x::uniR{𝘁,$𝑑MA}, ::Type{MA}) where 𝘁<:REAL = $TYPE(x) # Fallback call
+        $TYPE(x::uniR{𝘁,$𝑑MO}, ::Type{MO}) where 𝘁<:REAL = $TYPE(x) # Fallback call
         $TYPE(x::AMOUNTS) = $TYPE(amt(x)) # AMOUNTS fallback
         # Precision-changing external constructors
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
