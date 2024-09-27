@@ -149,12 +149,20 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
             $TYPE(Measurement{𝘀}(amt(x).val) * unit(amt(x)))
         end
+        (::Type{$TYPE{𝘀}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},
+                                    REAL,uniR{𝘁},AMOUNTS}) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
+			$TYPE{𝘀}($TYPE(x))		# Fallback call
+        end
         # Precision+Exactness-changing external constructors
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX}) where {𝘀<:PREC,𝗽<:PREC} = begin
             $TYPE(𝘀(amt(x).val) * unit(amt(x)))
         end
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
             $TYPE(𝘀(amt(x).val.val) * unit(amt(x)))
+        end
+        (::Type{$TYPE{𝘀,EX}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},
+                                       REAL,uniR{𝘁},AMOUNTS}) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
+            $TYPE{𝘀,EX}($TYPE(x)) 	# Fallback call
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX},
                               e::𝘀=𝘀(max(eps(𝘀), eps(amt(x).val)))) where {𝘀<:PREC,
@@ -163,6 +171,10 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
             $TYPE(Measurement{𝘀}(amt(x).val) * unit(amt(x)))
+        end
+        (::Type{$TYPE{𝘀,MM}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},
+                                       REAL,uniR{𝘁},AMOUNTS}) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
+            $TYPE{𝘀,MM}($TYPE(x)) 	# Fallback call
         end
         # Type export
         export $TYPE
