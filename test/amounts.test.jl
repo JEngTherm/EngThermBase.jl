@@ -281,46 +281,55 @@ end
         for 𝕍 in Real[Irrational{:ℯ}(), Irrational{:π}(), 2//3, 1//10, 3, 2]
             for 𝔹 in (SY, DT, MA, MO)
                 # Obtain corresponding 𝕋 amount's units
-                𝕌 = unit(eval(𝕋)(𝕍)())
+                𝕌 = unit(eval(𝕋)(𝕍, 𝔹)())
                 #--------------------------------------------------------------------------#
                 #                            Exact Constructors                            #
                 #--------------------------------------------------------------------------#
-                # TODO / TODO : adapt the tests below
-                amnt = eval(𝕋)(𝕍)                               # unitless arg
+                amnt = eval(𝕋)(𝕍, 𝔹)                            # unitless arg
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
+                @test amnt isa eval(𝕋){Float64,EX,𝔹}
                 amnt = eval(𝕋)(𝕍 * 𝕌)                           # unit-ed arg
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
+                @test amnt isa eval(𝕋){Float64,EX,𝔹}
                 amnt = eval(𝕋)(amnt)                            # copy constructor
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
-                amnt = eval(𝕋){Float64,EX}(𝕍)                   # non-conv, fully spec'd
-                @test amnt isa eval(𝕋){Float64,EX}
-                amnt = eval(𝕋){Float64,EX}(𝕍 * 𝕌)               # non-conv, fully spec'd, unit
-                @test amnt isa eval(𝕋){Float64,EX}
+                @test amnt isa eval(𝕋){Float64,EX,𝔹}
+                amnt = eval(𝕋){Float64}(𝕍 * 𝕌)                  # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,EX,𝔹}
+                amnt = eval(𝕋){Float64,EX}(𝕍 * 𝕌)               # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,EX,𝔹}
+                amnt = eval(𝕋){Float64,EX,𝔹}(𝕍 * 𝕌)             # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,EX,𝔹}
                 #--------------------------------------------------------------------------#
                 #                         Measurements Constructor                         #
                 #--------------------------------------------------------------------------#
-                amnt = eval(𝕋)(𝕍 ± 𝕍)                           # unitless arg
+                amnt = eval(𝕋)(𝕍 ± 𝕍, 𝔹)                        # unitless arg
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
                 amnt = eval(𝕋)((𝕍 ± 𝕍) * 𝕌)                     # unit-ed arg
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
                 amnt = eval(𝕋)(amnt)                            # copy constructor
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
-                amnt = eval(𝕋){Float64,MM}(𝕍 ± 𝕍)               # non-conv, fully spec'd
-                @test amnt isa eval(𝕋){Float64,MM}
-                amnt = eval(𝕋){Float64,MM}((𝕍 ± 𝕍) * 𝕌)         # non-conv, fully spec'd, unit
-                @test amnt isa eval(𝕋){Float64,MM}
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
+                amnt = eval(𝕋){Float64}((𝕍 ± 𝕍) * 𝕌)            # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
+                amnt = eval(𝕋){Float64,MM}((𝕍 ± 𝕍) * 𝕌)         # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
+                amnt = eval(𝕋){Float64,MM,𝔹}((𝕍 ± 𝕍) * 𝕌)       # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
             end
         end
     end
