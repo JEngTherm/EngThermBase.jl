@@ -69,6 +69,10 @@
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,EX}
+                amnt = eval(𝕋){Float64,EX}(𝕍)                   # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,EX}
+                amnt = eval(𝕋){Float64,EX}(𝕍 * 𝕌)               # non-conv, fully spec'd, unit
+                @test amnt isa eval(𝕋){Float64,EX}
                 #--------------------------------------------------------------------------#
                 #                         Measurements Constructor                         #
                 #--------------------------------------------------------------------------#
@@ -83,6 +87,10 @@
                 amnt = eval(𝕋)(amnt)                            # copy constructor
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
+                @test amnt isa eval(𝕋){Float64,MM}
+                amnt = eval(𝕋){Float64,MM}(𝕍 ± 𝕍)               # non-conv, fully spec'd
+                @test amnt isa eval(𝕋){Float64,MM}
+                amnt = eval(𝕋){Float64,MM}((𝕍 ± 𝕍) * 𝕌)         # non-conv, fully spec'd, unit
                 @test amnt isa eval(𝕋){Float64,MM}
             end
         end
