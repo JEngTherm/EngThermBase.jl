@@ -172,6 +172,20 @@ definition, `u - T * s --> a`, and `(P * v) / (R * T) --> Z`. Moreover, a Mach  
 of 1.25 is obtained by dividing the velocity of 1500 km/h by the sound speed of  1200  km/h,
 and the classic ratio `cp / cv --> γ`.
 
+If the automatic tagging is unwanted, one can always manually tag the result of  operations,
+in the same way raw values are being tagged in the previous example.  As  long  as  physical
+dimensions are consistent, manually re-tagging will work, as expected:
+
+```julia
+julia> specific_boundary_work = w_( u_(300) + P_(100) * v_(0.1) )
+w₆₄: 310.00 kJ/kg
+```
+
+In the above example, which can occur in  the  Thermodynamic  context  of  a  boundary  work
+**energy balance** calculation, the outermost call `w_()` is the  manual  re-tagging,  which
+causes a specific work interation to be returned, instead of the default  specific  enthalpy
+property.
+
 
 ## Automatic re-basing
 
