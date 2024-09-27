@@ -641,6 +641,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(Measurement{𝘀}(amt(x).val), 𝗯)
         end
+        (::Type{$TYPE{𝘀}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
+                          ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
+            $TYPE{𝘀}($TYPE(x))  # Fallback call
+        end
         # Precision+Exactness-changing external constructors
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(𝘀(amt(x).val), 𝗯)
