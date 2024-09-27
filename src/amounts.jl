@@ -126,10 +126,10 @@ A `$TYPE` can be natively constructed from the following argument types:\n
             (::Type{$TYPE{𝗽,MM}})(x::PMTY{𝗽}) where 𝗽<:PREC = new{𝗽,MM}(_qty(x))
             # Inner, unit-converting, fully-specified constructors
             # ----------------------------------------------------
-            (::Type{$TYPE{𝗽,EX}})(x::Union{𝗽,UETY{𝗽}}) where 𝗽<:PREC = begin
+            (::Type{$TYPE{𝗽,EX}})(x::UETY{𝗽}) where 𝗽<:PREC = begin
                 new{𝗽,EX}(_qty(x))
             end
-            (::Type{$TYPE{𝗽,MM}})(x::Union{PMTY{𝗽},UMTY{𝗽}}) where 𝗽<:PREC = begin
+            (::Type{$TYPE{𝗽,MM}})(x::UMTY{𝗽}) where 𝗽<:PREC = begin
                 new{𝗽,MM}(_qty(x))
             end
         end
