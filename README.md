@@ -78,7 +78,7 @@ with the `precof`, `exacof`, and `baseof` functions.
 ## Quantity untagging (and optional unit conversion):
 
 In `EngThermBase.jl`, amounts are `functors`, meaning they can be called as a function.  The
-default behavior is to untag itself, returning unaltered it's `val` member. If,  however,  a
+default behavior is to untag itself, returning unaltered it's `amt` member. If,  however,  a
 unit is passed as an argument to the functor, a unit conversion will be attempted. All  unit
 operations on `EngThermBase.jl` are powered by `Unitful.jl`.
 
@@ -93,14 +93,14 @@ julia> x(u"°C")
 238.85000000000002 °C
 ```
 
-The example illustrates that constructors apply default units to unitless arguments, so that
-the default temperature unit, `K`, was applied by `T_` in the `T_(512)` call.  An  analogous
-behavior is illusrtated with the `P_(1024)` call.
+The above example illustrates that constructors apply default units to  unitless  arguments,
+so that the default temperature unit, `K`, was applied by `T_` in  the  `T_(512)`  call.  An
+analogous behavior is illusrtated with the `P_(1024)` call.
 
 Untagging happens when the `x` and `y` objects are called (as  functors),  with  `x()`,  and
 `y()`, in which case we see the plain underlying  values  of  `512.0  K`  and  `1024.0  kPa`
-returned as a 2-tuple. Nota that there's no mor pretty-printing because the values  are  not
-`EngThermBase.jl` amounts.
+returned as a 2-tuple. Note that there's no more pretty-printing because the untagged values
+are no longer `EngThermBase.jl` amounts.
 
 In the last example, a unit conversion is performed when a unit is  passed  to  the  functor
 call `x(u"°C")`, that returns 238.85 °C. Note again, the lack of pretty-printing.
@@ -108,7 +108,7 @@ call `x(u"°C")`, that returns 238.85 °C. Note again, the lack of pretty-printi
 Other untagging functions are: `amt`, `bare`, and `pod`; which, respectively return the  (i)
 underlying amount (with units, just like the  functor),  (ii)  the  "bare"  numerical  value
 without units, and (iii) a "plain-old data", which also strips from  bare  numerical  values
-any possible uncertainty.
+any possible accompanying error/uncertainty.
 
 ```julia
 julia> x = T_(300 ± 0.1)
@@ -125,29 +125,36 @@ In this case,  `typeof(x)`  returns  `T_amt{Float64,  MM}`.  The  `MM`  exactnes
 indicates a measurement, powered by `Measurements.jl`.
 
 Note that by applying the `amt()`, `bare()`, and `pod()`  functions  on  `x`,  returned  the
-illustrated values, with all operations untagging `x`, returning a (i) united measurement, a
-(ii) unitless measurement, and a (iii) simple numeric value, or a plain-old data.
+illustrated values, with all operations untagging `x`, returning a (i) unit-ed  measurement,
+a (ii) unitless measurement, and a (iii) simple numeric value, or a plain-old data.
 
 
 ## Automatic re-tagging
 
-Certain "known" operations with tagged operands yield quantities of  other,  however  known,
-tags:
+Some common thermodynamic operations on tagged operands yield quantities of other tags.  For
+instance, it is generally assumed that, whenever adding a pressure-volume product, `Pv`,  to
+an internal energy  amount,  `u`—all  in  the  same  base—the  operation  should  return  an
+_enthalpy_ amount, `h`, since
+
+$h ≝ u + Pv$
+
+and therefore, the  following  operations,  each  one  following  a  thermodynamic  quantity
+_definition_, from other operands (amounts), return the corresponding quantity:
 
 ```julia
-julia> u_(300) + P_(100) * v_(0.1)
+julia> u_(300) + P_(100) * v_(0.1)  # h ≝ u + P*v
 h₆₄: 310.00 kJ/kg
 
-julia> u_(400) - T_(300) * s_(1.0)
+julia> u_(400) - T_(300) * s_(1.0)  # a ≝ u - T*s
 a₆₄: 100.00 kJ/kg
 
-julia> (P_(100) * v_(0.1)) / (R_(0.2) * T_(500))
+julia> (P_(100) * v_(0.1)) / (R_(0.2) * T_(500))  # Z ≝ (P*v) / (R*T)
 Z₆₄: 0.10000 –
 
-julia> ve(1500u"km/hr") / cs(1200u"km/hr")
+julia> ve(1500u"km/hr") / cs(1200u"km/hr")  # Ma ≝ 𝕧 / 𝕔
 Ma₆₄: 1.2500 –
 
-julia> cp(5) / cv(4)
+julia> cp(5) / cv(4)  # γ ≝ cp / cv
 γ₆₄: 1.2500 –
 ```
 
@@ -171,16 +178,16 @@ According to theory, the first two  are  intensive,  while  the  others,  extens
 examples of what can be done computationally:
 
 ```julia
-julia> sp_int_energy = u_(300)
+julia> specific_internal_energy = u_(300)
 u₆₄: 300.00 kJ/kg
 
-julia> syst_mass = m_(3.0u"kg")
+julia> system_mass = m_(3.0u"kg")
 m₆₄: 3.0000 kg
 
-julia> syst_energy = sp_int_energy * syst_mass
+julia> system_internal_energy = specific_internal_energy * system_mass
 U₆₄: 900.00 kJ
 
-julia> pars = [ syst_mass, sp_int_energy, syst_energy ]
+julia> pars = [ system_mass, specific_internal_energy, system_internal_energy ]
 3-element Vector{BProperty{Float64, EX}}:
  m₆₄: 3.0000 kg
  u₆₄: 300.00 kJ/kg
@@ -197,18 +204,19 @@ julia> extensive_pars = [ p for p in pars if baseof(p) <: ExtBase ]
 ```
 
 It is worth noting that an automatic change of base took place in the product  that  defined
-the `syst_energy`, when a specific internal energy amount was multiplied by  a  system  mass
-amount, `EngThermBase.jl` returned a system (based) internal energy amount, in `kJ`:
+the `system_internal_energy`, when a specific internal energy amount  was  multiplied  by  a
+system mass amount, `EngThermBase.jl` returned a system (based) internal energy  amount,  in
+`kJ`:
 
 ```julia
-julia> typeof(syst_energy)
+julia> typeof(system_internal_energy)
 u_amt{Float64, EX, SY}
 
 ```
 
 ## Abstract Type Hierarchy
 
-`EngThermBase.jl` conceptual abstract types have 4 (four) branches placed under the top-most
+`EngThermBase.jl` conceptual abstract types have 5 (five) branches placed under the top-most
 type `AbstractTherm`:
 
 ```julia
@@ -217,6 +225,7 @@ julia> using TypeTree
 julia> subtypes(AbstractTherm)
 4-element Vector{Any}:
  AMOUNTS
+ AUX
  BASES
  COMBOS
  MODELS
@@ -226,7 +235,7 @@ The `AMOUNTS` are the tagged quantities and are already introduced above. The ot
 expand like the following:
 
 ```julia
-julia> print.(TypeTree.tt(BASES));
+julia> print(tt(BASES)...)
 BASES
  ├─ ExactBase
  │   ├─ EX
@@ -239,33 +248,33 @@ BASES
          ├─ MA
          └─ MO
 
-julia> print.(TypeTree.tt(COMBOS));
+julia> print(tt(COMBOS)...)
 COMBOS
  ├─ PropPair{𝗽, 𝘅} where [...]
- │   ├─ ChFPair{𝗽, 𝘅}
- │   └─ EoSPair{𝗽, 𝘅}
- │       ├─ PvPair{𝕡, 𝕩}
- │       ├─ TPPair{𝕡, 𝕩}
- │       └─ TvPair{𝕡, 𝕩}
- ├─ PropQuad{𝗽, 𝘅}
- └─ PropTrio{𝗽, 𝘅}
-     └─ TPxTrio{𝕡, 𝕩}
+ │   ├─ ChFPair{𝗽, 𝘅} where [...]
+ │   └─ EoSPair{𝗽, 𝘅} where [...]
+ │       ├─ PvPair{𝕡, 𝕩} where [...]
+ │       ├─ TPPair{𝕡, 𝕩} where [...]
+ │       └─ TvPair{𝕡, 𝕩} where [...]
+ ├─ PropQuad{𝗽, 𝘅} where [...]
+ └─ PropTrio{𝗽, 𝘅} where [...]
+     └─ TPxTrio{𝕡, 𝕩} where [...]
 
-julia> print.(TypeTree.tt(MODELS));
+julia> print(tt(MODELS)...)
 MODELS
  ├─ Heat{𝗽, 𝘅} where [...]
- │   ├─ BivarHeat{𝗽, 𝘅, 𝗯}
- │   ├─ ConstHeat{𝗽, 𝘅, 𝗯}
- │   ├─ GenerHeat{𝗽, 𝘅, 𝗯}
- │   └─ UnvarHeat{𝗽, 𝘅, 𝗯}
- ├─ Medium{𝗽, 𝘅}
- │   └─ Substance{𝗽, 𝘅}
- └─ System{𝗽, 𝘅}
-     └─ Scope{𝗽, 𝘅}
-         ├─ Mixtures{𝗽, 𝘅}
-         │   ├─ Reactiv{𝗽, 𝘅}
-         │   └─ Unreact{𝗽, 𝘅}
-         └─ PureSubs{𝗽, 𝘅}
+ │   ├─ BivarHeat{𝗽, 𝘅, 𝗯} where [...]
+ │   ├─ ConstHeat{𝗽, 𝘅, 𝗯} where [...]
+ │   ├─ GenerHeat{𝗽, 𝘅, 𝗯} where [...]
+ │   └─ UnvarHeat{𝗽, 𝘅, 𝗯} where [...]
+ ├─ Medium{𝗽, 𝘅} where [...]
+ │   └─ Substance{𝗽, 𝘅} where [...]
+ └─ System{𝗽, 𝘅} where [...]
+     └─ Scope{𝗽, 𝘅} where [...]
+         ├─ Mixtures{𝗽, 𝘅} where [...]
+         │   ├─ Reactiv{𝗽, 𝘅} where [...]
+         │   └─ Unreact{𝗽, 𝘅} where [...]
+         └─ PureSubs{𝗽, 𝘅} where [...]
 
 ```
 
