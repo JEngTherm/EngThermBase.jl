@@ -641,9 +641,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         (::Type{$TYPE{𝘀}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(Measurement{𝘀}(amt(x).val), 𝗯)
         end
-        (::Type{$TYPE{𝘀}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
-                          ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
-            $TYPE{𝘀}($TYPE(x))  # Fallback call
+        (::Type{$TYPE{𝘀}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS},
+                           b::Type{𝗯}=DEF[:IB]
+                          ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL,𝗯<:BASE} = begin
+            $TYPE{𝘀}($TYPE(x, b))  # Fallback call
         end
         # Precision+Exactness-changing external constructors
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,EX,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
@@ -652,9 +653,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(𝘀(amt(x).val.val), 𝗯)
         end
-        (::Type{$TYPE{𝘀,EX}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
-                             ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
-            $TYPE{𝘀,EX}($TYPE(x))  # Fallback call
+        (::Type{$TYPE{𝘀,EX}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS},
+                              b::Type{𝗯}=DEF[:IB]
+                             ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL,𝗯<:BASE} = begin
+            $TYPE{𝘀,EX}($TYPE(x, b))  # Fallback call
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX,𝗯},
                             e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
@@ -664,9 +666,10 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(Measurement{𝘀}(amt(x).val), 𝗯)
         end
-        (::Type{$TYPE{𝘀,MM}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
-                             ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
-            $TYPE{𝘀,MM}($TYPE(x))  # Fallback call
+        (::Type{$TYPE{𝘀,MM}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS},
+                              b::Type{𝗯}=DEF[:IB]
+                             ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL,𝗯<:BASE} = begin
+            $TYPE{𝘀,MM}($TYPE(x, b))  # Fallback call
         end
         # Same-Base-explicit, precision+exactness-changing external constructors
         (::Type{$TYPE{𝘀,𝘅,𝗯}})(x::$TYPE{𝗽,𝘆,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝘆<:EXAC,𝗯<:BASE} = begin
