@@ -39,8 +39,9 @@
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){ℙ}
                 @test amnt isa eval(𝕋){ℙ,MM}
+            end
         end
-        for 𝕍 in REAL[Irrational{:ℯ}, Irrational{:π}, 2//3, 1//10, 3, 2]
+        for 𝕍 in Real[Irrational{:ℯ}(), Irrational{:π}(), 2//3, 1//10, 3, 2]
             for 𝕌 in (
                 u"m", u"s", u"m/s", u"N", u"N/m^2", u"J", u"J/s", u"K", u"1/K", u"mol",
                 u"mol/s", u"kg/kmol", u"kJ/kg", u"kJ/kg/s", u"kJ/kg/K", u"kJ/kg/K/s",
@@ -75,6 +76,7 @@
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
+            end
         end
     end
 end
