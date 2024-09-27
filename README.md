@@ -112,7 +112,10 @@ any possible accompanying error/uncertainty.
 
 ```julia
 julia> x = T_(300 ± 0.1)
-T₆₄: (300.00 ± 0.10 K)
+T₆₄∴ (300.00 ± 0.10 K)
+
+julia> typeof(x)
+T_amt{Float64, MM}
 
 julia> [ F(x) for F in (amt, bare, pod) ]
 3-element Vector{Number}:
@@ -123,6 +126,12 @@ julia> [ F(x) for F in (amt, bare, pod) ]
 
 In this case,  `typeof(x)`  returns  `T_amt{Float64,  MM}`.  The  `MM`  exactness  parameter
 indicates a measurement, powered by `Measurements.jl`.
+
+It is worth noting that temperature `Measurement` exactness quantities pretty-print as `T₆₄∴
+...` instead of `T₆₄: ...`, i.e., the employed separator changes from `:` to `∴`, as to more
+explicitly convey that something "special" is  being  tagged  as  a  temperature,  i.e.,  an
+underlying `Measurements` value. This change has been introduced on  `release-0.5`  for  all
+`MM` exactness `AMOUNTS`.
 
 Note that by applying the `amt()`, `bare()`, and `pod()`  functions  on  `x`,  returned  the
 illustrated values, with all operations untagging `x`, returning a (i) unit-ed  measurement,
