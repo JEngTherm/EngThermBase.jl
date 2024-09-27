@@ -674,8 +674,19 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         end
         (::Type{$TYPE{𝘀,𝘅,𝗯}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
                               ) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝘁<:REAL,𝗯<:BASE} = begin
-            $TYPE{𝘀,𝘅}($TYPE(x))    # Fallback call
+            $TYPE{𝘀,𝘅}($TYPE(x, 𝗯))    # Fallback call
         end
+        # Quantity external constructors with explicit base specification
+        # United Exact (UETY) constructors
+        $TYPE(x::UETY{𝗽,$𝑑SY}, ::Type{SY}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        $TYPE(x::UETY{𝗽,$𝑑DT}, ::Type{DT}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        $TYPE(x::UETY{𝗽,$𝑑MA}, ::Type{MA}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        $TYPE(x::UETY{𝗽,$𝑑MO}, ::Type{MO}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        # United Measurement (UMTY) constructors
+        $TYPE(x::UMTY{𝗽,$𝑑SY}, ::Type{SY}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        $TYPE(x::UMTY{𝗽,$𝑑DT}, ::Type{DT}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        $TYPE(x::UMTY{𝗽,$𝑑MA}, ::Type{MA}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
+        $TYPE(x::UMTY{𝗽,$𝑑MO}, ::Type{MO}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
         # Type export
         export $TYPE
         # Type-stable wrapped amount obtaining function
