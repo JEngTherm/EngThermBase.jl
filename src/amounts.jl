@@ -738,15 +738,12 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         export $FNAM, $ALIA
         # Conversions - Change of base is _not_ a conversion
         # Same {EXAC,BASE}, {PREC}- conversion
-        convert(::Type{$TYPE{𝘀,𝘅,𝗯}},
-                y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = begin
-            $TYPE{promote_type(𝘀,𝗽),𝘅}(y)
-        end
+        convert(::Type{$TYPE{𝘀}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀}(y)
+        convert(::Type{$TYPE{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
+        convert(::Type{$TYPE{𝘀,𝘅,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
         # Same {BASE}, {PREC,EXAC}- conversion
-        convert(::Type{$TYPE{𝘀,𝘆,𝗯}},
-                y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = begin
-            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
-        end
+        convert(::Type{$TYPE{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
+        convert(::Type{$TYPE{𝘀,𝘆,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
         # Promotion rules
         promote_rule(::Type{$TYPE{𝘀,𝘆,𝗯}},
                      ::Type{$TYPE{𝗽,𝘅,𝗯}}) where {𝘀<:PREC,𝗽<:PREC,
