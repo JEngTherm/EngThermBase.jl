@@ -199,14 +199,9 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         $ALIA = $FNAM
         export $FNAM, $ALIA
         # Conversions
-        convert(::Type{$TYPE{𝘀,𝘅}},
-                y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
-            $TYPE{promote_type(𝘀,𝗽),𝘅}(y)
-        end
-        convert(::Type{$TYPE{𝘀,𝘆}},
-                y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
-        end
+        convert(::Type{$TYPE{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = $TYPE{𝘀,𝘅}(y)
+        convert(::Type{$TYPE{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = $TYPE{𝘀,𝘆}(y)
+        convert(::Type{$TYPE{𝘀}}, y::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE{𝘀}(y)
         # Promotion rules
         promote_rule(::Type{$TYPE{𝘀,𝘆}},
                      ::Type{$TYPE{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
@@ -362,14 +357,9 @@ Constructors determine all parameters from their arguments.\n
         $ALIA = $FNAM
         export $FNAM, $ALIA
         # Conversions
-        convert(::Type{$TYPE{𝘀,𝘅}},
-                y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = begin
-            $TYPE{promote_type(𝘀,𝗽),𝘅}(y)
-        end
-        convert(::Type{$TYPE{𝘀,𝘆}},
-                y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
-            $TYPE{promote_type(𝘀,𝗽),promote_type(𝘆,𝘅)}(y)
-        end
+        convert(::Type{$TYPE{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = $TYPE{𝘀,𝘅}(y)
+        convert(::Type{$TYPE{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = $TYPE{𝘀,𝘆}(y)
+        convert(::Type{$TYPE{𝘀}}, y::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE{𝘀}(y)
         # Promotion rules
         promote_rule(::Type{$TYPE{𝘀,𝘆}},
                      ::Type{$TYPE{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
