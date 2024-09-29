@@ -165,12 +165,12 @@ A `$TYPE` can be natively constructed from the following argument types:\n
             $TYPE{𝘀,EX}($TYPE(x)) 	# Fallback call
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX},
-                              e::𝘀=𝘀(max(eps(𝘀), eps(amt(x).val)))) where {𝘀<:PREC,
-                                                                           𝗽<:PREC} = begin
+                              e::𝘀=𝘀(max(eps(𝘀), eps(𝘀(amt(x).val)))/2)) where {𝘀<:PREC,𝗽<:PREC} = begin
             $TYPE(measurement(𝘀(amt(x).val), e) * unit(amt(x)))
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM}) where {𝘀<:PREC,𝗽<:PREC} = begin
-            $TYPE(Measurement{𝘀}(amt(x).val) * unit(amt(x)))
+            e = 𝘀(max(eps(𝘀), eps(𝘀(pod(x))), 2*𝘀(bare(x).err))/2)
+            $TYPE(measurement(𝘀(pod(x)), e) * unit(amt(x)))
         end
         (::Type{$TYPE{𝘀,MM}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},
                                        REAL,uniR{𝘁},AMOUNTS}) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = begin
@@ -342,10 +342,13 @@ Constructors determine all parameters from their arguments.\n
         (::Type{$TYPE{𝘀,EX}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
                              ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = $TYPE{𝘀,EX}($TYPE(x)) # Fallback
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX},
-                              e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
+                              e::𝘀=𝘀(max(eps(𝘀),eps(𝘀(amt(x).val)))/2)
                              ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(measurement(𝘀(amt(x).val), e))
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM}
-                             ) where {𝘀<:PREC,𝗽<:PREC} = $TYPE(Measurement{𝘀}(amt(x).val))
+                             ) where {𝘀<:PREC,𝗽<:PREC} = begin
+            e = 𝘀(max(eps(𝘀), eps(𝘀(pod(x))), 2*𝘀(bare(x).err))/2)
+            $TYPE(measurement(𝘀(pod(x)), e) * unit(amt(x)))
+        end
         (::Type{$TYPE{𝘀,MM}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
                              ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = $TYPE{𝘀,MM}($TYPE(x)) # Fallback
         # Type export
@@ -686,12 +689,14 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         (::Type{$TYPE{𝘀,EX}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(𝘀(amt(x).val.val), 𝗯)
         end
-        (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX,𝗯}, e::𝘀=𝘀(max(eps(𝘀),eps(amt(x).val)))
+        (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,EX,𝗯},
+                              e::𝘀=𝘀(max(eps(𝘀),eps(𝘀(amt(x).val)))/2)
                              ) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             $TYPE(measurement(𝘀(amt(x).val), e), 𝗯)
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
-            $TYPE(Measurement{𝘀}(amt(x).val), 𝗯)
+            e = 𝘀(max(eps(𝘀), eps(𝘀(pod(x))), 2*𝘀(bare(x).err))/2)
+            $TYPE(measurement(𝘀(pod(x)), e) * unit(amt(x)))
         end
         (::Type{$TYPE{𝘀,𝘅}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
                             ) where {𝘀<:PREC,𝘅<:EXAC,𝗽<:PREC,𝘁<:REAL} = begin
@@ -780,6 +785,14 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         # {PREC,EXAC}- conversion, Same {BASE}
         convert(::Type{$SUPT{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
         convert(::Type{$SUPT{𝘀,𝘆,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
+        # BasedAmt Conversions
+        # {PREC}- conversion, Same {EXAC,BASE}
+        convert(::Type{BasedAmt{𝘀}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀}(y)
+        convert(::Type{BasedAmt{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
+        convert(::Type{BasedAmt{𝘀,𝘅,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
+        # {PREC,EXAC}- conversion, Same {BASE}
+        convert(::Type{BasedAmt{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
+        convert(::Type{BasedAmt{𝘀,𝘆,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
         # AMOUNTS Conversions - There is no BASE paramater in AMOUNTS
         # {PREC}- conversion, Same {EXAC,BASE}
         convert(::Type{AMOUNTS{𝘀}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀}(y)
