@@ -377,12 +377,12 @@ end
         𝔻 = eval(DST)
         for ℙ in (Float16, Float32, Float64, BigFloat)
             # Type- and Precision- Conversions
-            @test typeof(𝔻{ℙ}[vec01...]) == Vector{𝔻{ℙ,EX}}
-            @test typeof(𝔻{ℙ}[vec02...]) == Vector{𝔻{ℙ,MM}}
-            @test typeof(𝔻{ℙ}[vec03...]) == Vector{𝔻{ℙ,EX}}
-            @test typeof(𝔻{ℙ}[vec01..., vec02...]) == Vector{𝔻{ℙ,𝘅} where {𝘅}}
-            @test typeof(𝔻{ℙ}[vec01..., vec03...]) == Vector{𝔻{ℙ,EX}}
-            @test typeof(𝔻{ℙ}[vec02..., vec03...]) == Vector{𝔻{ℙ,𝘅} where {𝘅}}
+            @test typeof(𝔻{ℙ}[vec01...]) == Vector{𝔻{ℙ}}
+            @test typeof(𝔻{ℙ}[vec02...]) == Vector{𝔻{ℙ}}
+            @test typeof(𝔻{ℙ}[vec03...]) == Vector{𝔻{ℙ}}
+            @test typeof(𝔻{ℙ}[vec01..., vec02...]) == Vector{𝔻{ℙ}}
+            @test typeof(𝔻{ℙ}[vec01..., vec03...]) == Vector{𝔻{ℙ}}
+            @test typeof(𝔻{ℙ}[vec02..., vec03...]) == Vector{𝔻{ℙ}}
             # Type-, Precision- and Exactness- Conversions
             for 𝕏 in (EX, MM)
                 @test typeof(𝔻{ℙ,𝕏}[vec01...]) == Vector{𝔻{ℙ,𝕏}}

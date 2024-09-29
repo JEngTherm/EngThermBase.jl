@@ -202,6 +202,20 @@ A `$TYPE` can be natively constructed from the following argument types:\n
         convert(::Type{$TYPE{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = $TYPE{𝘀,𝘅}(y)
         convert(::Type{$TYPE{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = $TYPE{𝘀,𝘆}(y)
         convert(::Type{$TYPE{𝘀}}, y::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE{𝘀}(y)
+        # SUPERTYPE Conversions
+        convert(::Type{$SUPT{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
+        convert(::Type{$SUPT{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} =
+            convert($TYPE{𝘀,𝘆}, y)  # fallback call
+        convert(::Type{$SUPT{𝘀}}  , y::$TYPE{𝗽}  ) where {𝘀<:PREC,𝗽<:PREC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
+        # AMOUNTS Conversions
+        convert(::Type{AMOUNTS{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
+        convert(::Type{AMOUNTS{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} =
+            convert($TYPE{𝘀,𝘆}, y)  # fallback call
+        convert(::Type{AMOUNTS{𝘀}}  , y::$TYPE{𝗽}  ) where {𝘀<:PREC,𝗽<:PREC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
         # Promotion rules
         promote_rule(::Type{$TYPE{𝘀,𝘆}},
                      ::Type{$TYPE{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
