@@ -324,6 +324,8 @@ end
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
+                amnt = eval(𝕋)(_qty((𝕍 ± 𝕍) * 𝕌))               # _qty-ed arg, no BASE: acid test for 𝕌 == DLESS
+                @test amnt isa eval(𝕋){Float64,MM,𝔹}
                 amnt = eval(𝕋)(amnt)                            # copy constructor
                 @test amnt isa eval(𝕋)
                 @test amnt isa eval(𝕋){Float64}
@@ -347,32 +349,50 @@ end
 
 @testset "amounts.test.jl: Generic Amount conversion tests                        " begin
     vec01 = [
-        eval(𝕋)(one(ℙ) * 𝕌)
+        eval(𝕋)(one(ℙ) * 𝕌 / 10)
             for 𝕋 in (:__amt, )
                 for ℙ in (Float16, Float32, Float64, BigFloat) 
-                    for 𝕌 in (u"m", u"s", u"m/s", u"kJ/kg", u"kJ/kg/s", u"kJ/kg/K")
+                    for 𝕌 in (u"m", u"m/s", u"kJ/kg/s", u"kJ/kmol/K")
     ]
     @test typeof(vec01) == Vector{__amt{𝗽, EX} where 𝗽}
     vec02 = [
-        eval(𝕋)((one(ℙ) ± one(ℙ)) * 𝕌)
+        eval(𝕋)((one(ℙ) ± one(ℙ)) * 𝕌 / 10)
             for 𝕋 in (:__amt, )
                 for ℙ in (Float16, Float32, Float64, BigFloat) 
-                    for 𝕌 in (u"m", u"s", u"m/s", u"kJ/kg", u"kJ/kg/s", u"kJ/kg/K")
+                    for 𝕌 in (u"m", u"m/s", u"kJ/kg/s", u"kJ/kmol/K")
     ]
     @test typeof(vec02) == Vector{__amt{𝗽, MM} where 𝗽}
     vec03 = [
         eval(𝕋)(𝕍 * 𝕌)
             for 𝕋 in (:__amt, )
-                for 𝕍 in Real[Irrational{:ℯ}(), Irrational{:π}(), 2//3, 1//10, 3, 2]
-                    for 𝕌 in (u"m", u"s", u"m/s", u"kJ/kg", u"kJ/kg/s", u"kJ/kg/K")
+                for 𝕍 in Real[Irrational{:ℯ}(), 1//10, 3]
+                    for 𝕌 in (u"m", u"m/s", u"kJ/kg/s", u"kJ/kmol/K")
     ]
     @test typeof(vec03) == Vector{__amt{Float64, EX}}
     # IMPLIED CONVERSION THROUGH CONCATENATION
-    @test typeof(vcat(vec01, vec02)) == Vector{__amt{𝗽} where {𝗽}}
+    @test typeof(vcat(vec01, vec02)) == Vector{__amt{𝗽,𝘅} where {𝗽,𝘅}}
     @test typeof(vcat(vec01, vec03)) == Vector{__amt{𝗽,EX} where {𝗽}}
     @test typeof(vcat(vec02, vec03)) == Vector{__amt{𝗽,𝘅} where {𝗽,𝘅}}
-    for ℙ in (Float16, Float32, Float64, BigFloat)
-        # Conversions
+    for DST in (:__amt, :GenerAmt, :AMOUNTS)
+        𝔻 = eval(DST)
+        for ℙ in (Float16, Float32, Float64, BigFloat)
+            # Type- and Precision- Conversions
+            @test typeof(𝔻{ℙ}[vec01...]) == Vector{𝔻{ℙ,EX}}
+            @test typeof(𝔻{ℙ}[vec02...]) == Vector{𝔻{ℙ,MM}}
+            @test typeof(𝔻{ℙ}[vec03...]) == Vector{𝔻{ℙ,EX}}
+            @test typeof(𝔻{ℙ}[vec01..., vec02...]) == Vector{𝔻{ℙ,𝘅} where {𝘅}}
+            @test typeof(𝔻{ℙ}[vec01..., vec03...]) == Vector{𝔻{ℙ,EX}}
+            @test typeof(𝔻{ℙ}[vec02..., vec03...]) == Vector{𝔻{ℙ,𝘅} where {𝘅}}
+            # Type-, Precision- and Exactness- Conversions
+            for 𝕏 in (EX, MM)
+                @test typeof(𝔻{ℙ,𝕏}[vec01...]) == Vector{𝔻{ℙ,𝕏}}
+                @test typeof(𝔻{ℙ,𝕏}[vec02...]) == Vector{𝔻{ℙ,𝕏}}
+                @test typeof(𝔻{ℙ,𝕏}[vec03...]) == Vector{𝔻{ℙ,𝕏}}
+                @test typeof(𝔻{ℙ,𝕏}[vec01..., vec02...]) == Vector{𝔻{ℙ,𝕏}}
+                @test typeof(𝔻{ℙ,𝕏}[vec01..., vec03...]) == Vector{𝔻{ℙ,𝕏}}
+                @test typeof(𝔻{ℙ,𝕏}[vec02..., vec03...]) == Vector{𝔻{ℙ,𝕏}}
+            end
+        end
     end
 end
 
