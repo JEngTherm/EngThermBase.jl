@@ -374,6 +374,20 @@ Constructors determine all parameters from their arguments.\n
         convert(::Type{$TYPE{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} = $TYPE{𝘀,𝘅}(y)
         convert(::Type{$TYPE{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = $TYPE{𝘀,𝘆}(y)
         convert(::Type{$TYPE{𝘀}}, y::$TYPE{𝗽}) where {𝘀<:PREC,𝗽<:PREC} = $TYPE{𝘀}(y)
+        # SUPERTYPE Conversions
+        convert(::Type{$SUPT{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
+        convert(::Type{$SUPT{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} =
+            convert($TYPE{𝘀,𝘆}, y)  # fallback call
+        convert(::Type{$SUPT{𝘀}}  , y::$TYPE{𝗽}  ) where {𝘀<:PREC,𝗽<:PREC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
+        # AMOUNTS Conversions
+        convert(::Type{AMOUNTS{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
+        convert(::Type{AMOUNTS{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} =
+            convert($TYPE{𝘀,𝘆}, y)  # fallback call
+        convert(::Type{AMOUNTS{𝘀}}  , y::$TYPE{𝗽}  ) where {𝘀<:PREC,𝗽<:PREC} =
+            convert($TYPE{𝘀}  , y)  # fallback call
         # Promotion rules
         promote_rule(::Type{$TYPE{𝘀,𝘆}},
                      ::Type{$TYPE{𝗽,𝘅}}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC} = begin
@@ -751,13 +765,27 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         $ALIA = $FNAM
         export $FNAM, $ALIA
         # Conversions - Change of base is _not_ a conversion
-        # Same {EXAC,BASE}, {PREC}- conversion
+        # {PREC}- conversion, Same {EXAC,BASE}
         convert(::Type{$TYPE{𝘀}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀}(y)
         convert(::Type{$TYPE{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
         convert(::Type{$TYPE{𝘀,𝘅,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
-        # Same {BASE}, {PREC,EXAC}- conversion
+        # {PREC,EXAC}- conversion, Same {BASE}
         convert(::Type{$TYPE{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
         convert(::Type{$TYPE{𝘀,𝘆,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
+        # SUPERTYPE Conversions
+        # {PREC}- conversion, Same {EXAC,BASE}
+        convert(::Type{$SUPT{𝘀}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀}(y)
+        convert(::Type{$SUPT{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
+        convert(::Type{$SUPT{𝘀,𝘅,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
+        # {PREC,EXAC}- conversion, Same {BASE}
+        convert(::Type{$SUPT{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
+        convert(::Type{$SUPT{𝘀,𝘆,𝗯}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
+        # AMOUNTS Conversions - There is no BASE paramater in AMOUNTS
+        # {PREC}- conversion, Same {EXAC,BASE}
+        convert(::Type{AMOUNTS{𝘀}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀}(y)
+        convert(::Type{AMOUNTS{𝘀,𝘅}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘅}(y)
+        # {PREC,EXAC}- conversion, Same {BASE}
+        convert(::Type{AMOUNTS{𝘀,𝘆}}, y::$TYPE{𝗽,𝘅,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝘆<:EXAC,𝘅<:EXAC,𝗯<:BASE} = $TYPE{𝘀,𝘆}(y)
         # Promotion rules
         promote_rule(::Type{$TYPE{𝘀,𝘆,𝗯}},
                      ::Type{$TYPE{𝗽,𝘅,𝗯}}) where {𝘀<:PREC,𝗽<:PREC,
