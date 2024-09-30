@@ -696,7 +696,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         end
         (::Type{$TYPE{𝘀,MM}})(x::$TYPE{𝗽,MM,𝗯}) where {𝘀<:PREC,𝗽<:PREC,𝗯<:BASE} = begin
             e = 𝘀(max(eps(𝘀), eps(𝘀(pod(x))), 2*𝘀(bare(x).err))/2)
-            $TYPE(measurement(𝘀(pod(x)), e) * unit(amt(x)))
+            $TYPE(measurement(𝘀(pod(x)), e) * unit(amt(x)), 𝗯)
         end
         (::Type{$TYPE{𝘀,𝘅}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
                             ) where {𝘀<:PREC,𝘅<:EXAC,𝗽<:PREC,𝘁<:REAL} = begin
