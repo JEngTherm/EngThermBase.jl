@@ -103,8 +103,6 @@ atoM_32 = NamedTuple{keys(atoM_64)}(
     (m_(Measurement{Float32}(bare(v)), MO) for v in values(atoM_64))
 )
 
-atoM = atoM_32
-
 """
 `atoM_16`\n
 `NamedTuple` of atomic weights, with uncertainty, by chemical element symbol. Entries are of
@@ -116,6 +114,13 @@ Data Source:
 atoM_16 = NamedTuple{keys(atoM_64)}(
     (m_(Measurement{Float16}(bare(v)), MO) for v in values(atoM_64))
 )
+
+
+#----------------------------------------------------------------------------------------------#
+#                                       The Exported One                                       #
+#----------------------------------------------------------------------------------------------#
+
+atoM = atoM_64
 
 export atoM
 
