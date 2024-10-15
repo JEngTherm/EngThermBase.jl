@@ -151,7 +151,7 @@ function ∫dlnx(𝑓::unvarSerF{𝕡,EX},
     return unvarSerF(
         𝑓.xmin,
         𝑓.xmax,
-        Function[x->yref, [x->quadgk(fi/x, 𝑟, x)[1] for fi in 𝑓.fvec]...]
+        Function[x->yref, [x->quadgk(𝑥->fi(𝑥)/𝑥, 𝑟, x)[1] for fi in 𝑓.fvec]...]
     )
 end
 
@@ -164,7 +164,7 @@ function ∫dlnx(𝑓::unvarSerF{𝕡,MM},
         𝑓.xmax,
         Function[x->yref, [
                 x->(
-                    (i, e) = bare.(ø_amt{𝕡,MM}.(quadgk(fi/x, 𝑟, x)));
+                    (i, e) = bare.(ø_amt{𝕡,MM}.(quadgk(𝑥->fi(𝑥)/𝑥, 𝑟, x)));
                     (i.val ± √(i.err^2 + e.val^2))
                 ) for fi in 𝑓.fvec
             ]...
