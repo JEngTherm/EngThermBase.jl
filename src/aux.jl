@@ -144,7 +144,36 @@ function ∫dx(𝑓::unvarSerF{𝕡,MM},
     )
 end
 
-export ∫dx
+function ∫dlnx(𝑓::unvarSerF{𝕡,EX},
+               xref::plnF{𝕡}=𝑓.xmin,
+               yref::plnF{𝕡}=zero(𝕡))::unvarSerF{𝕡,EX} where 𝕡<:PREC
+    𝑟 = bare(ø_amt{𝕡,EX}(xref))
+    return unvarSerF(
+        𝑓.xmin,
+        𝑓.xmax,
+        Function[x->yref, [x->quadgk(fi/x, 𝑟, x)[1] for fi in 𝑓.fvec]...]
+    )
+end
+
+function ∫dlnx(𝑓::unvarSerF{𝕡,MM},
+               xref::plnF{𝕡}=𝑓.xmin,
+               yref::plnF{𝕡}=zero(𝕡))::unvarSerF{𝕡,MM} where 𝕡<:PREC
+    𝑟 = bare(ø_amt{𝕡,MM}(xref))
+    return unvarSerF(
+        𝑓.xmin,
+        𝑓.xmax,
+        Function[x->yref, [
+                x->(
+                    (i, e) = bare.(ø_amt{𝕡,MM}.(quadgk(fi/x, 𝑟, x)));
+                    (i.val ± √(i.err^2 + e.val^2))
+                ) for fi in 𝑓.fvec
+            ]...
+        ],
+        𝑓.mulf.err / 𝕡(1.0e-2)
+    )
+end
+
+export ∫dx, ∫dlnx
 
 
 #----------------------------------------------------------------------------------------------#
