@@ -115,25 +115,30 @@ export ddx
 
 using QuadGK
 
-function ∫dx(𝑓::unvarSerF{𝕡,EX}, xref::plnF{𝕡}=𝑓.xmin)::unvarSerF{𝕡,EX} where 𝕡<:PREC
+function ∫dx(𝑓::unvarSerF{𝕡,EX},
+             xref::plnF{𝕡}=𝑓.xmin,
+             yref::plnF{𝕡}=zero(𝕡))::unvarSerF{𝕡,EX} where 𝕡<:PREC
     𝑟 = bare(ø_amt{𝕡,EX}(xref))
     return unvarSerF(
         𝑓.xmin,
         𝑓.xmax,
-        Function[x->quadgk(fi, 𝑟, x)[1] for fi in 𝑓.fvec]
+        Function[x->yref, [x->quadgk(fi, 𝑟, x)[1] for fi in 𝑓.fvec]...]
     )
 end
 
-function ∫dx(𝑓::unvarSerF{𝕡,MM}, xref::plnF{𝕡}=𝑓.xmin)::unvarSerF{𝕡,MM} where 𝕡<:PREC
+function ∫dx(𝑓::unvarSerF{𝕡,MM},
+             xref::plnF{𝕡}=𝑓.xmin,
+             yref::plnF{𝕡}=zero(𝕡))::unvarSerF{𝕡,MM} where 𝕡<:PREC
     𝑟 = bare(ø_amt{𝕡,MM}(xref))
     return unvarSerF(
         𝑓.xmin,
         𝑓.xmax,
-        Function[
-            x->(
-                (i, e) = bare.(ø_amt{𝕡,MM}.(quadgk(fi, 𝑟, x)));
-                (i.val ± √(i.err^2 + e.val^2))
-            ) for fi in 𝑓.fvec
+        Function[x->yref, [
+                x->(
+                    (i, e) = bare.(ø_amt{𝕡,MM}.(quadgk(fi, 𝑟, x)));
+                    (i.val ± √(i.err^2 + e.val^2))
+                ) for fi in 𝑓.fvec
+            ]...
         ],
         𝑓.mulf.err / 𝕡(1.0e-2)
     )
