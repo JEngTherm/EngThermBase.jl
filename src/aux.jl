@@ -2,6 +2,42 @@
 #                                       Auxiliary Items                                        #
 #----------------------------------------------------------------------------------------------#
 
+"""
+`struct unvarSerF{𝕡,𝕩} <: AuxFunc where {𝕡<:PREC,𝕩<:EXAC}`
+
+Precision- and Exactness- parameterized, scalar-valued, dimensionless, `<:AbstractFloat`,
+univariate, series function type with explicit compact (bounded / interval) domain support and
+reference domain/codomain elements, or, conversely, reference argument/value or state/value,
+respectively.
+
+Depending on the Exactness parameter, *both* function domain and codomain elements are uniformly
+of type `𝕡 where {𝕡<:PREC}`, for `𝕩 ≡ EX` — the Exact base; or `Measurement{𝕡} where {𝕡<:PREC}`,
+for `𝕩 ≡ MM` — the Measurement base.
+
+Recall the definitions of `PREC` and `EXAC` being:
+
+`const PREC = Union{Float16,Float32,Float64,BigFloat}`
+
+`const EXAC = Union{EX,MM}`
+
+Data members include:
+
+    - `xmin::Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC`: the domain support interval inferior endpoint;
+    - `xmax::Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC`: the domain support interval superior endpoint;
+    - `xref::Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC`: the domain reference element/argument/state;
+    - `yref::Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC`: the codomain reference element/value;
+    - `fvec::Vector{Function}`: the variable collection of function additive terms;
+
+The inner constructors enforce the following standards/restrictions:
+
+    - No input value `[xy]{min,max,ref}` shall be a NaN;
+    - `xmin <= xref <= xmax`;
+    - `fvec` must not be empty.
+
+## Hierarchy
+
+`unvarSerF <: $(tyArchy(unvarSerF))`\n
+"""
 struct unvarSerF{𝕡,𝕩} <: AuxFunc where {𝕡<:PREC,𝕩<:EXAC}
     xmin::plnF{𝕡}   # Plain, unitless floats: (≝ Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC)
     xmax::plnF{𝕡}
