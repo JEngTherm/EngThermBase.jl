@@ -21,6 +21,9 @@ include("operations.jl")
 include("constants.jl")
 include("combos.jl")
 
+# Includes - auxiliary stuff
+include("aux.jl")
+
 # Includes - data libraries
 include("lib/atoM.jl")                  # Selected Elements' atomic masses
 include("lib/moleculeTokenizer.jl")     # For molecule parsing
