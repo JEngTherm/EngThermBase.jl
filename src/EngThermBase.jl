@@ -22,7 +22,7 @@ include("constants.jl")
 include("combos.jl")
 
 # Includes - auxiliary stuff
-include("aux.jl")
+include("auxiliary.jl")
 
 # Includes - data libraries
 include("lib/atoM.jl")                  # Selected Elements' atomic masses
