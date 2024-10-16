@@ -220,7 +220,7 @@ end
     )
 end
 
-+(𝑓::unvarSerF{𝕡,𝕩}, 𝑎::Union{REAL,AbstractFloat}) where {𝕡<:PREC,𝕩<:EXAC} = +(𝑎, 𝑓) # Fallback
++(𝑓::unvarSerF{𝕡,𝕩}, 𝑎::Union{REAL,plnF{𝕢}}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = +(𝑎, 𝑓) # Fallback
 
 -(𝑓::unvarSerF{𝕡,EX}) where 𝕡<:PREC = begin
     return unvarSerF(
@@ -239,9 +239,58 @@ end
     )
 end
 
--(𝑓::unvarSerF{𝕡,𝕩}, 𝑎::Union{REAL,AbstractFloat}) where {𝕡<:PREC,𝕩<:EXAC} = +(-𝑎, 𝑓) # Fallback
+# Fallback methods
+-(𝑓::unvarSerF{𝕡,𝕩}, 𝑎::Union{REAL,plnF{𝕢}}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = +(-𝑎, 𝑓)
 
--(𝑎::Union{REAL,AbstractFloat}, 𝑓::unvarSerF{𝕡,𝕩}) where {𝕡<:PREC,𝕩<:EXAC} = +(𝑎, -𝑓) # Fallback
+-(𝑎::Union{REAL,plnF{𝕢}}, 𝑓::unvarSerF{𝕡,𝕩}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = +(𝑎, -𝑓)
+
+
+#······························································································#
+#                                   Mul / Div by a constant                                    #
+#······························································································#
+
+*(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX} where {𝕡<:PREC,𝕢<:PREC} = begin
+    𝚊 = 𝕡(𝑎)
+    return unvarSerF(
+        𝑓.xmin,
+        𝑓.xmax,
+        Function[[x->(fi(x)*𝚊) for fi in 𝑓.fvec]...]
+    )
+end
+
+*(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX} where {𝕡<:PREC,𝕢<:PREC} = begin
+    𝚊 = Measurement{𝕡}(𝑎).val
+    return unvarSerF(
+        𝑓.xmin,
+        𝑓.xmax,
+        Function[[x->(fi(x)*𝚊) for fi in 𝑓.fvec]...]
+    )
+end
+
+*(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM} where {𝕡<:PREC,𝕢<:PREC} = begin
+    𝚊 = 𝕡(𝑎)
+    return unvarSerF(
+        𝑓.xmin,
+        𝑓.xmax,
+        Function[[x->(fi(x)*𝚊) for fi in 𝑓.fvec]...],
+        𝑓.mulf.err / 𝕡(1.0e-2)
+    )
+end
+
+*(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM} where {𝕡<:PREC,𝕢<:PREC} = begin
+    𝚊 = Measurement{𝕡}(𝑎)
+    return unvarSerF(
+        𝑓.xmin,
+        𝑓.xmax,
+        Function[[x->(fi(x)*𝚊) for fi in 𝑓.fvec]...],
+        𝑓.mulf.err / 𝕡(1.0e-2)
+    )
+end
+
+# Fallback methods
+*(𝑓::unvarSerF{𝕡,𝕩}, 𝑎::Union{REAL,plnF{𝕢}}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = *(𝑎, 𝑓)
+
+/(𝑓::unvarSerF{𝕡,𝕩}, 𝑎::Union{REAL,plnF{𝕢}}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = *(inv(𝑎), 𝑓)
 
 
 #----------------------------------------------------------------------------------------------#
