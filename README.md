@@ -11,6 +11,7 @@ The `EngThermBase.jl` package provides a common platform for:
 - Engineering thermodynamics models and packages, and
 - Case calculations.
 
+
 ## Engineering thermodynamics quantity tagging:
 
 ```julia
@@ -237,6 +238,7 @@ u_amt{Float64, EX, SY}
 
 ```
 
+
 ## Abstract Type Hierarchy
 
 `EngThermBase.jl` conceptual abstract types have 5 (five) branches placed under the top-most
@@ -307,6 +309,7 @@ capacity, pure substance (by equation of state,  or  EoS),  mixtures,  etc...  s
 
 For additional information and examples, please refer to the package's documentation.
 
+
 ## Auxiliary functions
 
 Version `0.5.0` brought precision- and exactness- parametric `unvarSerF <: AuxFunc` generic
@@ -359,15 +362,20 @@ the values listed on another Textbook Appendix table for Nitrogen as an ideal ga
 
 Prof. C. Naaktgeboren, PhD. [Lattes](http://lattes.cnpq.br/8621139258082919).
 
+Hermann von Helmholtz Energy Research Group
+[DGP](http://dgp.cnpq.br/dgp/espelhogrupo/8462486184187645).
+
 Federal University of Technology, Paraná
 [(site)](http://portal.utfpr.edu.br/english), Guarapuava Campus.
 
 `NaaktgeborenC <dot!> PhD {at!} gmail [dot!] com`
 
+
 ## License
 
 This project is [licensed](https://github.com/JEngTherm/EngThermBase.jl/blob/master/LICENSE)
 under the MIT license.
+
 
 ## Citations
 
