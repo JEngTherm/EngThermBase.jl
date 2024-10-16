@@ -62,21 +62,22 @@ struct unvarSerF{𝕡,𝕩} <: AuxFunc where {𝕡<:PREC,𝕩<:EXAC}
     end
 end
 
-(F::unvarSerF{𝕡,EX})(x::plnF{𝕡}) where {𝕡<:PREC} = begin
+
+#······························································································#
+#                                           Functors                                           #
+#······························································································#
+
+(F::unvarSerF{𝕡,EX})(x::Union{REAL,plnF{𝕢}}) where {𝕡<:PREC,𝕢<:PREC} = begin
     @assert !isnan(x)
     @assert F.xmin <= x <= F.xmax
     return bare(ø_amt{𝕡,EX}(reduce(+, [𝑓(x) for 𝑓 in F.fvec])))
 end
 
-(F::unvarSerF{𝕡,MM})(x::plnF{𝕡}) where {𝕡<:PREC} = begin
+(F::unvarSerF{𝕡,MM})(x::Union{REAL,plnF{𝕢}}) where {𝕡<:PREC,𝕢<:PREC} = begin
     @assert !isnan(x)
     @assert F.xmin <= x <= F.xmax
     return bare(ø_amt{𝕡,MM}(reduce(+, [𝑓(x) for 𝑓 in F.fvec]) * F.mulf))
 end
-
-(F::unvarSerF{𝕡,𝕩})(x::Union{REAL,𝕢}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = F(𝕡(x))
-
-(F::unvarSerF{𝕡,𝕩})(x::Measurement{𝕢}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = F(Measurement{𝕡}(x))
 
 export unvarSerF
 
@@ -182,7 +183,7 @@ export ∫dx, ∫dlnx
 #                                   Add / Sub by a constant                                    #
 #······························································································#
 
-+(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX} where {𝕡<:PREC,𝕢<:PREC} = begin
+(+(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = 𝕡(𝑎)
     return unvarSerF(
         𝑓.xmin,
@@ -191,7 +192,7 @@ export ∫dx, ∫dlnx
     )
 end
 
-+(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX} where {𝕡<:PREC,𝕢<:PREC} = begin
+(+(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = 𝕡(𝑎.val)
     return unvarSerF(
         𝑓.xmin,
@@ -200,7 +201,7 @@ end
     )
 end
 
-+(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM} where {𝕡<:PREC,𝕢<:PREC} = begin
+(+(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = bare(ø_amt{𝕡,MM}(𝑎))
     return unvarSerF(
         𝑓.xmin,
@@ -210,7 +211,7 @@ end
     )
 end
 
-+(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM} where {𝕡<:PREC,𝕢<:PREC} = begin
+(+(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = Measurement{𝕡}(𝑎)
     return unvarSerF(
         𝑓.xmin,
@@ -249,7 +250,7 @@ end
 #                                   Mul / Div by a constant                                    #
 #······························································································#
 
-*(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX} where {𝕡<:PREC,𝕢<:PREC} = begin
+(*(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = 𝕡(𝑎)
     return unvarSerF(
         𝑓.xmin,
@@ -258,7 +259,7 @@ end
     )
 end
 
-*(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX} where {𝕡<:PREC,𝕢<:PREC} = begin
+(*(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,EX})::unvarSerF{𝕡,EX}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = Measurement{𝕡}(𝑎).val
     return unvarSerF(
         𝑓.xmin,
@@ -267,7 +268,7 @@ end
     )
 end
 
-*(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM} where {𝕡<:PREC,𝕢<:PREC} = begin
+(*(𝑎::Union{REAL, 𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = 𝕡(𝑎)
     return unvarSerF(
         𝑓.xmin,
@@ -277,7 +278,7 @@ end
     )
 end
 
-*(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM} where {𝕡<:PREC,𝕢<:PREC} = begin
+(*(𝑎::Measurement{𝕢}, 𝑓::unvarSerF{𝕡,MM})::unvarSerF{𝕡,MM}) where {𝕡<:PREC,𝕢<:PREC} = begin
     𝚊 = Measurement{𝕡}(𝑎)
     return unvarSerF(
         𝑓.xmin,
