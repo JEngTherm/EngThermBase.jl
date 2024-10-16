@@ -33,10 +33,8 @@ The inner constructors enforce the following standards/restrictions:
 Instances of `unvarSerF` are `functors`, meaning they can be used as functions (as expected).
 The functor implementation enforce the following standard: if `𝑓::unvarSerF{𝕡,𝕩} ...`, then:
 
-    - The argument `𝑥` of `𝑓{𝕡,EX}(𝑥)` can be `𝑥::Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC`;
-    - However, `𝑓{𝕡,EX}(𝑥)::𝕡 where 𝕡<:PREC`, meaning the return type precision is `EX`;
-    - The argument `𝑥` of `𝑓{𝕡,MM}(𝑥)` can be `𝑥::Union{𝕡, Measurement{𝕡}} where 𝕡<:PREC`;
-    - However, `𝑓{𝕡,MM}(𝑥)::Measurement{𝕡} where 𝕡<:PREC`, meaning the return type precision is `MM`;
+    - `𝑓{𝕡,EX}(𝑥)::𝕡 where 𝕡<:PREC`, meaning the return type precision is `EX`;
+    - `𝑓{𝕡,MM}(𝑥)::Measurement{𝕡} where 𝕡<:PREC`, meaning the return type precision is `MM`;
 
 ## Hierarchy
 
@@ -75,6 +73,10 @@ end
     @assert F.xmin <= x <= F.xmax
     return bare(ø_amt{𝕡,MM}(reduce(+, [𝑓(x) for 𝑓 in F.fvec]) * F.mulf))
 end
+
+(F::unvarSerF{𝕡,𝕩})(x::Union{REAL,𝕢}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = F(𝕡(x))
+
+(F::unvarSerF{𝕡,𝕩})(x::Measurement{𝕢}) where {𝕡<:PREC,𝕢<:PREC,𝕩<:EXAC} = F(Measurement{𝕡}(x))
 
 export unvarSerF
 
