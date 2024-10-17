@@ -360,7 +360,7 @@ Constructors determine all parameters from their arguments.\n
         (::Type{$TYPE{𝘀,MM}})(x::Union{𝗽,UETY{𝗽},PMTY{𝗽},UMTY{𝗽},REAL,uniR{𝘁},AMOUNTS}
                              ) where {𝘀<:PREC,𝗽<:PREC,𝘁<:REAL} = $TYPE{𝘀,MM}($TYPE(x)) # Fallback
         # Type export
-        export $TYPE
+        export $TYPE, $TARG
         # Type-stable wrapped amount obtaining function
         amt(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑SY,$𝑢SY}
         amt(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽},$𝑑SY,$𝑢SY}
@@ -747,7 +747,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
         $TYPE(x::UMTY{𝗽,$𝑑MA}, ::Type{MA}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
         $TYPE(x::UMTY{𝗽,$𝑑MO}, ::Type{MO}) where 𝗽<:PREC = $TYPE(x) # internal constructor fallback
         # Type export
-        export $TYPE
+        export $TYPE, $TARG
         # Type-stable wrapped amount obtaining function
         amt(x::$TYPE{𝗽,EX,SY}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑SY,$𝑢SY}
         amt(x::$TYPE{𝗽,EX,DT}) where 𝗽<:PREC = x.amt::Quantity{𝗽,$𝑑DT,$𝑢DT}
