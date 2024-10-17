@@ -115,7 +115,7 @@ A `$TYPE` can be natively constructed from the following argument types:\n
     # @eval block
     @eval begin
         # Type arguments
-        const $TARG = ($TYPE, $SUPT, $FNAM, $ALIA, $SYMB, $WHAT, $DELT)
+        const $TARG = (TYPE, SUPT, FNAM, ALIA, SYMB, WHAT, DELT)
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽} where 𝗽<:PREC
@@ -297,7 +297,7 @@ Constructors determine all parameters from their arguments.\n
     # @eval block
     @eval begin
         # Type arguments
-        const $TARG = ($TYPE, $SUPT, $FNAM, $ALIA, $SYMB, $UNIT, $USTR, $WHAT, $DELT)
+        const $TARG = (TYPE, SUPT, FNAM, ALIA, SYMB, UNIT, USTR, WHAT, DELT)
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽,$𝑑SY,$𝑢SY} where 𝗽<:PREC
@@ -527,7 +527,7 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
     # @eval block
     @eval begin
         # Type arguments
-        const $TARG = ($TYPE, $SUPT, $FNAM, $ALIA, $SYMB, $UNIT, $USTR, $WHAT, $DELT, $bsym)
+        const $TARG = (TYPE, SUPT, FNAM, ALIA, SYMB, UNIT, USTR, WHAT, DELT, bsym)
         # Concrete type definition
         struct $TYPE{𝗽,𝘅,𝗯} <: $SUPT{𝗽,𝘅,𝗯}
             amt::Union{UATY{𝗽,$𝑑SY,$𝑢SY},UATY{𝗽,$𝑑DT,$𝑢DT},
