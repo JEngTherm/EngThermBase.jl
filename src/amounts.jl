@@ -112,10 +112,11 @@ A `$TYPE` can be natively constructed from the following argument types:\n
     fnStr = "Function to return $WHAT amounts of arbitrary units."
     # Type args
     TARG = Symbol(replace(string(TYPE), "amt" => "arg"))
+    ARGT = (TYPE, SUPT, FNAM, ALIA, SYMB, WHAT, DELT)
     # @eval block
     @eval begin
         # Type arguments
-        const $TARG = (TYPE, SUPT, FNAM, ALIA, SYMB, WHAT, DELT)
+        const $TARG = $ARGT
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽} where 𝗽<:PREC
@@ -294,10 +295,11 @@ Constructors determine all parameters from their arguments.\n
     fnStr = "Function to return $WHAT amounts in ($USTR)."
     # Type args
     TARG = Symbol(replace(string(TYPE), "amt" => "arg"))
+    ARGT = (TYPE, SUPT, FNAM, ALIA, SYMB, UNIT, USTR, WHAT, DELT)
     # @eval block
     @eval begin
         # Type arguments
-        const $TARG = (TYPE, SUPT, FNAM, ALIA, SYMB, UNIT, USTR, WHAT, DELT)
+        const $TARG = $ARGT
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽,$𝑑SY,$𝑢SY} where 𝗽<:PREC
@@ -524,10 +526,11 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
     fnStr = "Function to return $WHAT amounts in ($USTR)."
     # Type args
     TARG = Symbol(replace(string(TYPE), "amt" => "arg"))
+    ARGT = (TYPE, SUPT, FNAM, ALIA, SYMB, UNIT, USTR, WHAT, DELT, bsym)
     # @eval block
     @eval begin
         # Type arguments
-        const $TARG = (TYPE, SUPT, FNAM, ALIA, SYMB, UNIT, USTR, WHAT, DELT, bsym)
+        const $TARG = $ARGT
         # Concrete type definition
         struct $TYPE{𝗽,𝘅,𝗯} <: $SUPT{𝗽,𝘅,𝗯}
             amt::Union{UATY{𝗽,$𝑑SY,$𝑢SY},UATY{𝗽,$𝑑DT,$𝑢DT},
