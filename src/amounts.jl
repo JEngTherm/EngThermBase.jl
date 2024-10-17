@@ -110,8 +110,12 @@ A `$TYPE` can be natively constructed from the following argument types:\n
 `$(TYPE) <: $(hiStr)`
     """
     fnStr = "Function to return $WHAT amounts of arbitrary units."
+    # Type args
+    TARG = Symbol(replace(string(TYPE), "amt" => "arg"))
     # @eval block
     @eval begin
+        # Type arguments
+        const $TARG = ($TYPE, $SUPT, $FNAM, $ALIA, $SYMB, $WHAT, $DELT)
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽} where 𝗽<:PREC
@@ -177,7 +181,7 @@ A `$TYPE` can be natively constructed from the following argument types:\n
             $TYPE{𝘀,MM}($TYPE(x)) 	# Fallback call
         end
         # Type export
-        export $TYPE
+        export $TYPE, $TARG
         # Type-stabler wrapped amount obtaining function
         amt(x::$TYPE{𝗽,EX}) where 𝗽<:PREC = x.amt::Quantity{𝗽}
         amt(x::$TYPE{𝗽,MM}) where 𝗽<:PREC = x.amt::Quantity{Measurement{𝗽}}
@@ -288,8 +292,12 @@ Constructors determine all parameters from their arguments.\n
 `$(TYPE) <: $(hiStr)`
     """
     fnStr = "Function to return $WHAT amounts in ($USTR)."
+    # Type args
+    TARG = Symbol(replace(string(TYPE), "amt" => "arg"))
     # @eval block
     @eval begin
+        # Type arguments
+        const $TARG = ($TYPE, $SUPT, $FNAM, $ALIA, $SYMB, $UNIT, $USTR, $WHAT, $DELT)
         # Concrete type definition
         struct $TYPE{𝗽,𝘅} <: $SUPT{𝗽,𝘅}
             amt::UATY{𝗽,$𝑑SY,$𝑢SY} where 𝗽<:PREC
@@ -514,8 +522,12 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
 `$(TYPE) <: $(hiStr)`
     """
     fnStr = "Function to return $WHAT amounts in ($USTR)."
+    # Type args
+    TARG = Symbol(replace(string(TYPE), "amt" => "arg"))
     # @eval block
     @eval begin
+        # Type arguments
+        const $TARG = ($TYPE, $SUPT, $FNAM, $ALIA, $SYMB, $UNIT, $USTR, $WHAT, $DELT, $bsym)
         # Concrete type definition
         struct $TYPE{𝗽,𝘅,𝗯} <: $SUPT{𝗽,𝘅,𝗯}
             amt::Union{UATY{𝗽,$𝑑SY,$𝑢SY},UATY{𝗽,$𝑑DT,$𝑢DT},
