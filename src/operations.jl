@@ -271,38 +271,38 @@ end
 # SY-based / mole => MO-based; with Unitful promotion
 # SY-based / TIME => DT-based; with Unitful promotion
 /(x::BasedAmt{𝗽,𝘅,SY}, y::Union{m_amt{𝘀,𝘆,SY},N_amt{𝘀,𝘆,SY},t_amt{𝘀,𝘆}}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+    (typeof(x).name.wrapper)(_qty(/(amt(x), amt(y))))
 end
 
 
 # DT-based / mass-DT => MA-based; with Unitful promotion
 # DT-based / mole-DT => MO-based; with Unitful promotion
 /(x::BasedAmt{𝗽,𝘅,DT}, y::Union{m_amt{𝘀,𝘆,DT},N_amt{𝘀,𝘆,DT}}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+    (typeof(x).name.wrapper)(_qty(/(amt(x), amt(y))))
 end
 
 
 # MA-based * MO-based mass => MO-based; with Unitful promotion
 *(x::BasedAmt{𝗽,𝘅,MA}, y::m_amt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+    (typeof(x).name.wrapper)(_qty(*(amt(x), amt(y))))
 end
 *(y::m_amt{𝘀,𝘆,MO}, x::BasedAmt{𝗽,𝘅,MA}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 # MO-based * MA-based mole => MA-based; with Unitful promotion
 *(x::BasedAmt{𝗽,𝘅,MO}, y::N_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    (typeof(x).name.wrapper)(*(amt(x), amt(y)))
+    (typeof(x).name.wrapper)(_qty(*(amt(x), amt(y))))
 end
 *(y::N_amt{𝘀,𝘆,MA}, x::BasedAmt{𝗽,𝘅,MO}) where {𝗽,𝘀,𝘅,𝘆} = x * y     # as to fallback
 
 
 # MA-based / MA-based mole => MO-based; with Unitful promotion
 /(x::BasedAmt{𝗽,𝘅,MA}, y::N_amt{𝘀,𝘆,MA}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+    (typeof(x).name.wrapper)(_qty(/(amt(x), amt(y))))
 end
 
 # MO-based / MO-based mass => MA-based; with Unitful promotion
 /(x::BasedAmt{𝗽,𝘅,MO}, y::m_amt{𝘀,𝘆,MO}) where {𝗽,𝘀,𝘅,𝘆} = begin
-    (typeof(x).name.wrapper)(/(amt(x), amt(y)))
+    (typeof(x).name.wrapper)(_qty(/(amt(x), amt(y))))
 end
 
 
