@@ -490,6 +490,10 @@ function mkBasAmt(TYPE::Symbol,         # Type Name:            :u_Amt
     𝑑DT = dimension(uDT)
     𝑑MA = dimension(uMA)
     𝑑MO = dimension(uMO)
+    Bvec = [𝑑SY, 𝑑DT, 𝑑MA, 𝑑MO]
+    hDL = DLESS in Bvec                 # Has a DimensionLess base: types that DON'T assign missing units
+    DLi = indexin([DLESS], Bvec)[1]     # The dimensionless base index: either an index or nothing
+    DLB = hDL ? [SY, DT, MA, MO][DLi] : nothing     # The dimensionless base
     i, f = DELT ? (3, 4) : (1, 2)
     𝑠SY = bsym[1] == :none ?
         normalize((DELT ? "Δ" : "") * uppercase(string(SYMB))) :
@@ -663,8 +667,13 @@ base argument. Plain, `AbstractFloat` ones require the base argument.\n
             uconvert(𝑢, amt(x))
         end
         # External constructors for other DataTypes:
-        $TYPE(x::plnF) = $TYPE(x, DEF[:IB])
-        $TYPE(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        if $hDL
+            $TYPE(x::plnF, b::Type{𝗯}=$DLB) where 𝗯<:BASE = $TYPE(x, b)
+            $TYPE(x::REAL, b::Type{𝗯}=$DLB) where 𝗯<:BASE = $TYPE(float(x), b)
+        else
+            $TYPE(x::plnF) = $TYPE(x, DEF[:IB])
+            $TYPE(x::REAL, b::Type{𝗯}=DEF[:IB]) where 𝗯<:BASE = $TYPE(float(x), b)
+        end
         $TYPE(x::Union{uniR{𝗽,$𝑑SY},uniR{𝗽,$𝑑DT},
                        uniR{𝗽,$𝑑MA},uniR{𝗽,$𝑑MO}}) where 𝗽<:REAL = begin
             $TYPE(float(x.val) * unit(x))
