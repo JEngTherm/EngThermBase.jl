@@ -211,7 +211,6 @@ end
 
 
 @testset "amounts.test.jl: Based Amount constructor tests                         " begin
-    _qty = EngThermBase._qty
     for 𝕋 in (:m_amt, :N_amt, :R_amt, :Pvamt, :RTamt, :Tsamt, :v_amt,
               :u_amt, :h_amt, :g_amt, :a_amt, :e_amt, :ekamt, :epamt,
               :s_amt, :cpamt, :cvamt, :c_amt, :j_amt, :y_amt, :xiamt,
@@ -324,7 +323,7 @@ end
                 @test amnt isa eval(𝕋){Float64}
                 @test amnt isa eval(𝕋){Float64,MM}
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
-                amnt = eval(𝕋)(_qty((𝕍 ± 𝕍) * 𝕌))               # _qty-ed arg, no BASE: acid test for 𝕌 == DLESS
+                amnt = eval(𝕋)((𝕍 ± 𝕍) * 𝕌)                     # no BASE: acid test for 𝕌 == DLESS
                 @test amnt isa eval(𝕋){Float64,MM,𝔹}
                 amnt = eval(𝕋)(amnt)                            # copy constructor
                 @test amnt isa eval(𝕋)
