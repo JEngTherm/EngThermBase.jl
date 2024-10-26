@@ -382,16 +382,15 @@ under the MIT license.
 How to cite this project:
 
 ```bibtex
-@Misc{2023-NaaktgeborenC-EngThermBase,
+@Misc{2024-NaaktgeborenC-EngThermBase,
   author       = {C. Naaktgeboren},
   title        = {{EngThermBase.jl} -- Engineering Thermodynamics infrastructure in Julia},
   howpublished = {Online},
-  month        = {August},
-  year         = {2023},
+  year         = {2024},
   journal      = {GitHub repository},
   publisher    = {GitHub},
   url          = {https://github.com/JEngTherm/EngThermBase.jl},
-  note         = {release 0.5.0 of 24-10-15},
+  note         = {release 0.5.1 of 24-10-25},
 }
 ```
 
