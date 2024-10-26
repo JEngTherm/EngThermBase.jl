@@ -1,7 +1,7 @@
 name = "EngThermBase"
 uuid = "dffbff30-506a-45ba-b474-e78cc8ad254e"
 authors = ["C Naaktgeboren <NaaktgeborenC.PhD@gmail.com>"]
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
